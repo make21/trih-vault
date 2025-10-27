@@ -8,11 +8,15 @@ export const revalidate = 43200;
 
 type EpisodePageParams = {
   params: {
-    slug: string;
+    slug?: string;
   };
 };
 
-const getEpisodeNumber = (slug: string): number | null => {
+const getEpisodeNumber = (slug?: string): number | null => {
+  if (!slug) {
+    return null;
+  }
+
   const episodePart = slug.split('-')[0];
   const parsed = Number.parseInt(episodePart, 10);
   return Number.isNaN(parsed) ? null : parsed;
@@ -32,7 +36,14 @@ export async function generateMetadata({ params }: EpisodePageParams): Promise<M
     };
   }
 
-  const episodeNumber = getEpisodeNumber(params.slug);
+  const { slug } = params;
+  if (!slug) {
+    return {
+      title: 'Episode not found',
+    };
+  }
+
+  const episodeNumber = getEpisodeNumber(slug);
   if (episodeNumber === null) {
     return {
       title: 'Episode not found',
@@ -79,7 +90,12 @@ export default async function EpisodePage({ params }: EpisodePageParams) {
     notFound();
   }
 
-  const episodeNumber = getEpisodeNumber(params.slug);
+  const { slug } = params;
+  if (!slug) {
+    notFound();
+  }
+
+  const episodeNumber = getEpisodeNumber(slug);
   if (episodeNumber === null) {
     notFound();
   }
@@ -89,7 +105,7 @@ export default async function EpisodePage({ params }: EpisodePageParams) {
     notFound();
   }
 
-  if (episode.slug !== params.slug) {
+  if (episode.slug !== slug) {
     redirect(`/episode/${episode.slug}`);
   }
 
