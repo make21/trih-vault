@@ -12,7 +12,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "verify:data": "node -e \"const fs=require('fs');const path=require('path');const dataPath=path.join(process.cwd(),'public','episodes.json');if(!fs.existsSync(dataPath)){console.error('episodes.json not found. Run npm run build:data first.');process.exit(1);}const raw=fs.readFileSync(dataPath,'utf8');let parsed;try{parsed=JSON.parse(raw);}catch(err){console.error('Failed to parse episodes.json:',err);process.exit(1);}if(!Array.isArray(parsed)){console.error('episodes.json does not contain an array.');process.exit(1);}const total=parsed.length;const collect=(key)=>Array.from(new Set(parsed.flatMap((item)=>Array.isArray(item[key])?item[key]:[]))).sort();const eras=collect('eras');const regions=collect('regions');console.log('Total episodes: '+total);console.log('Unique eras ('+eras.length+'): '+eras.join(', '));console.log('Unique regions ('+regions.length+'): '+regions.join(', '));\""
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import type { Episode } from '@/lib/types';
 import EpisodeCard from './EpisodeCard';
 import FilterControls from './FilterControls';
@@ -116,6 +116,14 @@ export default function EpisodeList({ episodes }: EpisodeListProps) {
     setSelectedRegions(new Set());
   };
 
+  const clearAllEras = useCallback(() => {
+    setSelectedEras(new Set());
+  }, [setSelectedEras]);
+
+  const clearAllRegions = useCallback(() => {
+    setSelectedRegions(new Set());
+  }, [setSelectedRegions]);
+
   return (
     <div>
       <FilterControls
@@ -126,6 +134,8 @@ export default function EpisodeList({ episodes }: EpisodeListProps) {
         toggleEra={toggleEra}
         toggleRegion={toggleRegion}
         clearFilters={clearFilters}
+        clearAllEras={clearAllEras}
+        clearAllRegions={clearAllRegions}
         allEras={allEras}
         allRegions={allRegions}
         eraCounts={eraCounts}

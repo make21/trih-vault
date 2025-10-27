@@ -8,6 +8,8 @@ interface FilterControlsProps {
   toggleEra: (era: string) => void;
   toggleRegion: (region: string) => void;
   clearFilters: () => void;
+  clearAllEras: () => void;
+  clearAllRegions: () => void;
   allEras: string[];
   allRegions: string[];
   eraCounts: Record<string, number>;
@@ -24,6 +26,8 @@ export default function FilterControls({
   toggleEra,
   toggleRegion,
   clearFilters,
+  clearAllEras,
+  clearAllRegions,
   allEras,
   allRegions,
   eraCounts,
@@ -79,7 +83,7 @@ export default function FilterControls({
             </label>
             {selectedEras.size > 0 && (
               <button
-                onClick={() => selectedEras.forEach((era) => toggleEra(era))}
+                onClick={clearAllEras}
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
                 Clear
@@ -102,7 +106,7 @@ export default function FilterControls({
                   {era}
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">
-                  {eraCounts[era] || 0}
+                  ({eraCounts[era] || 0})
                 </span>
               </label>
             ))}
@@ -116,9 +120,7 @@ export default function FilterControls({
             </label>
             {selectedRegions.size > 0 && (
               <button
-                onClick={() =>
-                  selectedRegions.forEach((region) => toggleRegion(region))
-                }
+                onClick={clearAllRegions}
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
                 Clear
@@ -141,7 +143,7 @@ export default function FilterControls({
                   {region}
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400">
-                  {regionCounts[region] || 0}
+                  ({regionCounts[region] || 0})
                 </span>
               </label>
             ))}
