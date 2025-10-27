@@ -6,6 +6,20 @@ import type { Episode } from '@/lib/types';
 
 export const revalidate = 43200;
 
+export async function generateStaticParams() {
+  const { episodes, isValid } = await loadEpisodes();
+
+  if (!isValid) {
+    return [];
+  }
+
+  return episodes
+    .filter((episode) => Boolean(episode.slug))
+    .map((episode) => ({
+      slug: episode.slug,
+    }));
+}
+
 type EpisodePageParams = {
   params: {
     slug?: string;
