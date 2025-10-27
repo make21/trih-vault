@@ -11,9 +11,14 @@ export async function loadEpisodes(): Promise<EpisodeResult> {
   const filePath = path.join(process.cwd(), 'public', 'episodes.json');
 
   if (!fs.existsSync(filePath)) {
-    console.warn('episodes.json not found, building now...');
-    const { execSync } = await import('child_process');
-    execSync('npm run build:data', { stdio: 'inherit' });
+    console.warn('episodes.json not found, attempting to build dataset...');
+    try {
+      const { execSync } = await import('child_process');
+      execSync('npm run build:data', { stdio: 'inherit' });
+    } catch (error) {
+      console.error('Failed to build episodes dataset:', error);
+      return { episodes: [], isValid: false };
+    }
   }
 
   try {
