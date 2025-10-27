@@ -7,7 +7,8 @@ interface EpisodeCardProps {
 }
 
 export default function EpisodeCard({ episode }: EpisodeCardProps) {
-  const displayTitle = episode.title_sheet || episode.title_feed;
+  const displayTitle =
+    episode.title_feed || episode.title_sheet || `Episode ${episode.episode}`;
   const formattedDate = new Date(episode.pubDate).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',

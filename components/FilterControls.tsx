@@ -8,14 +8,13 @@ interface FilterControlsProps {
   toggleEra: (era: string) => void;
   toggleRegion: (region: string) => void;
   clearFilters: () => void;
-  clearAllEras: () => void;
-  clearAllRegions: () => void;
   allEras: string[];
   allRegions: string[];
   eraCounts: Record<string, number>;
   regionCounts: Record<string, number>;
-  sortBy: string;
-  setSortBy: (value: string) => void;
+  yearRange: [number, number];
+  yearBounds: [number, number];
+  setYearRange: (range: [number, number]) => void;
 }
 
 export default function FilterControls({
@@ -26,138 +25,144 @@ export default function FilterControls({
   toggleEra,
   toggleRegion,
   clearFilters,
-  clearAllEras,
-  clearAllRegions,
   allEras,
   allRegions,
   eraCounts,
   regionCounts,
-  sortBy,
-  setSortBy,
+  yearRange,
+  yearBounds,
+  setYearRange,
 }: FilterControlsProps) {
+  const [minYear, maxYear] = yearBounds;
+  const [currentMin, currentMax] = yearRange;
+  const showClearButton =
+    Boolean(search) ||
+    selectedEras.size > 0 ||
+    selectedRegions.size > 0 ||
+    currentMin !== minYear ||
+    currentMax !== maxYear;
+  const sliderDisabled = minYear === maxYear;
+
+  const handleMinChange = (value: number) => {
+    const bounded = Math.min(Math.max(value, minYear), currentMax);
+    setYearRange([bounded, currentMax]);
+  };
+
+  const handleMaxChange = (value: number) => {
+    const bounded = Math.max(Math.min(value, maxYear), currentMin);
+    setYearRange([currentMin, bounded]);
+  };
+
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md p-6 mb-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div>
-          <label
-            htmlFor="search"
-            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
-          >
-            Search Episodes
-          </label>
+    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700 p-6 space-y-6">
+      <div>
+        <label
+          htmlFor="search"
+          className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+        >
+          Search (title & description)
+        </label>
+        <input
+          id="search"
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search episodes..."
+          className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      <div>
+        <span className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          Era
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {allEras.map((era) => {
+            const checked = selectedEras.has(era);
+            return (
+              <button
+                key={era}
+                onClick={() => toggleEra(era)}
+                className={`px-3 py-1 rounded-full border text-sm transition-colors ${
+                  checked
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600'
+                }`}
+                type="button"
+              >
+                <span>{era}</span>
+                <span className="ml-2 text-xs opacity-80">({eraCounts[era] || 0})</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        <span className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+          Region
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {allRegions.map((region) => {
+            const checked = selectedRegions.has(region);
+            return (
+              <button
+                key={region}
+                onClick={() => toggleRegion(region)}
+                className={`px-3 py-1 rounded-full border text-sm transition-colors ${
+                  checked
+                    ? 'bg-emerald-600 text-white border-emerald-600'
+                    : 'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600'
+                }`}
+                type="button"
+              >
+                <span>{region}</span>
+                <span className="ml-2 text-xs opacity-80">({regionCounts[region] || 0})</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div>
+        <span className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+          Year range
+        </span>
+        <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+          {sliderDisabled
+            ? `${minYear}`
+            : `${currentMin} – ${currentMax}`}
+        </div>
+        <div className="mt-4 space-y-3">
           <input
-            id="search"
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by title or description..."
-            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            type="range"
+            min={minYear}
+            max={maxYear}
+            value={currentMin}
+            onChange={(event) => handleMinChange(Number(event.target.value))}
+            disabled={sliderDisabled}
+            className="w-full"
+          />
+          <input
+            type="range"
+            min={minYear}
+            max={maxYear}
+            value={currentMax}
+            onChange={(event) => handleMaxChange(Number(event.target.value))}
+            disabled={sliderDisabled}
+            className="w-full"
           />
         </div>
-
-        <div>
-          <label
-            htmlFor="sort"
-            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
-          >
-            Sort By
-          </label>
-          <select
-            id="sort"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="alphabetical">Alphabetical</option>
-          </select>
-        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Filter by Era
-            </label>
-            {selectedEras.size > 0 && (
-              <button
-                onClick={clearAllEras}
-                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-          <div className="max-h-48 overflow-y-auto border border-slate-200 dark:border-slate-700 rounded-lg p-3">
-            {allEras.map((era) => (
-              <label
-                key={era}
-                className="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 rounded px-2"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedEras.has(era)}
-                  onChange={() => toggleEra(era)}
-                  className="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm text-slate-700 dark:text-slate-300 flex-1">
-                  {era}
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  ({eraCounts[era] || 0})
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
-              Filter by Region
-            </label>
-            {selectedRegions.size > 0 && (
-              <button
-                onClick={clearAllRegions}
-                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-          <div className="max-h-48 overflow-y-auto border border-slate-200 dark:border-slate-700 rounded-lg p-3">
-            {allRegions.map((region) => (
-              <label
-                key={region}
-                className="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 rounded px-2"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedRegions.has(region)}
-                  onChange={() => toggleRegion(region)}
-                  className="rounded border-slate-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-sm text-slate-700 dark:text-slate-300 flex-1">
-                  {region}
-                </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  ({regionCounts[region] || 0})
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {(search || selectedEras.size > 0 || selectedRegions.size > 0) && (
-        <div className="mt-4 flex justify-end">
+      {showClearButton && (
+        <div className="pt-2">
           <button
             onClick={clearFilters}
-            className="px-4 py-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors font-medium"
+            className="w-full px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+            type="button"
           >
-            Clear All Filters
+            Clear all filters
           </button>
         </div>
       )}

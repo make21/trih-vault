@@ -1,5 +1,24 @@
 import type { Episode, RSSItem, CSVRow } from './types';
 
+const stripEpisodePrefix = (title?: string | null): string => {
+  if (!title) {
+    return '';
+  }
+
+  return String(title).replace(/^\s*\d+\s*[).:-]?\s*/, '');
+};
+
+const makeSlug = (episodeNumber: number, title?: string | null): string => {
+  const cleanedTitle = stripEpisodePrefix(title);
+  const t = String(cleanedTitle || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+  return `${episodeNumber}-${t || 'episode'}`;
+};
+
 export function joinData(rssItems: RSSItem[], csvRows: CSVRow[]): Episode[] {
   const csvByEpisode = new Map<number, CSVRow[]>();
 
@@ -22,6 +41,8 @@ export function joinData(rssItems: RSSItem[], csvRows: CSVRow[]): Episode[] {
 
     const title_sheet = csvData.find((r) => r.title)?.title || null;
 
+    const slug = makeSlug(item.episode, item.title || title_sheet);
+
     return {
       episode: item.episode,
       title_feed: item.title,
@@ -32,6 +53,7 @@ export function joinData(rssItems: RSSItem[], csvRows: CSVRow[]): Episode[] {
       audio: item.audio,
       eras,
       regions,
+      slug,
     };
   });
 

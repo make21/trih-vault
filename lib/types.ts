@@ -8,6 +8,7 @@ export interface Episode {
   audio?: string | null;
   eras: string[];
   regions: string[];
+  slug: string;
 }
 
 export interface RSSItem {

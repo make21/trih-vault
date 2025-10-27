@@ -7,6 +7,62 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const RSS_URL = 'https://feeds.megaphone.fm/GLT4787413333';
 
+function stripEpisodePrefix(title) {
+  if (!title) {
+    return '';
+  }
+
+  return String(title).replace(/^\s*\d+\s*[).:-]?\s*/, '');
+}
+
+function makeSlug(epNum, title) {
+  const cleanedTitle = stripEpisodePrefix(title);
+  const t = String(cleanedTitle || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+  return `${epNum}-${t || 'episode'}`;
+}
+
+function loadExistingEpisodesWithSlugs() {
+  const outputPath = path.join(__dirname, '..', 'public', 'episodes.json');
+
+  if (!fs.existsSync(outputPath)) {
+    return null;
+  }
+
+  try {
+    const raw = fs.readFileSync(outputPath, 'utf-8');
+    const parsed = JSON.parse(raw);
+
+    if (!Array.isArray(parsed)) {
+      console.warn('Existing episodes.json is not an array; cannot use fallback dataset.');
+      return null;
+    }
+
+    const enriched = parsed.map((episode) => {
+      if (episode && typeof episode === 'object') {
+        const titleCandidate =
+          episode.title_feed || episode.title_sheet || episode.title;
+        const slug = makeSlug(episode.episode, titleCandidate);
+        if (episode.slug === slug) {
+          return episode;
+        }
+        return { ...episode, slug };
+      }
+      return episode;
+    });
+
+    console.warn('Using existing episodes.json as fallback dataset.');
+    return enriched;
+  } catch (error) {
+    console.error('Failed to read existing episodes.json for fallback:', error);
+    return null;
+  }
+}
+
 async function fetchWithRetry(url, { retries = 2, timeoutMs = 10_000 } = {}) {
   let attempt = 0;
 
@@ -236,6 +292,8 @@ function joinData(rssItems, csvRows) {
 
     const title_sheet = csvData.find((r) => r.title)?.title || null;
 
+    const slug = makeSlug(item.episode, item.title || title_sheet);
+
     return {
       episode: item.episode,
       title_feed: item.title,
@@ -246,6 +304,7 @@ function joinData(rssItems, csvRows) {
       audio: item.audio,
       eras,
       regions,
+      slug,
     };
   });
 
@@ -267,6 +326,17 @@ async function main() {
     console.log(`✅ Successfully wrote ${episodes.length} episodes to public/episodes.json`);
   } catch (error) {
     console.error('❌ Error building dataset:', error);
+    const fallbackEpisodes = loadExistingEpisodesWithSlugs();
+
+    if (fallbackEpisodes) {
+      const outputPath = path.join(__dirname, '..', 'public', 'episodes.json');
+      fs.writeFileSync(outputPath, JSON.stringify(fallbackEpisodes, null, 2));
+      console.log(
+        `⚠️ Wrote fallback dataset with ${fallbackEpisodes.length} episodes from existing file.`
+      );
+      process.exit(0);
+    }
+
     process.exit(1);
   }
 }
