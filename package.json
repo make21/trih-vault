@@ -1,45 +1,13 @@
 {
-  "name": "project",
-  "version": "1.0.0",
-  "description": "A visual, searchable timeline of *The Rest Is History* podcast — built from the public RSS feed and a fan-curated episode dataset linking each story to its era and region.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "trih-enrichment-pipeline",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "build:data": "node scripts/build-dataset.mjs",
-    "prebuild": "npm run build:data",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "build:enrich": "node -e \"const fs=require('fs');const path=require('path');const dir=path.join(process.cwd(),'dist-scripts');if(fs.existsSync(dir)){fs.rmSync(dir,{recursive:true,force:true});}\" && tsc -p tsconfig.scripts.json",
-    "enrich": "node dist-scripts/scripts/enrich/index.js",
-    "test": "npm run build:enrich && node --test dist-scripts/scripts/enrich/__tests__/*.test.js",
-    "verify:data": "node -e \"const fs=require('fs');const path=require('path');const dataPath=path.join(process.cwd(),'public','episodes.json');if(!fs.existsSync(dataPath)){console.error('episodes.json not found. Run npm run build:data first.');process.exit(1);}const raw=fs.readFileSync(dataPath,'utf8');let parsed;try{parsed=JSON.parse(raw);}catch(err){console.error('Failed to parse episodes.json:',err);process.exit(1);}if(!Array.isArray(parsed)){console.error('episodes.json does not contain an array.');process.exit(1);}const total=parsed.length;const collect=(key)=>Array.from(new Set(parsed.flatMap((item)=>Array.isArray(item[key])?item[key]:[]))).sort();const eras=collect('eras');const regions=collect('regions');console.log('Total episodes: '+total);console.log('Unique eras ('+eras.length+'): '+eras.join(', '));console.log('Unique regions ('+regions.length+'): '+regions.join(', '));\""
+    "fetch": "node scripts/fetch-rss.js",
+    "enrich": "node scripts/enrich.js",
+    "validate": "node scripts/validate.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
-    "@types/node": "^24.9.1",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "autoprefixer": "^10.4.21",
-    "csv-parse": "^6.1.0",
-    "fast-xml-parser": "^5.3.0",
-    "p-limit": "^3.1.0",
-    "next": "^16.0.0",
-    "postcss": "^8.5.6",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.16",
-    "typescript": "^5.9.3",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "eslint": "^9.38.0",
-    "eslint-config-next": "^16.0.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

@@ -1,48 +1,34 @@
-name: Enrich episodes
+name: Enrich
 
 on:
-  workflow_dispatch:
   schedule:
     - cron: '0 5 * * *'
-
-permissions:
-  contents: write
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  enrich:
+  build:
     runs-on: ubuntu-latest
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
       - name: Install dependencies
-        run: npm ci
-      - name: Build enrichment scripts
-        run: npm run build:enrich
-      - name: Run enrichment pipeline
-        run: npm run enrich -- --verbose
-      - name: Commit updates
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add public/episodes.json public/series.json public/collections.json public/umbrellas.json data/inference-cache.json
-            git commit -m "chore: update enrichment data"
-          fi
-      - name: Push changes
-        if: ${{ github.ref_type == 'branch' }}
-        env:
-          BRANCH_NAME: ${{ github.ref_name }}
-        run: |
-          git push origin HEAD:"$BRANCH_NAME"
-      - name: Trigger Vercel deploy
-        if: ${{ env.VERCEL_DEPLOY_HOOK_URL != '' }}
-        run: curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
+        run: npm install
+
+      - name: Fetch RSS
+        run: npm run fetch
+
+      - name: Enrich metadata
+        run: npm run enrich
+
+      - name: Validate outputs
+        run: npm run validate

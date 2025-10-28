@@ -1,4 +1,8 @@
 node_modules/
-.next/
 .env
-dist-scripts/**/*.tsbuildinfo
+.env.*
+!.env.local.sample
+npm-debug.log*
+dist/
+.DS_Store
+.cache/

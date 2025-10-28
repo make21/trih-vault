@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>The Rest Is History</title>
+    <link>https://restishistorypod.com</link>
+    <description>Sample feed used for offline development.</description>
+    <item>
+      <title>Alexander the Great: Part 1</title>
+      <description><![CDATA[Alexander rises to power across Macedonia and Greece.]]></description>
+      <pubDate>Mon, 01 Jul 2024 10:00:00 GMT</pubDate>
+      <guid isPermaLink="false">alexander-part-1</guid>
+      <itunes:episode>661</itunes:episode>
+      <enclosure url="https://example.com/audio/alexander-part1.mp3" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Alexander the Great: Part 2</title>
+      <description><![CDATA[The campaign pushes east towards Persia.]]></description>
+      <pubDate>Tue, 02 Jul 2024 10:00:00 GMT</pubDate>
+      <guid isPermaLink="false">alexander-part-2</guid>
+      <itunes:episode>662</itunes:episode>
+      <enclosure url="https://example.com/audio/alexander-part2.mp3" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Moments: Fall of the Roman Republic</title>
+      <description><![CDATA[Tracing the final days of the Roman Republic and Caesar's rise.]]></description>
+      <pubDate>Wed, 10 Jul 2024 10:00:00 GMT</pubDate>
+      <guid isPermaLink="false">moments-fall-rome</guid>
+      <itunes:episode>670</itunes:episode>
+      <enclosure url="https://example.com/audio/moments-fall-rome.mp3" type="audio/mpeg" />
+    </item>
+  </channel>
+</rss>
