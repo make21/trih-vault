@@ -2,16 +2,9 @@ import type { Episode } from "./types";
 import { cleanTitleStem, parseDate, daysBetween, slugify } from "./utils";
 import { romanToInt } from "./roman";
 
-export interface SeriesAssignment {
-  key: string;
-  title: string;
-  part: number;
-  source: "rules";
-}
-
 export interface SeriesGroup {
   key: string;
-  title: string;
+  stem: string;
   episodes: Episode[];
   parts: number[];
 }
@@ -20,7 +13,7 @@ const PART_REGEX = /(.*?)(?:\s*[-–—:]\s*)?(?:part|pt\.?)\s*(?:#|no\.?\s*)?([
 
 interface TitleCandidate {
   key: string;
-  title: string;
+  stem: string;
   part: number;
 }
 
@@ -38,7 +31,7 @@ function extractSeriesCandidate(title: string | null): TitleCandidate | null {
   if (!key) return null;
   return {
     key,
-    title: rawStem,
+    stem: rawStem,
     part: numeric,
   };
 }
@@ -49,11 +42,11 @@ function pickCandidate(episode: Episode): TitleCandidate | null {
   return extractSeriesCandidate(episode.title_feed ?? null);
 }
 
-function sortEntries(entries: Array<{ episode: Episode; part: number; title: string }>) {
+function sortEntries(entries: Array<{ episode: Episode; part: number; stem: string }>) {
   return [...entries].sort((a, b) => a.episode.episode - b.episode.episode);
 }
 
-function isValidSeries(entries: Array<{ episode: Episode; part: number; title: string }>): boolean {
+function isValidSeries(entries: Array<{ episode: Episode; part: number; stem: string }>): boolean {
   if (entries.length < 2) return false;
   const sorted = sortEntries(entries);
   for (let i = 1; i < sorted.length; i += 1) {
@@ -76,23 +69,17 @@ function isValidSeries(entries: Array<{ episode: Episode; part: number; title: s
   return true;
 }
 
-export interface SeriesDetectionResult {
-  assignmentsBySlug: Map<string, SeriesAssignment>;
-  groupsByKey: Map<string, SeriesGroup>;
-}
-
-export function detectSeries(episodes: Episode[]): SeriesDetectionResult {
-  const grouped = new Map<string, Array<{ episode: Episode; part: number; title: string }>>();
+export function detectSeriesGroups(episodes: Episode[]): Map<string, SeriesGroup> {
+  const grouped = new Map<string, Array<{ episode: Episode; part: number; stem: string }>>();
 
   for (const episode of episodes) {
     const candidate = pickCandidate(episode);
     if (!candidate) continue;
     const bucket = grouped.get(candidate.key) ?? [];
-    bucket.push({ episode, part: candidate.part, title: candidate.title });
+    bucket.push({ episode, part: candidate.part, stem: candidate.stem });
     grouped.set(candidate.key, bucket);
   }
 
-  const assignmentsBySlug = new Map<string, SeriesAssignment>();
   const groupsByKey = new Map<string, SeriesGroup>();
 
   for (const [key, entries] of grouped.entries()) {
@@ -100,26 +87,16 @@ export function detectSeries(episodes: Episode[]): SeriesDetectionResult {
       continue;
     }
     const sorted = sortEntries(entries);
-    const title = sorted[0]?.title ?? key;
-    const parts = sorted.map((item) => item.part);
+    const stem = sorted[0]?.stem ?? key;
+    const parts = sorted.map((item, index) => (index + 1));
     const episodesList = sorted.map((item) => item.episode);
-    const group: SeriesGroup = {
+    groupsByKey.set(key, {
       key,
-      title,
+      stem,
       episodes: episodesList,
       parts,
-    };
-    groupsByKey.set(key, group);
-    for (let i = 0; i < sorted.length; i += 1) {
-      const entry = sorted[i];
-      assignmentsBySlug.set(entry.episode.slug, {
-        key,
-        title,
-        part: entry.part,
-        source: "rules",
-      });
-    }
+    });
   }
 
-  return { assignmentsBySlug, groupsByKey };
+  return groupsByKey;
 }

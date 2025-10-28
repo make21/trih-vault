@@ -7,6 +7,7 @@ interface ParsedArgs {
   onlySlug: string | null;
   verbose: boolean;
   cacheOnly: boolean;
+  seriesOnly: boolean;
 }
 
 function parseArgs(argv: string[]): ParsedArgs {
@@ -16,6 +17,7 @@ function parseArgs(argv: string[]): ParsedArgs {
     onlySlug: null,
     verbose: false,
     cacheOnly: false,
+    seriesOnly: false,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -32,6 +34,9 @@ function parseArgs(argv: string[]): ParsedArgs {
         break;
       case "--cache-only":
         args.cacheOnly = true;
+        break;
+      case "--series-only":
+        args.seriesOnly = true;
         break;
       case "--only":
         args.onlySlug = argv[i + 1] ?? null;
@@ -56,7 +61,20 @@ function parseArgs(argv: string[]): ParsedArgs {
 }
 
 function printHelp() {
-  console.log(`Usage: npm run enrich [options]\n\nOptions:\n  --dry-run       Do not write files\n  --refresh       Ignore cached inference\n  --only <slug>   Enrich a single episode\n  --cache-only    Do not call the LLM when cache misses\n  --verbose       Print additional logs\n  --help          Show this message`);
+  console.log(
+    [
+      "Usage: npm run enrich [options]",
+      "",
+      "Options:",
+      "  --dry-run       Do not write files",
+      "  --refresh       Ignore cached inference",
+      "  --only <slug>   Enrich a single episode",
+      "  --cache-only    Do not call the LLM when cache misses",
+      "  --series-only   Update series data without rewriting episodes",
+      "  --verbose       Print additional logs",
+      "  --help          Show this message",
+    ].join("\n")
+  );
 }
 
 async function main() {
@@ -68,11 +86,13 @@ async function main() {
       onlySlug: args.onlySlug,
       verbose: args.verbose,
       cacheOnly: args.cacheOnly,
+      seriesOnly: args.seriesOnly,
     });
     const summary = result.summary;
     console.log(
-      `Episodes: ${summary.totalEpisodes} | Series: ${summary.totalSeries} | LLM calls: ${summary.llmCalls} | ` +
-        `Skipped: ${summary.llmSkipped} | Unknown: ${summary.lowConfidence.unknown} | Broad: ${summary.lowConfidence.broad}`
+      `Series: ${summary.totalSeries} | Episodes: ${summary.totalEpisodes} | Singletons: ${summary.singletonSeries} | ` +
+        `LLM calls: ${summary.llmCalls} | Skipped: ${summary.llmSkipped} | Umbrellas: ${summary.umbrellas} | ` +
+        `Low confidence: ${summary.lowConfidenceSeries}`
     );
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);

@@ -63,3 +63,15 @@ export function ensureArray<T>(value: T | T[] | null | undefined): T[] {
   if (value === null || value === undefined) return [];
   return [value];
 }
+
+export function toTitleCase(value: string): string {
+  return value
+    .split(/\s+/)
+    .map((segment) => {
+      if (!segment) return segment;
+      const lower = segment.toLowerCase();
+      return lower.charAt(0).toUpperCase() + lower.slice(1);
+    })
+    .join(" ")
+    .trim();
+}
