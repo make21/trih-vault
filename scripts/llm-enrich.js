@@ -251,28 +251,45 @@ function validateSeriesPayload(payload) {
 }
 
 async function callChatCompletions({ messages, label }) {
-  let lastError = null;
-  for (const model of ['gpt-5-nano', 'gpt-4.1-mini']) {
-    try {
-      const response = await openai.chat.completions.create({
-        model,
-        messages,
-        temperature: 0.2,
-        response_format: { type: 'json_object' },
-      });
-      const usage = response?.usage ?? {};
-      const promptTokens = usage.prompt_tokens ?? 0;
-      const completionTokens = usage.completion_tokens ?? 0;
-      const totalTokens = usage.total_tokens ?? promptTokens + completionTokens;
-      console.log(`LLM call (${label}) using ${model}: prompt ${promptTokens}, completion ${completionTokens}, total ${totalTokens}`);
-      return { response, model, usage };
-    } catch (error) {
-      lastError = error;
-      const message = error && typeof error === 'object' && 'message' in error ? error.message : String(error);
-      console.warn(`LLM call (${label}) failed on ${model}: ${message}`);
-    }
+  const model = process.env.LLM_MODEL || 'gpt-5-nano';
+  const basePayload = {
+    model,
+    messages,
+    response_format: { type: 'json_object' },
+  };
+
+  if (model !== 'gpt-5-nano') {
+    basePayload.temperature = 0.2;
   }
-  throw lastError ?? new Error(`LLM call (${label}) failed.`);
+
+  try {
+    const response = await openai.chat.completions.create(basePayload);
+    const usage = response?.usage ?? {};
+    const promptTokens = usage.prompt_tokens ?? 0;
+    const completionTokens = usage.completion_tokens ?? 0;
+    const totalTokens = usage.total_tokens ?? promptTokens + completionTokens;
+    console.log(`LLM call (${label}) using ${basePayload.model}: prompt ${promptTokens}, completion ${completionTokens}, total ${totalTokens}`);
+    return { response, model: basePayload.model, usage };
+  } catch (error) {
+    const message = error && typeof error === 'object' && 'message' in error ? error.message : String(error);
+    console.warn(`LLM call (${label}) failed on ${basePayload.model}: ${message}`);
+
+    if (model !== 'gpt-5-nano') {
+      throw error;
+    }
+
+    console.warn(`Primary model ${model} failed, retrying with gpt-4.1-mini`);
+    basePayload.model = 'gpt-4.1-mini';
+    basePayload.temperature = 0.2;
+
+    const retry = await openai.chat.completions.create(basePayload);
+    const usage = retry?.usage ?? {};
+    const promptTokens = usage.prompt_tokens ?? 0;
+    const completionTokens = usage.completion_tokens ?? 0;
+    const totalTokens = usage.total_tokens ?? promptTokens + completionTokens;
+    console.log(`LLM call (${label}) using ${basePayload.model}: prompt ${promptTokens}, completion ${completionTokens}, total ${totalTokens}`);
+    return { response: retry, model: basePayload.model, usage };
+  }
 }
 
 async function fetchEpisodeEnrichment(episode) {
