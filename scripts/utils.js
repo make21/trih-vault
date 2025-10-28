@@ -53,6 +53,8 @@ export const ROOT_DIR = path.resolve(__dirname, '..');
 
 export const FEED_URL = 'https://feeds.megaphone.fm/GLT4787413333';
 
+export const ARC_GAP_DAYS = 120;
+
 export async function readJsonFile(relativePath, defaultValue) {
   const fullPath = path.join(ROOT_DIR, relativePath);
   try {
@@ -127,6 +129,53 @@ export function computeEpisodeCacheKey(title, description) {
 export function computeSeriesHash(items) {
   const sorted = [...items].sort((a, b) => a.id.localeCompare(b.id));
   return shortHash(JSON.stringify(sorted), 20);
+}
+
+const MILLIS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/**
+ * @typedef {Object} ArcCandidate
+ * @property {number} part
+ * @property {number} pubDateValue
+ */
+
+/**
+ * @typedef {Object} ArcBucketLike
+ * @property {Array<ArcCandidate>} entries
+ * @property {Set<number>} partsSeen
+ * @property {(number|null|undefined)} lastPubValue
+ */
+
+/**
+ * Determine whether a new arc bucket should be started for the incoming candidate.
+ *
+ * @param {(ArcBucketLike|null|undefined)} previousBucket
+ * @param {ArcCandidate} candidate
+ * @param {number} [gapDays=ARC_GAP_DAYS]
+ * @returns {boolean}
+ */
+export function shouldStartNewArc(previousBucket, candidate, gapDays = ARC_GAP_DAYS) {
+  if (!previousBucket || !Array.isArray(previousBucket.entries) || previousBucket.entries.length === 0) {
+    return true;
+  }
+
+  if (candidate.part === 1 && previousBucket.entries.length > 0) {
+    return true;
+  }
+
+  const lastPubValue = previousBucket.lastPubValue;
+  if (Number.isFinite(lastPubValue) && Number.isFinite(candidate.pubDateValue)) {
+    const gap = candidate.pubDateValue - lastPubValue;
+    if (gap > gapDays * MILLIS_PER_DAY) {
+      return true;
+    }
+  }
+
+  if (previousBucket.partsSeen?.has(candidate.part)) {
+    return true;
+  }
+
+  return false;
 }
 
 function tokenize(input) {

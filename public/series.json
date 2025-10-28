@@ -273,6 +273,37 @@
     }
   },
   {
+    "id": "s_5c75481c8c",
+    "title": "The French Revolution",
+    "episodeIds": [
+      "ep_f0ec904c6b",
+      "ep_038290f215",
+      "ep_f78f57f280",
+      "ep_438f792430",
+      "ep_2d31cff158"
+    ],
+    "yearFrom": null,
+    "yearTo": null,
+    "provisional": {
+      "head": "the-french-revolution"
+    }
+  },
+  {
+    "id": "s_63e442b4d4",
+    "title": "The French Revolution",
+    "episodeIds": [
+      "ep_74744a67a3",
+      "ep_0c60a25d11",
+      "ep_f4eb4a987b",
+      "ep_96af217b73"
+    ],
+    "yearFrom": null,
+    "yearTo": null,
+    "provisional": {
+      "head": "the-french-revolution"
+    }
+  },
+  {
     "id": "s_692216f22f",
     "title": "Helen Of Troy",
     "episodeIds": [
@@ -405,6 +436,22 @@
     "yearTo": null,
     "provisional": {
       "head": "the-peasants-revolt"
+    }
+  },
+  {
+    "id": "s_95fa8bcced",
+    "title": "Nelson",
+    "episodeIds": [
+      "ep_636c5c0176",
+      "ep_4aa01a7f4d",
+      "ep_3c3156ccb1",
+      "ep_b37c4e195a",
+      "ep_977d962408"
+    ],
+    "yearFrom": null,
+    "yearTo": null,
+    "provisional": {
+      "head": "nelson"
     }
   },
   {
