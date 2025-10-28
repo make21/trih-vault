@@ -27,7 +27,9 @@ async function main() {
 
   for (const episode of episodes) {
     if (!episode.seriesId) {
-      errors.push(`Episode ${episode.id} missing seriesId`);
+      if (typeof episode.part === 'number') {
+        errors.push(`Episode ${episode.id} has part ${episode.part} but no seriesId`);
+      }
       continue;
     }
     if (!seriesById.has(episode.seriesId)) {

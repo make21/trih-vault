@@ -3,14 +3,7 @@
     "id": "alexander-the-great",
     "title": "Alexander The Great",
     "seriesIds": [
-      "alexander-the-great__alexander-the-great"
-    ]
-  },
-  {
-    "id": "moments",
-    "title": "Moments",
-    "seriesIds": [
-      "moments__moments-fall-of-the-roman-republic"
+      "alexander-the-great"
     ]
   }
 ]

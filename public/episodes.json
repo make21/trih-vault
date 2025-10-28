@@ -6,7 +6,7 @@
     "description": "Alexander rises to power across Macedonia and Greece.",
     "audioUrl": "https://example.com/audio/alexander-part1.mp3",
     "part": 1,
-    "seriesId": "alexander-the-great__alexander-the-great"
+    "seriesId": "alexander-the-great"
   },
   {
     "id": "ep662",
@@ -15,7 +15,7 @@
     "description": "The campaign pushes east towards Persia.",
     "audioUrl": "https://example.com/audio/alexander-part2.mp3",
     "part": 2,
-    "seriesId": "alexander-the-great__alexander-the-great"
+    "seriesId": "alexander-the-great"
   },
   {
     "id": "ep670",
@@ -23,7 +23,6 @@
     "pubDate": "2024-07-10T10:00:00.000Z",
     "description": "Tracing the final days of the Roman Republic and Caesar's rise.",
     "audioUrl": "https://example.com/audio/moments-fall-rome.mp3",
-    "seriesId": "moments__moments-fall-of-the-roman-republic",
     "part": null
   }
 ]

@@ -102,27 +102,23 @@ export function kebabCase(input) {
   return slug.startsWith('-') ? slug.slice(1) : slug;
 }
 
-export function normaliseWhitespace(input) {
-  return input.replace(/\s+/g, ' ').trim();
+export function extractPart(title) {
+  const m = title.match(/\(\s*Part\s*(\d+)\s*\)/i);
+  if (m) {
+    return Number(m[1]);
+  }
+  const colon = title.match(/:\s*Part\s*(\d+)/i);
+  return colon ? Number(colon[1]) : null;
 }
 
-export function deriveStemAndPart(title) {
-  const partMatch = title.match(/\bPart\s*(\d+)\b/i);
-  let stem = title;
-  let part = null;
-  if (partMatch) {
-    part = Number(partMatch[1]);
-    const before = stem.slice(0, partMatch.index ?? 0);
-    const after = stem.slice((partMatch.index ?? 0) + partMatch[0].length);
-    stem = normaliseWhitespace(`${before} ${after}`);
-    stem = stem.replace(/\s*[-:–]\s*$/u, '').trim();
-  }
-  if (!stem) {
-    stem = title;
-  }
-  stem = stem.replace(/[()]/g, ' ');
-  stem = normaliseWhitespace(stem);
-  return { stem, part };
+export function seriesStem(title) {
+  const base = title
+    .replace(/\(\s*Part\s*\d+\s*\)/gi, '')
+    .replace(/\s*[–—-]\s*/g, ': ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+  return base.replace(/:\s*part\s*\d+$/, '').trim();
 }
 
 export function toTitleCase(input) {

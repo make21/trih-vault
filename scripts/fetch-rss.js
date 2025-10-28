@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import {
   FEED_URL,
-  deriveStemAndPart,
+  extractPart,
   readJsonFile,
   shortHash,
   writeJsonFile,
@@ -102,7 +102,7 @@ async function main() {
       continue;
     }
     const audioUrl = getAudioUrl(item);
-    const { part } = deriveStemAndPart(title);
+    const part = extractPart(title);
     const episode = {
       id,
       title,

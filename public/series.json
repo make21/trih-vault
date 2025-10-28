@@ -1,19 +1,13 @@
 [
   {
-    "id": "alexander-the-great__alexander-the-great",
+    "id": "alexander-the-great",
     "title": "Alexander The Great",
     "episodeIds": [
       "ep661",
       "ep662"
     ],
-    "topicId": "alexander-the-great"
-  },
-  {
-    "id": "moments__moments-fall-of-the-roman-republic",
-    "title": "Moments: Fall Of The Roman Republic",
-    "episodeIds": [
-      "ep670"
-    ],
-    "topicId": "moments"
+    "topicId": "alexander-the-great",
+    "yearFrom": null,
+    "yearTo": null
   }
 ]
