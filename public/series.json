@@ -1,5 +1,2255 @@
 [
   {
+    "id": "215-stalingrad-and-the-red-army",
+    "title": "215. Stalingrad And The Red Army",
+    "episodeIds": [
+      "ep_0e598dc8f0"
+    ],
+    "topicId": "215-stalingrad-and-the-red-army",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "219-justinian-making-rome-great-again",
+    "title": "219. Justinian: Making Rome Great Again",
+    "episodeIds": [
+      "ep_a0ced01036"
+    ],
+    "topicId": "219-justinian-making-rome-great-again",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "227-portugal-on-the-edge-of-the-world",
+    "title": "227. Portugal: On The Edge Of The World",
+    "episodeIds": [
+      "ep_0e43708358"
+    ],
+    "topicId": "227-portugal-on-the-edge-of-the-world",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "228-portugal-the-golden-age-of-discovery",
+    "title": "228. Portugal: The Golden Age Of Discovery",
+    "episodeIds": [
+      "ep_0cbbb0699c"
+    ],
+    "topicId": "228-portugal-the-golden-age-of-discovery",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "407-the-nazis-in-power-the-conquest-of-austria",
+    "title": "407. The Nazis In Power: The Conquest Of Austria",
+    "episodeIds": [
+      "ep_ca0ab979d0"
+    ],
+    "topicId": "407-the-nazis-in-power-the-conquest-of-austria",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "415-the-murder-of-richard-ii",
+    "title": "415. The Murder Of Richard Ii",
+    "episodeIds": [
+      "ep_ce0af6a3fd"
+    ],
+    "topicId": "415-the-murder-of-richard-ii",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "463-mad-elections",
+    "title": "463. Mad Elections",
+    "episodeIds": [
+      "ep_00c67c3e37"
+    ],
+    "topicId": "463-mad-elections",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "476-the-french-revolution-the-diamond-necklace-scandal",
+    "title": "476. The French Revolution: The Diamond Necklace Scandal",
+    "episodeIds": [
+      "ep_0daa48698c"
+    ],
+    "topicId": "476-the-french-revolution-the-diamond-necklace-scandal",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "486-henry-iv-warrior-princes-and-fat-knights",
+    "title": "486. Henry Iv: Warrior Princes And Fat Knights",
+    "episodeIds": [
+      "ep_0ca9257300"
+    ],
+    "topicId": "486-henry-iv-warrior-princes-and-fat-knights",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "490-hundred-years-war-england-triumphant",
+    "title": "490. Hundred Years' War: England Triumphant",
+    "episodeIds": [
+      "ep_0b4059349c"
+    ],
+    "topicId": "490-hundred-years-war-england-triumphant",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "499-the-roman-conquest-of-britain-julius-caesar-s-invasion",
+    "title": "499. The Roman Conquest Of Britain: Julius Caesar’S Invasion",
+    "episodeIds": [
+      "ep_0e676aae3b"
+    ],
+    "topicId": "499-the-roman-conquest-of-britain-julius-caesar-s-invasion",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "503-the-french-revolution-bloodbath-in-paris",
+    "title": "503. The French Revolution: Bloodbath In Paris",
+    "episodeIds": [
+      "ep_f0ec904c6b"
+    ],
+    "topicId": "503-the-french-revolution-bloodbath-in-paris",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "545-the-french-revolution-the-first-feminist",
+    "title": "545. The French Revolution: The First Feminist",
+    "episodeIds": [
+      "ep_0c60a25d11"
+    ],
+    "topicId": "545-the-french-revolution-the-first-feminist",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "287-jesus-christ-the-mystery",
+    "title": "287: Jesus Christ: The Mystery",
+    "episodeIds": [
+      "ep_cca01aa17d"
+    ],
+    "topicId": "287-jesus-christ-the-mystery",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "405-the-nazis-in-power-the-nuremberg-rallies",
+    "title": "405. The Nazis In Power: The Nuremberg Rallies",
+    "episodeIds": [
+      "ep_1aefd6feab"
+    ],
+    "topicId": "405-the-nazis-in-power-the-nuremberg-rallies",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "452-custer-s-last-stand-the-battle-of-the-little-bighorn",
+    "title": "452. Custer'S Last Stand: The Battle Of The Little Bighorn",
+    "episodeIds": [
+      "ep_01f3fa09b0"
+    ],
+    "topicId": "452-custer-s-last-stand-the-battle-of-the-little-bighorn",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "454-fall-of-the-sioux-death-of-crazy-horse",
+    "title": "454. Fall Of The Sioux: Death Of Crazy Horse",
+    "episodeIds": [
+      "ep_1a709110ba"
+    ],
+    "topicId": "454-fall-of-the-sioux-death-of-crazy-horse",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "466-the-murder-of-franz-ferdinand-the-conspiracy",
+    "title": "466. The Murder Of Franz Ferdinand: The Conspiracy",
+    "episodeIds": [
+      "ep_1f9027b9dd"
+    ],
+    "topicId": "466-the-murder-of-franz-ferdinand-the-conspiracy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "496-evita-the-world-s-most-powerful-woman",
+    "title": "496. Evita: The World'S Most Powerful Woman",
+    "episodeIds": [
+      "ep_1b36b8ed94"
+    ],
+    "topicId": "496-evita-the-world-s-most-powerful-woman",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "500-the-roman-conquest-of-britain-the-empire-strikes-back",
+    "title": "500. The Roman Conquest Of Britain: The Empire Strikes Back",
+    "episodeIds": [
+      "ep_ffaa1a4aee"
+    ],
+    "topicId": "500-the-roman-conquest-of-britain-the-empire-strikes-back",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "520-warlords-of-the-west-barbarian-heirs-of-rome",
+    "title": "520. Warlords Of The West: Barbarian Heirs Of Rome",
+    "episodeIds": [
+      "ep_a1aef4c974"
+    ],
+    "topicId": "520-warlords-of-the-west-barbarian-heirs-of-rome",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "548-the-road-to-1066-anglo-saxon-apocalypse",
+    "title": "548. The Road To 1066: Anglo: Saxon Apocalypse",
+    "episodeIds": [
+      "ep_1e2c528b15"
+    ],
+    "topicId": "548-the-road-to-1066-anglo-saxon-apocalypse",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "555-1066-slaughter-at-stamford-bridge",
+    "title": "555. 1066: Slaughter At Stamford Bridge",
+    "episodeIds": [
+      "ep_e1d5cdac12"
+    ],
+    "topicId": "555-1066-slaughter-at-stamford-bridge",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "556-1066-the-battle-of-hastings",
+    "title": "556. 1066: The Battle Of Hastings",
+    "episodeIds": [
+      "ep_bad1cc5b44"
+    ],
+    "topicId": "556-1066-the-battle-of-hastings",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "558-the-rolling-stones-sex-drugs-and-rock-n-roll",
+    "title": "558. The Rolling Stones: Sex, Drugs And Rock ‘N’ Roll",
+    "episodeIds": [
+      "ep_e1cb17cbc1"
+    ],
+    "topicId": "558-the-rolling-stones-sex-drugs-and-rock-n-roll",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "106-watergate",
+    "title": "106. Watergate",
+    "episodeIds": [
+      "ep_2b85f6c071"
+    ],
+    "topicId": "106-watergate",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "179-french-presidents-1981-2022",
+    "title": "179. French Presidents: 1981: 2022",
+    "episodeIds": [
+      "ep_2ca2fa88b2"
+    ],
+    "topicId": "179-french-presidents-1981-2022",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "231-queen-elizabeth-ii",
+    "title": "231. Queen Elizabeth Ii",
+    "episodeIds": [
+      "ep_fe2ddb481b"
+    ],
+    "topicId": "231-queen-elizabeth-ii",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "311-reagan-the-road-to-the-white-house",
+    "title": "311: Reagan: The Road To The White House",
+    "episodeIds": [
+      "ep_2f65bc381f"
+    ],
+    "topicId": "311-reagan-the-road-to-the-white-house",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "406-the-nazis-in-power-hitler-s-road-to-war",
+    "title": "406. The Nazis In Power: Hitler’S Road To War",
+    "episodeIds": [
+      "ep_2ad8efda71"
+    ],
+    "topicId": "406-the-nazis-in-power-hitler-s-road-to-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "413-the-peasants-revolt-england-erupts",
+    "title": "413. The Peasants' Revolt: England Erupts",
+    "episodeIds": [
+      "ep_2b3822634b"
+    ],
+    "topicId": "413-the-peasants-revolt-england-erupts",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "424-carthage-vs-rome-total-war",
+    "title": "424. Carthage Vs. Rome: Total War",
+    "episodeIds": [
+      "ep_fb2e5ba3da"
+    ],
+    "topicId": "424-carthage-vs-rome-total-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "479-the-french-revolution-the-storming-of-the-bastille",
+    "title": "479. The French Revolution: The Storming Of The Bastille",
+    "episodeIds": [
+      "ep_eaaa2ca902"
+    ],
+    "topicId": "479-the-french-revolution-the-storming-of-the-bastille",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "507-the-french-revolution-the-marseillaise-song-of-war",
+    "title": "507. The French Revolution: The Marseillaise, Song Of War",
+    "episodeIds": [
+      "ep_2d31cff158"
+    ],
+    "topicId": "507-the-french-revolution-the-marseillaise-song-of-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "516-nelson-god-of-war",
+    "title": "516. Nelson: God Of War",
+    "episodeIds": [
+      "ep_2eed856971"
+    ],
+    "topicId": "516-nelson-god-of-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "572-the-medici-masters-of-florence",
+    "title": "572. The Medici: Masters Of Florence",
+    "episodeIds": [
+      "ep_2f94b04319"
+    ],
+    "topicId": "572-the-medici-masters-of-florence",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "183-history-s-biggest-questions-with-dan-carlin",
+    "title": "183. History'S Biggest Questions With Dan Carlin",
+    "episodeIds": [
+      "ep_3e16c0aead"
+    ],
+    "topicId": "183-history-s-biggest-questions-with-dan-carlin",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "298-the-nazis-total-power",
+    "title": "298: The Nazis: Total Power",
+    "episodeIds": [
+      "ep_3df6195311"
+    ],
+    "topicId": "298-the-nazis-total-power",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "319-hundred-years-war-triumph-of-the-longbow",
+    "title": "319: Hundred Years' War: Triumph Of The Longbow",
+    "episodeIds": [
+      "ep_3c43147ec9"
+    ],
+    "topicId": "319-hundred-years-war-triumph-of-the-longbow",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "348-the-boston-tea-party",
+    "title": "348: The Boston Tea Party",
+    "episodeIds": [
+      "ep_3b9854eadd"
+    ],
+    "topicId": "348-the-boston-tea-party",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "385-the-fall-of-the-aztecs-the-woman-who-changed-the-world",
+    "title": "385. The Fall Of The Aztecs: The Woman Who Changed The World",
+    "episodeIds": [
+      "ep_3e25a95ffc"
+    ],
+    "topicId": "385-the-fall-of-the-aztecs-the-woman-who-changed-the-world",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "393-jfk-cuba-camelot-and-the-cold-war",
+    "title": "393. Jfk: Cuba, Camelot And The Cold War",
+    "episodeIds": [
+      "ep_3ff5642039"
+    ],
+    "topicId": "393-jfk-cuba-camelot-and-the-cold-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "409-the-nazis-in-power-hitler-s-war-on-the-jews",
+    "title": "409. The Nazis In Power: Hitler'S War On The Jews",
+    "episodeIds": [
+      "ep_3dcad24715"
+    ],
+    "topicId": "409-the-nazis-in-power-hitler-s-war-on-the-jews",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "453-custer-s-last-stand-the-final-showdown",
+    "title": "453. Custer'S Last Stand: The Final Showdown",
+    "episodeIds": [
+      "ep_e3b43d88dd"
+    ],
+    "topicId": "453-custer-s-last-stand-the-final-showdown",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "473-the-road-to-the-great-war-the-tsar-chooses-war",
+    "title": "473. The Road To The Great War: The Tsar Chooses War",
+    "episodeIds": [
+      "ep_e3abbadc42"
+    ],
+    "topicId": "473-the-road-to-the-great-war-the-tsar-chooses-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "531-hitler-s-war-on-poland-the-pact-with-stalin",
+    "title": "531. Hitler'S War On Poland: The Pact With Stalin",
+    "episodeIds": [
+      "ep_f3c3b410a5"
+    ],
+    "topicId": "531-hitler-s-war-on-poland-the-pact-with-stalin",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "581-the-irish-civil-war-the-killing-of-michael-collins",
+    "title": "581. The Irish Civil War: The Killing Of Michael Collins",
+    "episodeIds": [
+      "ep_3e6b082696"
+    ],
+    "topicId": "581-the-irish-civil-war-the-killing-of-michael-collins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "610-nelson-the-battle-of-copenhagen",
+    "title": "610. Nelson: The Battle Of Copenhagen",
+    "episodeIds": [
+      "ep_3c3156ccb1"
+    ],
+    "topicId": "610-nelson-the-battle-of-copenhagen",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "197-antony-cleopatra",
+    "title": "197. Antony & Cleopatra",
+    "episodeIds": [
+      "ep_4fd70c4480"
+    ],
+    "topicId": "197-antony-cleopatra",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "198-cleopatra-s-downfall",
+    "title": "198. Cleopatra'S Downfall",
+    "episodeIds": [
+      "ep_4fe8277089"
+    ],
+    "topicId": "198-cleopatra-s-downfall",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "236-china-and-world-war-ii",
+    "title": "236. China And World War Ii",
+    "episodeIds": [
+      "ep_04d1e513e1"
+    ],
+    "topicId": "236-china-and-world-war-ii",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "249-treason-in-modern-britain",
+    "title": "249. Treason In Modern Britain",
+    "episodeIds": [
+      "ep_4f5629a3c4"
+    ],
+    "topicId": "249-treason-in-modern-britain",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "295-the-rise-of-the-nazis",
+    "title": "295: The Rise Of The Nazis",
+    "episodeIds": [
+      "ep_4a5238eb3e"
+    ],
+    "topicId": "295-the-rise-of-the-nazis",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "381-captain-cook-to-the-ends-of-the-earth",
+    "title": "381. Captain Cook: To The Ends Of The Earth",
+    "episodeIds": [
+      "ep_4da31d2980"
+    ],
+    "topicId": "381-captain-cook-to-the-ends-of-the-earth",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "432-titanic-the-survivors",
+    "title": "432. Titanic: The Survivors",
+    "episodeIds": [
+      "ep_4b22b27149"
+    ],
+    "topicId": "432-titanic-the-survivors",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "477-the-french-revolution-the-violence-begins",
+    "title": "477. The French Revolution: The Violence Begins",
+    "episodeIds": [
+      "ep_ac4f548358"
+    ],
+    "topicId": "477-the-french-revolution-the-violence-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "481-the-french-revolution-the-women-s-march-on-versailles",
+    "title": "481. The French Revolution: The Women'S March On Versailles",
+    "episodeIds": [
+      "ep_c4f0a1ffaf"
+    ],
+    "topicId": "481-the-french-revolution-the-women-s-march-on-versailles",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "530-hitler-s-war-on-poland-countdown-to-armageddon",
+    "title": "530. Hitler’S War On Poland: Countdown To Armageddon",
+    "episodeIds": [
+      "ep_4c7f8e0ece"
+    ],
+    "topicId": "530-hitler-s-war-on-poland-countdown-to-armageddon",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "534-emperors-of-rome-sex-secrets-of-the-caesars",
+    "title": "534. Emperors Of Rome: Sex Secrets Of The Caesars",
+    "episodeIds": [
+      "ep_0004eb8b68"
+    ],
+    "topicId": "534-emperors-of-rome-sex-secrets-of-the-caesars",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "546-the-french-revolution-the-monarchy-falls",
+    "title": "546. The French Revolution: The Monarchy Falls",
+    "episodeIds": [
+      "ep_f4eb4a987b"
+    ],
+    "topicId": "546-the-french-revolution-the-monarchy-falls",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "551-the-road-to-1066-countdown-to-conquest",
+    "title": "551. The Road To 1066: Countdown To Conquest",
+    "episodeIds": [
+      "ep_4d23eee615"
+    ],
+    "topicId": "551-the-road-to-1066-countdown-to-conquest",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "569-hannibal-elephants-cross-the-alps",
+    "title": "569. Hannibal: Elephants Cross The Alps",
+    "episodeIds": [
+      "ep_4f159e7607"
+    ],
+    "topicId": "569-hannibal-elephants-cross-the-alps",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "597-the-first-world-war-the-massacre-of-the-innocents",
+    "title": "597. The First World War: The Massacre Of The Innocents",
+    "episodeIds": [
+      "ep_4cd950a0e9"
+    ],
+    "topicId": "597-the-first-world-war-the-massacre-of-the-innocents",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "609-nelson-the-gathering-storm",
+    "title": "609. Nelson: The Gathering Storm",
+    "episodeIds": [
+      "ep_4aa01a7f4d"
+    ],
+    "topicId": "609-nelson-the-gathering-storm",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "202-american-civil-war-gettysburg",
+    "title": "202. American Civil War: Gettysburg",
+    "episodeIds": [
+      "ep_5da07f9bef"
+    ],
+    "topicId": "202-american-civil-war-gettysburg",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "214-the-battle-of-stalingrad",
+    "title": "214. The Battle Of Stalingrad",
+    "episodeIds": [
+      "ep_5eca55f8ce"
+    ],
+    "topicId": "214-the-battle-of-stalingrad",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "370-the-1973-chilean-coup-allende-nixon-and-the-cia",
+    "title": "370. The 1973 Chilean Coup: Allende, Nixon And The Cia",
+    "episodeIds": [
+      "ep_b5f61370aa"
+    ],
+    "topicId": "370-the-1973-chilean-coup-allende-nixon-and-the-cia",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "464-modern-british-elections",
+    "title": "464. Modern British Elections",
+    "episodeIds": [
+      "ep_5c0395c8ab"
+    ],
+    "topicId": "464-modern-british-elections",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "489-hundred-years-war-bloodbath-at-agincourt",
+    "title": "489. Hundred Years' War: Bloodbath At Agincourt",
+    "episodeIds": [
+      "ep_5b4be83abb"
+    ],
+    "topicId": "489-hundred-years-war-bloodbath-at-agincourt",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "596-the-first-world-war-the-miracle-on-the-marne",
+    "title": "596. The First World War: The Miracle On The Marne",
+    "episodeIds": [
+      "ep_b5ca821c84"
+    ],
+    "topicId": "596-the-first-world-war-the-miracle-on-the-marne",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "177-the-jewish-revolt",
+    "title": "177. The Jewish Revolt",
+    "episodeIds": [
+      "ep_6f0bc05ae2"
+    ],
+    "topicId": "177-the-jewish-revolt",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "230-portugal-football-fado-and-fascism",
+    "title": "230. Portugal: Football, Fado, And Fascism?",
+    "episodeIds": [
+      "ep_6d3044c926"
+    ],
+    "topicId": "230-portugal-football-fado-and-fascism",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "318-hundred-years-war-a-game-of-thrones",
+    "title": "318: Hundred Years' War: A Game Of Thrones",
+    "episodeIds": [
+      "ep_6d8f0e4f1b"
+    ],
+    "topicId": "318-hundred-years-war-a-game-of-thrones",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "325-fall-of-saigon-apocalypse-now",
+    "title": "325: Fall Of Saigon: Apocalypse Now",
+    "episodeIds": [
+      "ep_6d86cb78c0"
+    ],
+    "topicId": "325-fall-of-saigon-apocalypse-now",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "337-ireland-union-famine-and-parnell",
+    "title": "337: Ireland: Union, Famine And Parnell",
+    "episodeIds": [
+      "ep_6b29ba1dea"
+    ],
+    "topicId": "337-ireland-union-famine-and-parnell",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "440-lord-byron-mad-bad-and-dangerous-to-know",
+    "title": "440. Lord Byron: Mad, Bad And Dangerous To Know",
+    "episodeIds": [
+      "ep_6b790c4462"
+    ],
+    "topicId": "440-lord-byron-mad-bad-and-dangerous-to-know",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "458-helen-of-troy-a-family-of-blood",
+    "title": "458. Helen Of Troy: A Family Of Blood",
+    "episodeIds": [
+      "ep_06bcb12c08"
+    ],
+    "topicId": "458-helen-of-troy-a-family-of-blood",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "469-the-road-to-the-great-war-countdown-to-armageddon",
+    "title": "469. The Road To The Great War: Countdown To Armageddon",
+    "episodeIds": [
+      "ep_6c831f97f0"
+    ],
+    "topicId": "469-the-road-to-the-great-war-countdown-to-armageddon",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "487-hundred-years-war-henry-v-s-invasion-of-france",
+    "title": "487. Hundred Years' War: Henry V’S Invasion Of France",
+    "episodeIds": [
+      "ep_d6dc5f4cba"
+    ],
+    "topicId": "487-hundred-years-war-henry-v-s-invasion-of-france",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "232-queen-elizabeth-ii",
+    "title": "232. Queen Elizabeth Ii",
+    "episodeIds": [
+      "ep_c7cc352580"
+    ],
+    "topicId": "232-queen-elizabeth-ii",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "307-columbus-a-new-world",
+    "title": "307: Columbus: A New World?",
+    "episodeIds": [
+      "ep_7b28a227a3"
+    ],
+    "topicId": "307-columbus-a-new-world",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "310-ronald-reagan-and-the-american-dream",
+    "title": "310: Ronald Reagan And The American Dream",
+    "episodeIds": [
+      "ep_e7b38c4385"
+    ],
+    "topicId": "310-ronald-reagan-and-the-american-dream",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "328-coronations-sex-holy-oil-and-civil-war",
+    "title": "328: Coronations: Sex, Holy Oil And Civil War",
+    "episodeIds": [
+      "ep_7ff83679f5"
+    ],
+    "topicId": "328-coronations-sex-holy-oil-and-civil-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "410-the-nazis-in-power-the-night-of-broken-glass",
+    "title": "410. The Nazis In Power: The Night Of Broken Glass",
+    "episodeIds": [
+      "ep_e7a362df4d"
+    ],
+    "topicId": "410-the-nazis-in-power-the-night-of-broken-glass",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "419-britain-in-1974-countdown-to-a-coup",
+    "title": "419. Britain In 1974: Countdown To A Coup",
+    "episodeIds": [
+      "ep_07ff472879"
+    ],
+    "topicId": "419-britain-in-1974-countdown-to-a-coup",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "423-carthage-vs-rome-the-wolf-at-the-gates",
+    "title": "423. Carthage Vs. Rome: The Wolf At The Gates",
+    "episodeIds": [
+      "ep_7a0199dd16"
+    ],
+    "topicId": "423-carthage-vs-rome-the-wolf-at-the-gates",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "436-luther-showdown-with-the-emperor",
+    "title": "436. Luther: Showdown With The Emperor",
+    "episodeIds": [
+      "ep_a7eb06ffe3"
+    ],
+    "topicId": "436-luther-showdown-with-the-emperor",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "449-custer-vs-crazy-horse-rise-of-sitting-bull",
+    "title": "449. Custer Vs. Crazy Horse: Rise Of Sitting Bull",
+    "episodeIds": [
+      "ep_7c370abf7e"
+    ],
+    "topicId": "449-custer-vs-crazy-horse-rise-of-sitting-bull",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "450-custer-s-last-stand-death-in-the-black-hills",
+    "title": "450. Custer'S Last Stand: Death In The Black Hills",
+    "episodeIds": [
+      "ep_7da7500414"
+    ],
+    "topicId": "450-custer-s-last-stand-death-in-the-black-hills",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "451-custer-s-last-stand-the-charge-of-the-7th-cavalry",
+    "title": "451. Custer'S Last Stand: The Charge Of The 7th Cavalry",
+    "episodeIds": [
+      "ep_ecfc07d746"
+    ],
+    "topicId": "451-custer-s-last-stand-the-charge-of-the-7th-cavalry",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "524-charlemagne-pagan-killer",
+    "title": "524. Charlemagne: Pagan Killer",
+    "episodeIds": [
+      "ep_7faeb5a328"
+    ],
+    "topicId": "524-charlemagne-pagan-killer",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "539-horror-in-the-congo-the-crimes-of-empire",
+    "title": "539. Horror In The Congo: The Crimes Of Empire",
+    "episodeIds": [
+      "ep_7c0fa8401c"
+    ],
+    "topicId": "539-horror-in-the-congo-the-crimes-of-empire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "590-the-assassination-of-abraham-lincoln-death-at-the-theatre",
+    "title": "590. The Assassination Of Abraham Lincoln: Death At The Theatre",
+    "episodeIds": [
+      "ep_7abcbc25ab"
+    ],
+    "topicId": "590-the-assassination-of-abraham-lincoln-death-at-the-theatre",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "170-the-falklands-war-the-task-force-sails",
+    "title": "170. The Falklands War: The Task Force Sails",
+    "episodeIds": [
+      "ep_8bd59e0e47"
+    ],
+    "topicId": "170-the-falklands-war-the-task-force-sails",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "188-australian-prime-ministers-harold-holt-malcolm-fraser",
+    "title": "188. Australian Prime Ministers: Harold Holt: Malcolm Fraser",
+    "episodeIds": [
+      "ep_8b26b99b9a"
+    ],
+    "topicId": "188-australian-prime-ministers-harold-holt-malcolm-fraser",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "252-the-world-cup-british-imperialism-south-american-rivalries-and-mussolini",
+    "title": "252. The World Cup: British Imperialism, South American Rivalries, And Mussolini",
+    "episodeIds": [
+      "ep_c8eab4fec1"
+    ],
+    "topicId": "252-the-world-cup-british-imperialism-south-american-rivalries-and-mussolini",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "344-oppenheimer-the-witch-hunt",
+    "title": "344: Oppenheimer: The Witch Hunt",
+    "episodeIds": [
+      "ep_f8f180cc1d"
+    ],
+    "topicId": "344-oppenheimer-the-witch-hunt",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "379-baghdad-the-arabian-nights",
+    "title": "379. Baghdad: The Arabian Nights",
+    "episodeIds": [
+      "ep_8cf4ff92c7"
+    ],
+    "topicId": "379-baghdad-the-arabian-nights",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "404-the-nazis-in-power-the-night-of-the-long-knives",
+    "title": "404. The Nazis In Power: The Night Of The Long Knives",
+    "episodeIds": [
+      "ep_8e3ca5548a"
+    ],
+    "topicId": "404-the-nazis-in-power-the-night-of-the-long-knives",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "447-custer-vs-crazy-horse-the-winning-of-the-west",
+    "title": "447. Custer Vs. Crazy Horse: The Winning Of The West",
+    "episodeIds": [
+      "ep_b8c7b13088"
+    ],
+    "topicId": "447-custer-vs-crazy-horse-the-winning-of-the-west",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "472-the-road-to-the-great-war-britain-s-fateful-choice",
+    "title": "472. The Road To The Great War: Britain'S Fateful Choice",
+    "episodeIds": [
+      "ep_8ee0038566"
+    ],
+    "topicId": "472-the-road-to-the-great-war-britain-s-fateful-choice",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "488-hundred-years-war-the-road-to-agincourt",
+    "title": "488. Hundred Years' War: The Road To Agincourt",
+    "episodeIds": [
+      "ep_da8a6a8205"
+    ],
+    "topicId": "488-hundred-years-war-the-road-to-agincourt",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "491-history-s-greatest-beards-from-egyptian-queens-to-medieval-conquerors",
+    "title": "491. History'S Greatest Beards: From Egyptian Queens To Medieval Conquerors",
+    "episodeIds": [
+      "ep_08a17e9204"
+    ],
+    "topicId": "491-history-s-greatest-beards-from-egyptian-queens-to-medieval-conquerors",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "492-the-war-on-beards-from-peter-the-great-to-john-lennon",
+    "title": "492. The War On Beards: From Peter The Great To John Lennon",
+    "episodeIds": [
+      "ep_8fcb055f10"
+    ],
+    "topicId": "492-the-war-on-beards-from-peter-the-great-to-john-lennon",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "594-the-first-world-war-the-invasion-of-belgium",
+    "title": "594. The First World War: The Invasion Of Belgium",
+    "episodeIds": [
+      "ep_c8ccbc6b43"
+    ],
+    "topicId": "594-the-first-world-war-the-invasion-of-belgium",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "175-crucifixion",
+    "title": "175. Crucifixion",
+    "episodeIds": [
+      "ep_9feb1fe6a1"
+    ],
+    "topicId": "175-crucifixion",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "196-julius-caesar-cleopatra",
+    "title": "196. Julius Caesar & Cleopatra",
+    "episodeIds": [
+      "ep_9da0aa9f64"
+    ],
+    "topicId": "196-julius-caesar-cleopatra",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "212-haunted-london",
+    "title": "212. Haunted London",
+    "episodeIds": [
+      "ep_9b47339e1c"
+    ],
+    "topicId": "212-haunted-london",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "250-alfred-the-great-fury-of-the-vikings",
+    "title": "250. Alfred The Great: Fury Of The Vikings",
+    "episodeIds": [
+      "ep_9a2165ce34"
+    ],
+    "topicId": "250-alfred-the-great-fury-of-the-vikings",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "327-coronations-the-deep-history",
+    "title": "327: Coronations: The Deep History",
+    "episodeIds": [
+      "ep_9c5592fe6c"
+    ],
+    "topicId": "327-coronations-the-deep-history",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "382-young-napoleon-teenage-revolutionary",
+    "title": "382. Young Napoleon: Teenage Revolutionary",
+    "episodeIds": [
+      "ep_dca9dd9bae"
+    ],
+    "topicId": "382-young-napoleon-teenage-revolutionary",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "386-the-fall-of-the-aztecs-the-city-of-gold",
+    "title": "386. The Fall Of The Aztecs: The City Of Gold",
+    "episodeIds": [
+      "ep_bbc9cb39ff"
+    ],
+    "topicId": "386-the-fall-of-the-aztecs-the-city-of-gold",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "420-britain-in-1974-thatcher-enters-the-ring",
+    "title": "420. Britain In 1974: Thatcher Enters The Ring",
+    "episodeIds": [
+      "ep_d9c82b05f4"
+    ],
+    "topicId": "420-britain-in-1974-thatcher-enters-the-ring",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "430-titanic-the-iceberg-strikes",
+    "title": "430. Titanic: The Iceberg Strikes",
+    "episodeIds": [
+      "ep_9a1e292a8c"
+    ],
+    "topicId": "430-titanic-the-iceberg-strikes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "441-lord-byron-scandal-sex-and-celebrity",
+    "title": "441. Lord Byron: Scandal, Sex And Celebrity",
+    "episodeIds": [
+      "ep_9af03702dc"
+    ],
+    "topicId": "441-lord-byron-scandal-sex-and-celebrity",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "482-the-french-revolution-the-royal-family-escapes",
+    "title": "482. The French Revolution: The Royal Family Escapes",
+    "episodeIds": [
+      "ep_bbe9dbd975"
+    ],
+    "topicId": "482-the-french-revolution-the-royal-family-escapes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "485-henry-iv-the-usurper-king",
+    "title": "485. Henry Iv: The Usurper King",
+    "episodeIds": [
+      "ep_09bf172549"
+    ],
+    "topicId": "485-henry-iv-the-usurper-king",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "517-nelson-the-hunt-for-napoleon",
+    "title": "517. Nelson: The Hunt For Napoleon",
+    "episodeIds": [
+      "ep_9ff5da2b53"
+    ],
+    "topicId": "517-nelson-the-hunt-for-napoleon",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "518-nelson-the-battle-of-the-nile",
+    "title": "518. Nelson: The Battle Of The Nile",
+    "episodeIds": [
+      "ep_9c17c53a37"
+    ],
+    "topicId": "518-nelson-the-battle-of-the-nile",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "522-warlords-of-the-west-a-clash-of-ice-and-fire",
+    "title": "522. Warlords Of The West: A Clash Of Ice And Fire",
+    "episodeIds": [
+      "ep_9f1cba9e3c"
+    ],
+    "topicId": "522-warlords-of-the-west-a-clash-of-ice-and-fire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "537-emperors-of-rome-claudius-paranoia-and-poison",
+    "title": "537. Emperors Of Rome: Claudius, Paranoia And Poison",
+    "episodeIds": [
+      "ep_9f64795150"
+    ],
+    "topicId": "537-emperors-of-rome-claudius-paranoia-and-poison",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "538-horror-in-the-congo-the-nightmare-begins",
+    "title": "538. Horror In The Congo: The Nightmare Begins",
+    "episodeIds": [
+      "ep_9d414c46d3"
+    ],
+    "topicId": "538-horror-in-the-congo-the-nightmare-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "570-hannibal-the-invasion-of-italy",
+    "title": "570. Hannibal: The Invasion Of Italy",
+    "episodeIds": [
+      "ep_afd9e48afd"
+    ],
+    "topicId": "570-hannibal-the-invasion-of-italy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "573-the-medici-lorenzo-the-magnificent",
+    "title": "573. The Medici: Lorenzo The Magnificent",
+    "episodeIds": [
+      "ep_cd9dd1a299"
+    ],
+    "topicId": "573-the-medici-lorenzo-the-magnificent",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "465-the-murder-of-franz-ferdinand-the-killer",
+    "title": "465. The Murder Of Franz Ferdinand: The Killer",
+    "episodeIds": [
+      "ep_12fdbf44f5"
+    ],
+    "topicId": "465-the-murder-of-franz-ferdinand-the-killer",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "574-the-medici-curse-of-the-mad-monk",
+    "title": "574. The Medici: Curse Of The Mad Monk",
+    "episodeIds": [
+      "ep_14bfadaf5a"
+    ],
+    "topicId": "574-the-medici-curse-of-the-mad-monk",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "422-ancient-carthage-rise-of-a-superpower",
+    "title": "422. Ancient Carthage: Rise Of A Superpower",
+    "episodeIds": [
+      "ep_16ecd05740"
+    ],
+    "topicId": "422-ancient-carthage-rise-of-a-superpower",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "510-america-in-68-the-killing-of-robert-kennedy",
+    "title": "510. America In '68: The Killing Of Robert Kennedy",
+    "episodeIds": [
+      "ep_16f71a112a"
+    ],
+    "topicId": "510-america-in-68-the-killing-of-robert-kennedy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "243-trafalgar-a-world-at-war",
+    "title": "243. Trafalgar: A World At War",
+    "episodeIds": [
+      "ep_19e5b158dc"
+    ],
+    "topicId": "243-trafalgar-a-world-at-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "511-america-in-68-george-wallace-the-first-donald-trump",
+    "title": "511. America In '68: George Wallace, The First Donald Trump",
+    "episodeIds": [
+      "ep_da19c9bc47"
+    ],
+    "topicId": "511-america-in-68-george-wallace-the-first-donald-trump",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "431-titanic-nightmare-at-midnight",
+    "title": "431. Titanic: Nightmare At Midnight",
+    "episodeIds": [
+      "ep_c20a159e8e"
+    ],
+    "topicId": "431-titanic-nightmare-at-midnight",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "515-nelson-attack-the-french",
+    "title": "515. Nelson: Attack The French!",
+    "episodeIds": [
+      "ep_22abe2466d"
+    ],
+    "topicId": "515-nelson-attack-the-french",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "239-young-churchill-born-to-lead",
+    "title": "239: Young Churchill: Born To Lead",
+    "episodeIds": [
+      "ep_fa025a5d09"
+    ],
+    "topicId": "239-young-churchill-born-to-lead",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "244-trafalgar-countdown-to-annihilation",
+    "title": "244. Trafalgar: Countdown To Annihilation",
+    "episodeIds": [
+      "ep_da27c1b403"
+    ],
+    "topicId": "244-trafalgar-countdown-to-annihilation",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "387-the-fall-of-the-aztecs-prisoners-of-montezuma",
+    "title": "387. The Fall Of The Aztecs: Prisoners Of Montezuma",
+    "episodeIds": [
+      "ep_28d7992e40"
+    ],
+    "topicId": "387-the-fall-of-the-aztecs-prisoners-of-montezuma",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "502-the-roman-conquest-of-britain-to-the-ends-of-the-earth",
+    "title": "502. The Roman Conquest Of Britain: To The Ends Of The Earth",
+    "episodeIds": [
+      "ep_f29a107fed"
+    ],
+    "topicId": "502-the-roman-conquest-of-britain-to-the-ends-of-the-earth",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "474-the-road-to-the-great-war-the-lights-go-out",
+    "title": "474. The Road To The Great War: The Lights Go Out",
+    "episodeIds": [
+      "ep_31a340eb41"
+    ],
+    "topicId": "474-the-road-to-the-great-war-the-lights-go-out",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "602-greek-myths-zeus-king-of-the-gods",
+    "title": "602. Greek Myths: Zeus, King Of The Gods",
+    "episodeIds": [
+      "ep_b33f55900e"
+    ],
+    "topicId": "602-greek-myths-zeus-king-of-the-gods",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "211-london-people",
+    "title": "211. London: People",
+    "episodeIds": [
+      "ep_c34b7222cc"
+    ],
+    "topicId": "211-london-people",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "557-1066-the-norman-conquest",
+    "title": "557. 1066: The Norman Conquest",
+    "episodeIds": [
+      "ep_34e1ce9d1b"
+    ],
+    "topicId": "557-1066-the-norman-conquest",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "388-the-fall-of-the-aztecs-the-festival-of-blood",
+    "title": "388. The Fall Of The Aztecs: The Festival Of Blood",
+    "episodeIds": [
+      "ep_35b42c829f"
+    ],
+    "topicId": "388-the-fall-of-the-aztecs-the-festival-of-blood",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "189-australian-prime-ministers-bob-hawke-scott-morrison",
+    "title": "189. Australian Prime Ministers: Bob Hawke: Scott Morrison",
+    "episodeIds": [
+      "ep_037c4d5040"
+    ],
+    "topicId": "189-australian-prime-ministers-bob-hawke-scott-morrison",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "611-nelson-bonaparte-prepares-to-strike",
+    "title": "611. Nelson: Bonaparte Prepares To Strike",
+    "episodeIds": [
+      "ep_b37c4e195a"
+    ],
+    "topicId": "611-nelson-bonaparte-prepares-to-strike",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "501-the-roman-conquest-of-britain-boudicca-s-reign-of-blood",
+    "title": "501. The Roman Conquest Of Britain: Boudicca’S Reign Of Blood",
+    "episodeIds": [
+      "ep_38c7c338aa"
+    ],
+    "topicId": "501-the-roman-conquest-of-britain-boudicca-s-reign-of-blood",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "568-hannibal-rome-s-greatest-enemy",
+    "title": "568. Hannibal: Rome'S Greatest Enemy",
+    "episodeIds": [
+      "ep_40a7ee8e2e"
+    ],
+    "topicId": "568-hannibal-rome-s-greatest-enemy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "604-greek-myths-sex-drugs-tragedy",
+    "title": "604. Greek Myths: Sex, Drugs & Tragedy",
+    "episodeIds": [
+      "ep_40e28f752a"
+    ],
+    "topicId": "604-greek-myths-sex-drugs-tragedy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "525-charlemagne-emperor-of-the-west",
+    "title": "525. Charlemagne: Emperor Of The West",
+    "episodeIds": [
+      "ep_41f40f06a9"
+    ],
+    "topicId": "525-charlemagne-emperor-of-the-west",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "392-jfk-the-road-to-the-white-house",
+    "title": "392. Jfk: The Road To The White House",
+    "episodeIds": [
+      "ep_43de958ea3"
+    ],
+    "topicId": "392-jfk-the-road-to-the-white-house",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "296-the-nazis-the-beer-hall-putsch",
+    "title": "296: The Nazis: The Beer Hall Putsch",
+    "episodeIds": [
+      "ep_bcf46d2909"
+    ],
+    "topicId": "296-the-nazis-the-beer-hall-putsch",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "598-the-first-world-war-the-eastern-front-explodes",
+    "title": "598. The First World War: The Eastern Front Explodes",
+    "episodeIds": [
+      "ep_db47b8a11c"
+    ],
+    "topicId": "598-the-first-world-war-the-eastern-front-explodes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "320-hundred-years-war-the-black-prince",
+    "title": "320: Hundred Years' War: The Black Prince",
+    "episodeIds": [
+      "ep_50f45df8d7"
+    ],
+    "topicId": "320-hundred-years-war-the-black-prince",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "563-peter-the-great-bloodbath-in-the-kremlin",
+    "title": "563. Peter The Great: Bloodbath In The Kremlin",
+    "episodeIds": [
+      "ep_55ffaeccad"
+    ],
+    "topicId": "563-peter-the-great-bloodbath-in-the-kremlin",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "172-the-falklands-war-afterlife",
+    "title": "172. The Falklands War: Afterlife",
+    "episodeIds": [
+      "ep_ecc56badfc"
+    ],
+    "topicId": "172-the-falklands-war-afterlife",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "254-the-world-cup-the-falklands-despots-and-corruption",
+    "title": "254. The World Cup: The Falklands, Despots, And Corruption",
+    "episodeIds": [
+      "ep_56af419fd0"
+    ],
+    "topicId": "254-the-world-cup-the-falklands-despots-and-corruption",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "377-baghdad-crossroads-of-the-universe",
+    "title": "377. Baghdad: Crossroads Of The Universe",
+    "episodeIds": [
+      "ep_b56ffa4efc"
+    ],
+    "topicId": "377-baghdad-crossroads-of-the-universe",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "471-the-road-to-the-great-war-the-austrian-ultimatum",
+    "title": "471. The Road To The Great War: The Austrian Ultimatum",
+    "episodeIds": [
+      "ep_fcafb56d74"
+    ],
+    "topicId": "471-the-road-to-the-great-war-the-austrian-ultimatum",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "240-young-churchill-soldier-of-empire",
+    "title": "240. Young Churchill: Soldier Of Empire",
+    "episodeIds": [
+      "ep_58a81aa0c5"
+    ],
+    "topicId": "240-young-churchill-soldier-of-empire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "297-the-nazis-hitler-s-triumph",
+    "title": "297: The Nazis: Hitler'S Triumph",
+    "episodeIds": [
+      "ep_58ada0551f"
+    ],
+    "topicId": "297-the-nazis-hitler-s-triumph",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "336-ireland-celts-conquest-and-cromwell",
+    "title": "336: Ireland: Celts, Conquest And Cromwell",
+    "episodeIds": [
+      "ep_fb58e760d4"
+    ],
+    "topicId": "336-ireland-celts-conquest-and-cromwell",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "532-hitler-s-war-on-poland-the-fall-of-warsaw",
+    "title": "532. Hitler'S War On Poland: The Fall Of Warsaw",
+    "episodeIds": [
+      "ep_58a1bd6e2e"
+    ],
+    "topicId": "532-hitler-s-war-on-poland-the-fall-of-warsaw",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "288-jesus-christ-the-history",
+    "title": "288: Jesus Christ: The History",
+    "episodeIds": [
+      "ep_a59cc634a1"
+    ],
+    "topicId": "288-jesus-christ-the-history",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "587-mary-queen-of-scots-murder-most-foul",
+    "title": "587. Mary, Queen Of Scots: Murder Most Foul",
+    "episodeIds": [
+      "ep_e59ad2d7a5"
+    ],
+    "topicId": "587-mary-queen-of-scots-murder-most-foul",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "384-the-fall-of-the-aztecs-the-adventure-begins",
+    "title": "384. The Fall Of The Aztecs: The Adventure Begins",
+    "episodeIds": [
+      "ep_60b3f0a019"
+    ],
+    "topicId": "384-the-fall-of-the-aztecs-the-adventure-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "394-jfk-death-in-dallas",
+    "title": "394. Jfk: Death In Dallas",
+    "episodeIds": [
+      "ep_acca64b380"
+    ],
+    "topicId": "394-jfk-death-in-dallas",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "553-the-last-viking-warrior-of-the-new-rome",
+    "title": "553. The Last Viking: Warrior Of The New Rome",
+    "episodeIds": [
+      "ep_fd64f235db"
+    ],
+    "topicId": "553-the-last-viking-warrior-of-the-new-rome",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "383-young-napoleon-the-shadow-of-the-guillotine",
+    "title": "383. Young Napoleon: The Shadow Of The Guillotine",
+    "episodeIds": [
+      "ep_af66b5845a"
+    ],
+    "topicId": "383-young-napoleon-the-shadow-of-the-guillotine",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "577-the-irish-war-of-independence-the-violence-begins",
+    "title": "577. The Irish War Of Independence: The Violence Begins",
+    "episodeIds": [
+      "ep_67efe4f241"
+    ],
+    "topicId": "577-the-irish-war-of-independence-the-violence-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "364-sixties-fashion-swinging-london",
+    "title": "364. Sixties Fashion: Swinging London",
+    "episodeIds": [
+      "ep_e69bbbfbf8"
+    ],
+    "topicId": "364-sixties-fashion-swinging-london",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "514-nelson-hero-of-the-seas",
+    "title": "514. Nelson: Hero Of The Seas",
+    "episodeIds": [
+      "ep_71fd94aaee"
+    ],
+    "topicId": "514-nelson-hero-of-the-seas",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "245-trafalgar-victory",
+    "title": "245. Trafalgar: Victory",
+    "episodeIds": [
+      "ep_75e798b69c"
+    ],
+    "topicId": "245-trafalgar-victory",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "378-baghdad-the-golden-age",
+    "title": "378. Baghdad: The Golden Age",
+    "episodeIds": [
+      "ep_77dc001c12"
+    ],
+    "topicId": "378-baghdad-the-golden-age",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "505-the-french-revolution-the-shadow-of-the-guillotine",
+    "title": "505. The French Revolution: The Shadow Of The Guillotine",
+    "episodeIds": [
+      "ep_f78f57f280"
+    ],
+    "topicId": "505-the-french-revolution-the-shadow-of-the-guillotine",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "591-the-assassination-of-abraham-lincoln-manhunt-for-the-killer",
+    "title": "591. The Assassination Of Abraham Lincoln: Manhunt For The Killer",
+    "episodeIds": [
+      "ep_78f2c8775d"
+    ],
+    "topicId": "591-the-assassination-of-abraham-lincoln-manhunt-for-the-killer",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "308-columbus-death-in-the-caribbean",
+    "title": "308: Columbus: Death In The Caribbean",
+    "episodeIds": [
+      "ep_080bdf45cd"
+    ],
+    "topicId": "308-columbus-death-in-the-caribbean",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "437-luther-a-world-torn-apart",
+    "title": "437. Luther: A World Torn Apart",
+    "episodeIds": [
+      "ep_cc80d9b4e9"
+    ],
+    "topicId": "437-luther-a-world-torn-apart",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "536-emperors-of-rome-caligula-incest-and-insanity",
+    "title": "536. Emperors Of Rome: Caligula, Incest And Insanity",
+    "episodeIds": [
+      "ep_82f5da1876"
+    ],
+    "topicId": "536-emperors-of-rome-caligula-incest-and-insanity",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "178-french-presidents-1958-1981",
+    "title": "178. French Presidents: 1958: 1981",
+    "episodeIds": [
+      "ep_edc86adf3b"
+    ],
+    "topicId": "178-french-presidents-1958-1981",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "470-the-road-to-the-great-war-the-kaiser-s-blank-cheque",
+    "title": "470. The Road To The Great War: The Kaiser’S Blank Cheque",
+    "episodeIds": [
+      "ep_86f9aef90d"
+    ],
+    "topicId": "470-the-road-to-the-great-war-the-kaiser-s-blank-cheque",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "495-evita-the-rise-of-general-pero-n",
+    "title": "495. Evita: The Rise Of General PeróN",
+    "episodeIds": [
+      "ep_87fdc3e668"
+    ],
+    "topicId": "495-evita-the-rise-of-general-pero-n",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "498-evita-the-mystery-of-the-missing-body",
+    "title": "498. Evita: The Mystery Of The Missing Body",
+    "episodeIds": [
+      "ep_bdbf88b210"
+    ],
+    "topicId": "498-evita-the-mystery-of-the-missing-body",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "565-the-great-northern-war-revenge-of-the-cossacks",
+    "title": "565. The Great Northern War: Revenge Of The Cossacks",
+    "episodeIds": [
+      "ep_88c05d613f"
+    ],
+    "topicId": "565-the-great-northern-war-revenge-of-the-cossacks",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "586-mary-queen-of-scots-the-battle-for-scotland",
+    "title": "586. Mary, Queen Of Scots: The Battle For Scotland",
+    "episodeIds": [
+      "ep_88f772fac4"
+    ],
+    "topicId": "586-mary-queen-of-scots-the-battle-for-scotland",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "241-young-churchill-prisoner-and-fugitive",
+    "title": "241. Young Churchill: Prisoner And Fugitive",
+    "episodeIds": [
+      "ep_91d5229253"
+    ],
+    "topicId": "241-young-churchill-prisoner-and-fugitive",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "448-custer-vs-crazy-horse-horse-lords-of-the-plains",
+    "title": "448. Custer Vs. Crazy Horse: Horse: Lords Of The Plains",
+    "episodeIds": [
+      "ep_91ac4515c8"
+    ],
+    "topicId": "448-custer-vs-crazy-horse-horse-lords-of-the-plains",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "342-the-trials-of-oscar-wilde-downfall-and-prison",
+    "title": "342: The Trials Of Oscar Wilde: Downfall And Prison",
+    "episodeIds": [
+      "ep_093a71fc3a"
+    ],
+    "topicId": "342-the-trials-of-oscar-wilde-downfall-and-prison",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "248-medieval-treason",
+    "title": "248. Medieval Treason",
+    "episodeIds": [
+      "ep_f96e84e970"
+    ],
+    "topicId": "248-medieval-treason",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "547-the-french-revolution-the-execution-of-the-king",
+    "title": "547. The French Revolution: The Execution Of The King",
+    "episodeIds": [
+      "ep_96af217b73"
+    ],
+    "topicId": "547-the-french-revolution-the-execution-of-the-king",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "529-the-nazis-road-to-war-showdown-in-munich",
+    "title": "529. The Nazis' Road To War: Showdown In Munich",
+    "episodeIds": [
+      "ep_98f935c535"
+    ],
+    "topicId": "529-the-nazis-road-to-war-showdown-in-munich",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "353-paris-1968-the-students-revolt",
+    "title": "353: Paris 1968: The Students' Revolt",
+    "episodeIds": [
+      "ep_e99a5a8e53"
+    ],
+    "topicId": "353-paris-1968-the-students-revolt",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "457-helen-of-troy-queen-of-the-greek-myths",
+    "title": "457. Helen Of Troy: Queen Of The Greek Myths",
+    "episodeIds": [
+      "ep_99c710b4a3"
+    ],
+    "topicId": "457-helen-of-troy-queen-of-the-greek-myths",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "294-lady-jane-grey-the-axe-falls",
+    "title": "294: Lady Jane Grey: The Axe Falls",
+    "episodeIds": [
+      "ep_136e023d59"
+    ],
+    "topicId": "294-lady-jane-grey-the-axe-falls",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "585-mary-queen-of-scots-the-royal-rivals",
+    "title": "585. Mary, Queen Of Scots: The Royal Rivals",
+    "episodeIds": [
+      "ep_137dfbf1f8"
+    ],
+    "topicId": "585-mary-queen-of-scots-the-royal-rivals",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "588-mary-queen-of-scots-the-mystery-of-the-exploding-mansion",
+    "title": "588. Mary, Queen Of Scots: The Mystery Of The Exploding Mansion",
+    "episodeIds": [
+      "ep_143cf522ab"
+    ],
+    "topicId": "588-mary-queen-of-scots-the-mystery-of-the-exploding-mansion",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "513-america-in-68-nixon-s-great-comeback",
+    "title": "513. America In '68: Nixon'S Great Comeback",
+    "episodeIds": [
+      "ep_157d3354ba"
+    ],
+    "topicId": "513-america-in-68-nixon-s-great-comeback",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "220-justinian-theodora-the-secret-history",
+    "title": "220. Justinian & Theodora: The Secret History",
+    "episodeIds": [
+      "ep_166f371086"
+    ],
+    "topicId": "220-justinian-theodora-the-secret-history",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "540-horror-in-the-congo-a-conspiracy-unmasked",
+    "title": "540. Horror In The Congo: A Conspiracy Unmasked",
+    "episodeIds": [
+      "ep_182a23ebe7"
+    ],
+    "topicId": "540-horror-in-the-congo-a-conspiracy-unmasked",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "446-custer-vs-crazy-horse-civil-war",
+    "title": "446. Custer Vs. Crazy Horse: Civil War",
+    "episodeIds": [
+      "ep_201f776792"
+    ],
+    "topicId": "446-custer-vs-crazy-horse-civil-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "417-britain-in-1974-state-of-emergency",
+    "title": "417. Britain In 1974: State Of Emergency",
+    "episodeIds": [
+      "ep_a212de5595"
+    ],
+    "topicId": "417-britain-in-1974-state-of-emergency",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "429-titanic-countdown-to-disaster",
+    "title": "429. Titanic: Countdown To Disaster",
+    "episodeIds": [
+      "ep_214eb3c6cd"
+    ],
+    "topicId": "429-titanic-countdown-to-disaster",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "497-evita-death-of-a-martyr",
+    "title": "497. Evita: Death Of A Martyr",
+    "episodeIds": [
+      "ep_235a1eccde"
+    ],
+    "topicId": "497-evita-death-of-a-martyr",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "169-the-falklands-war-countdown-to-invasion",
+    "title": "169. The Falklands War: Countdown To Invasion",
+    "episodeIds": [
+      "ep_d250df8b0d"
+    ],
+    "topicId": "169-the-falklands-war-countdown-to-invasion",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "605-greek-myths-jason-the-quest-for-the-golden-fleece",
+    "title": "605. Greek Myths: Jason & The Quest For The Golden Fleece",
+    "episodeIds": [
+      "ep_f273f1fab7"
+    ],
+    "topicId": "605-greek-myths-jason-the-quest-for-the-golden-fleece",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "213-london-moments",
+    "title": "213. London: Moments",
+    "episodeIds": [
+      "ep_284d27d400"
+    ],
+    "topicId": "213-london-moments",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "560-the-golden-age-of-japan-lady-murasaki-and-the-shining-prince",
+    "title": "560. The Golden Age Of Japan: Lady Murasaki And The Shining Prince",
+    "episodeIds": [
+      "ep_a308afed73"
+    ],
+    "topicId": "560-the-golden-age-of-japan-lady-murasaki-and-the-shining-prince",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "309-columbus-villain-or-hero",
+    "title": "309: Columbus: Villain Or Hero?",
+    "episodeIds": [
+      "ep_313c59bed9"
+    ],
+    "topicId": "309-columbus-villain-or-hero",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "306-columbus-the-adventure-begins",
+    "title": "306: Columbus: The Adventure Begins",
+    "episodeIds": [
+      "ep_319ce68da0"
+    ],
+    "topicId": "306-columbus-the-adventure-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "195-young-cleopatra",
+    "title": "195. Young Cleopatra",
+    "episodeIds": [
+      "ep_347bf9fce4"
+    ],
+    "topicId": "195-young-cleopatra",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "468-the-murder-of-franz-ferdinand-the-crime",
+    "title": "468. The Murder Of Franz Ferdinand: The Crime",
+    "episodeIds": [
+      "ep_374c77ae43"
+    ],
+    "topicId": "468-the-murder-of-franz-ferdinand-the-crime",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "312-reagan-iran-contra-and-the-cold-war",
+    "title": "312: Reagan, Iran: Contra And The Cold War",
+    "episodeIds": [
+      "ep_fb423f87d4"
+    ],
+    "topicId": "312-reagan-iran-contra-and-the-cold-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "576-the-irish-war-of-independence-rise-of-the-ira",
+    "title": "576. The Irish War Of Independence: Rise Of The Ira",
+    "episodeIds": [
+      "ep_429f8a0e95"
+    ],
+    "topicId": "576-the-irish-war-of-independence-rise-of-the-ira",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "506-the-french-revolution-massacre-at-the-palace",
+    "title": "506. The French Revolution: Massacre At The Palace",
+    "episodeIds": [
+      "ep_438f792430"
+    ],
+    "topicId": "506-the-french-revolution-massacre-at-the-palace",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "561-the-golden-age-of-japan-secrets-of-the-imperial-court",
+    "title": "561. The Golden Age Of Japan: Secrets Of The Imperial Court",
+    "episodeIds": [
+      "ep_460ca0aea0"
+    ],
+    "topicId": "561-the-golden-age-of-japan-secrets-of-the-imperial-court",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "363-sixties-fashion-the-teenage-revolution",
+    "title": "363. Sixties Fashion: The Teenage Revolution",
+    "episodeIds": [
+      "ep_477ac33f45"
+    ],
+    "topicId": "363-sixties-fashion-the-teenage-revolution",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "575-the-medici-the-bonfire-of-the-vanities",
+    "title": "575. The Medici: The Bonfire Of The Vanities",
+    "episodeIds": [
+      "ep_aceb479bab"
+    ],
+    "topicId": "575-the-medici-the-bonfire-of-the-vanities",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "398-jfk-the-mystery-is-solved",
+    "title": "398. Jfk: The Mystery Is Solved",
+    "episodeIds": [
+      "ep_492c3b1de4"
+    ],
+    "topicId": "398-jfk-the-mystery-is-solved",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "467-the-murder-of-franz-ferdinand-the-victim",
+    "title": "467. The Murder Of Franz Ferdinand: The Victim",
+    "episodeIds": [
+      "ep_507f54bb4e"
+    ],
+    "topicId": "467-the-murder-of-franz-ferdinand-the-victim",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "580-the-irish-civil-war-the-assassination-of-sir-henry-wilson",
+    "title": "580. The Irish Civil War: The Assassination Of Sir Henry Wilson",
+    "episodeIds": [
+      "ep_523e50fd49"
+    ],
+    "topicId": "580-the-irish-civil-war-the-assassination-of-sir-henry-wilson",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "567-the-great-northern-war-murder-in-moscow",
+    "title": "567. The Great Northern War: Murder In Moscow",
+    "episodeIds": [
+      "ep_536a946a77"
+    ],
+    "topicId": "567-the-great-northern-war-murder-in-moscow",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "347-the-american-revolution",
+    "title": "347: The American Revolution",
+    "episodeIds": [
+      "ep_540c1a6234"
+    ],
+    "topicId": "347-the-american-revolution",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "433-luther-the-man-who-changed-the-world",
+    "title": "433. Luther: The Man Who Changed The World",
+    "episodeIds": [
+      "ep_b549a5a612"
+    ],
+    "topicId": "433-luther-the-man-who-changed-the-world",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "414-the-peasants-revolt-london-s-burning",
+    "title": "414. The Peasants’ Revolt: London’S Burning",
+    "episodeIds": [
+      "ep_569e8315c7"
+    ],
+    "topicId": "414-the-peasants-revolt-london-s-burning",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "603-greek-myths-the-riddle-of-the-sphinx",
+    "title": "603. Greek Myths: The Riddle Of The Sphinx",
+    "episodeIds": [
+      "ep_578fd643ee"
+    ],
+    "topicId": "603-greek-myths-the-riddle-of-the-sphinx",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "571-hannibal-roman-bloodbath-at-cannae",
+    "title": "571. Hannibal: Roman Bloodbath At Cannae",
+    "episodeIds": [
+      "ep_622ab84b30"
+    ],
+    "topicId": "571-hannibal-roman-bloodbath-at-cannae",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "184-history-s-biggest-questions-with-dan-carlin",
+    "title": "184. History'S Biggest Questions With Dan Carlin",
+    "episodeIds": [
+      "ep_f634bb8300"
+    ],
+    "topicId": "184-history-s-biggest-questions-with-dan-carlin",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "608-nelson-slaughter-in-naples",
+    "title": "608. Nelson: Slaughter In Naples",
+    "episodeIds": [
+      "ep_636c5c0176"
+    ],
+    "topicId": "608-nelson-slaughter-in-naples",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
     "id": "alexander-the-great",
     "title": "Alexander The Great",
     "episodeIds": [
@@ -7,6 +2257,786 @@
       "ep662"
     ],
     "topicId": "alexander-the-great",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "187-australian-prime-ministers-edmund-barton-robert-menzies",
+    "title": "187. Australian Prime Ministers: Edmund Barton: Robert Menzies",
+    "episodeIds": [
+      "ep_a679a61930"
+    ],
+    "topicId": "187-australian-prime-ministers-edmund-barton-robert-menzies",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "253-the-world-cup-post-war-reconciliation-brazilian-dictatorship-and-north-koreans-in-middlesbrough",
+    "title": "253. The World Cup: Post: War Reconciliation, Brazilian Dictatorship, And North Koreans In Middlesbrough",
+    "episodeIds": [
+      "ep_bbea740af1"
+    ],
+    "topicId": "253-the-world-cup-post-war-reconciliation-brazilian-dictatorship-and-north-koreans-in-middlesbrough",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "380-captain-cook-history-s-greatest-explorer",
+    "title": "380. Captain Cook: History’S Greatest Explorer",
+    "episodeIds": [
+      "ep_d747e4dcbc"
+    ],
+    "topicId": "380-captain-cook-history-s-greatest-explorer",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "338-ireland-home-rule-mutiny-and-civil-war",
+    "title": "338: Ireland: Home Rule, Mutiny: And Civil War?",
+    "episodeIds": [
+      "ep_757c48a2c0"
+    ],
+    "topicId": "338-ireland-home-rule-mutiny-and-civil-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "562-peter-the-great-the-rise-of-russia",
+    "title": "562. Peter The Great: The Rise Of Russia",
+    "episodeIds": [
+      "ep_855df79bc1"
+    ],
+    "topicId": "562-peter-the-great-the-rise-of-russia",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "397-jfk-a-conspiracy-unmasked",
+    "title": "397. Jfk: A Conspiracy Unmasked",
+    "episodeIds": [
+      "ep_e885cf44a8"
+    ],
+    "topicId": "397-jfk-a-conspiracy-unmasked",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "523-charlemagne-return-of-the-kings",
+    "title": "523. Charlemagne: Return Of The Kings",
+    "episodeIds": [
+      "ep_891e76c24e"
+    ],
+    "topicId": "523-charlemagne-return-of-the-kings",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "442-lord-byron-dangerous-liaisons",
+    "title": "442. Lord Byron: Dangerous Liaisons",
+    "episodeIds": [
+      "ep_936d480d28"
+    ],
+    "topicId": "442-lord-byron-dangerous-liaisons",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "584-mary-queen-of-scots-birth-of-a-legend",
+    "title": "584. Mary, Queen Of Scots: Birth Of A Legend",
+    "episodeIds": [
+      "ep_c946bdb6de"
+    ],
+    "topicId": "584-mary-queen-of-scots-birth-of-a-legend",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "341-the-trials-of-oscar-wilde-sex-and-scandal",
+    "title": "341: The Trials Of Oscar Wilde: Sex And Scandal",
+    "episodeIds": [
+      "ep_958c84f3a1"
+    ],
+    "topicId": "341-the-trials-of-oscar-wilde-sex-and-scandal",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "210-london-places",
+    "title": "210. London: Places",
+    "episodeIds": [
+      "ep_968a6ccd6f"
+    ],
+    "topicId": "210-london-places",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "612-nelson-the-final-showdown",
+    "title": "612. Nelson: The Final Showdown",
+    "episodeIds": [
+      "ep_977d962408"
+    ],
+    "topicId": "612-nelson-the-final-showdown",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "352-amsterdam-kings-canals-and-coffee-houses",
+    "title": "352: Amsterdam: Kings, Canals, And Coffee Houses",
+    "episodeIds": [
+      "ep_da989d075b"
+    ],
+    "topicId": "352-amsterdam-kings-canals-and-coffee-houses",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "512-america-in-68-the-chicago-riots",
+    "title": "512. America In '68: The Chicago Riots",
+    "episodeIds": [
+      "ep_1349d2b4e1"
+    ],
+    "topicId": "512-america-in-68-the-chicago-riots",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "578-the-irish-war-of-independence-bloody-sunday",
+    "title": "578. The Irish War Of Independence: Bloody Sunday",
+    "episodeIds": [
+      "ep_1357f5cdbd"
+    ],
+    "topicId": "578-the-irish-war-of-independence-bloody-sunday",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "371-the-1973-chilean-coup-general-pinochet-seizes-power",
+    "title": "371. The 1973 Chilean Coup: General Pinochet Seizes Power",
+    "episodeIds": [
+      "ep_bc1919d986"
+    ],
+    "topicId": "371-the-1973-chilean-coup-general-pinochet-seizes-power",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "494-evita-birth-of-a-legend",
+    "title": "494. Evita: Birth Of A Legend",
+    "episodeIds": [
+      "ep_1926a44813"
+    ],
+    "topicId": "494-evita-birth-of-a-legend",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "324-fall-of-saigon-the-nightmare-begins",
+    "title": "324: Fall Of Saigon: The Nightmare Begins",
+    "episodeIds": [
+      "ep_c1980efc85"
+    ],
+    "topicId": "324-fall-of-saigon-the-nightmare-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "321-hundred-years-war-a-storm-of-swords",
+    "title": "321: Hundred Years' War: A Storm Of Swords",
+    "episodeIds": [
+      "ep_b2388d0b42"
+    ],
+    "topicId": "321-hundred-years-war-a-storm-of-swords",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "329-coronations-chaos-ceremony-and-empire",
+    "title": "329: Coronations: Chaos, Ceremony And Empire",
+    "episodeIds": [
+      "ep_2630ed1974"
+    ],
+    "topicId": "329-coronations-chaos-ceremony-and-empire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "589-mary-queen-of-scots-downfall",
+    "title": "589. Mary, Queen Of Scots: Downfall",
+    "episodeIds": [
+      "ep_fb2758aeb6"
+    ],
+    "topicId": "589-mary-queen-of-scots-downfall",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "201-american-civil-war-outbreak",
+    "title": "201. American Civil War: Outbreak",
+    "episodeIds": [
+      "ep_ee2837b0dc"
+    ],
+    "topicId": "201-american-civil-war-outbreak",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "218-theodora-empress-of-byzantium",
+    "title": "218. Theodora: Empress Of Byzantium",
+    "episodeIds": [
+      "ep_ff3255ce87"
+    ],
+    "topicId": "218-theodora-empress-of-byzantium",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "435-luther-the-battle-against-satan",
+    "title": "435. Luther: The Battle Against Satan",
+    "episodeIds": [
+      "ep_cf4082f9d3"
+    ],
+    "topicId": "435-luther-the-battle-against-satan",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "176-the-jews-against-rome",
+    "title": "176. The Jews Against Rome",
+    "episodeIds": [
+      "ep_4756fd6243"
+    ],
+    "topicId": "176-the-jews-against-rome",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "396-jfk-the-second-assassin-strikes",
+    "title": "396. Jfk: The Second Assassin Strikes",
+    "episodeIds": [
+      "ep_bea5160dc9"
+    ],
+    "topicId": "396-jfk-the-second-assassin-strikes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "566-the-great-northern-war-slaughter-on-the-steppes",
+    "title": "566. The Great Northern War: Slaughter On The Steppes",
+    "episodeIds": [
+      "ep_05357b5336"
+    ],
+    "topicId": "566-the-great-northern-war-slaughter-on-the-steppes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "343-oppenheimer-the-father-of-the-atom-bomb",
+    "title": "343: Oppenheimer: The Father Of The Atom Bomb",
+    "episodeIds": [
+      "ep_5819f10224"
+    ],
+    "topicId": "343-oppenheimer-the-father-of-the-atom-bomb",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "107-watergate",
+    "title": "107. Watergate",
+    "episodeIds": [
+      "ep_6070b6788b"
+    ],
+    "topicId": "107-watergate",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "509-america-in-68-the-assassination-of-martin-luther-king-jr",
+    "title": "509. America In '68: The Assassination Of Martin Luther King Jr.",
+    "episodeIds": [
+      "ep_e6421b4208"
+    ],
+    "topicId": "509-america-in-68-the-assassination-of-martin-luther-king-jr",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "480-the-french-revolution-the-rights-of-man",
+    "title": "480. The French Revolution: The Rights Of Man",
+    "episodeIds": [
+      "ep_7146e06d0d"
+    ],
+    "topicId": "480-the-french-revolution-the-rights-of-man",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "314-atlantis-the-legend",
+    "title": "314: Atlantis: The Legend",
+    "episodeIds": [
+      "ep_7327f24765"
+    ],
+    "topicId": "314-atlantis-the-legend",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "418-britain-in-1974-the-crisis-election",
+    "title": "418. Britain In 1974: The Crisis Election",
+    "episodeIds": [
+      "ep_8087e79997"
+    ],
+    "topicId": "418-britain-in-1974-the-crisis-election",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "434-luther-the-revolution-begins",
+    "title": "434. Luther: The Revolution Begins",
+    "episodeIds": [
+      "ep_8509e91905"
+    ],
+    "topicId": "434-luther-the-revolution-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "421-ancient-carthage-lords-of-the-sea",
+    "title": "421. Ancient Carthage: Lords Of The Sea",
+    "episodeIds": [
+      "ep_a8516dc195"
+    ],
+    "topicId": "421-ancient-carthage-lords-of-the-sea",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "549-the-road-to-1066-revenge-of-the-vikings",
+    "title": "549. The Road To 1066: Revenge Of The Vikings",
+    "episodeIds": [
+      "ep_8592eb42fa"
+    ],
+    "topicId": "549-the-road-to-1066-revenge-of-the-vikings",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "443-lord-byron-death-of-a-vampire",
+    "title": "443. Lord Byron: Death Of A Vampire",
+    "episodeIds": [
+      "ep_8676d13536"
+    ],
+    "topicId": "443-lord-byron-death-of-a-vampire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "508-america-in-68-nightmare-in-vietnam",
+    "title": "508. America In '68: Nightmare In Vietnam",
+    "episodeIds": [
+      "ep_9426c4f71d"
+    ],
+    "topicId": "508-america-in-68-nightmare-in-vietnam",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "293-lady-jane-grey-the-nine-days-queen",
+    "title": "293: Lady Jane Grey: The Nine Days' Queen",
+    "episodeIds": [
+      "ep_9528aa8931"
+    ],
+    "topicId": "293-lady-jane-grey-the-nine-days-queen",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "478-the-french-revolution-showdown-in-versailles",
+    "title": "478. The French Revolution: Showdown In Versailles",
+    "episodeIds": [
+      "ep_9756bd70f4"
+    ],
+    "topicId": "478-the-french-revolution-showdown-in-versailles",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "354-paris-1968-the-return-of-de-gaulle",
+    "title": "354: Paris 1968: The Return Of De Gaulle",
+    "episodeIds": [
+      "ep_9888d5e787"
+    ],
+    "topicId": "354-paris-1968-the-return-of-de-gaulle",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "351-amsterdam-miracles-money-and-mud",
+    "title": "351: Amsterdam: Miracles, Money, And Mud",
+    "episodeIds": [
+      "ep_12445b5226"
+    ],
+    "topicId": "351-amsterdam-miracles-money-and-mud",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "455-fall-of-the-sioux-the-ghost-dance",
+    "title": "455. Fall Of The Sioux: The Ghost Dance",
+    "episodeIds": [
+      "ep_21606d1473"
+    ],
+    "topicId": "455-fall-of-the-sioux-the-ghost-dance",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "554-1066-the-shadows-of-war",
+    "title": "554. 1066: The Shadows Of War",
+    "episodeIds": [
+      "ep_c24489cb7c"
+    ],
+    "topicId": "554-1066-the-shadows-of-war",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "427-titanic-the-tragedy-begins",
+    "title": "427. Titanic: The Tragedy Begins",
+    "episodeIds": [
+      "ep_32888c5773"
+    ],
+    "topicId": "427-titanic-the-tragedy-begins",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "504-the-french-revolution-war-to-the-death",
+    "title": "504. The French Revolution: War To The Death",
+    "episodeIds": [
+      "ep_038290f215"
+    ],
+    "topicId": "504-the-french-revolution-war-to-the-death",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "389-the-fall-of-the-aztecs-the-night-of-tears",
+    "title": "389. The Fall Of The Aztecs: The Night Of Tears",
+    "episodeIds": [
+      "ep_41532d58dc"
+    ],
+    "topicId": "389-the-fall-of-the-aztecs-the-night-of-tears",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "376-baghdad-the-forging-of-islam",
+    "title": "376. Baghdad: The Forging Of Islam",
+    "episodeIds": [
+      "ep_56413ca6a5"
+    ],
+    "topicId": "376-baghdad-the-forging-of-islam",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "171-the-falklands-war-battle-for-the-islands",
+    "title": "171. The Falklands War: Battle For The Islands",
+    "episodeIds": [
+      "ep_58039b6cd4"
+    ],
+    "topicId": "171-the-falklands-war-battle-for-the-islands",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "595-the-first-world-war-the-battle-of-the-frontiers",
+    "title": "595. The First World War: The Battle Of The Frontiers",
+    "episodeIds": [
+      "ep_d59556e829"
+    ],
+    "topicId": "595-the-first-world-war-the-battle-of-the-frontiers",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "339-ireland-the-easter-rising-1916",
+    "title": "339: Ireland: The Easter Rising, 1916",
+    "episodeIds": [
+      "ep_66889cb383"
+    ],
+    "topicId": "339-ireland-the-easter-rising-1916",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "552-the-last-viking-the-saga-of-harald-hardrada",
+    "title": "552. The Last Viking: The Saga Of Harald Hardrada",
+    "episodeIds": [
+      "ep_a70296b368"
+    ],
+    "topicId": "552-the-last-viking-the-saga-of-harald-hardrada",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "544-the-french-revolution-the-september-massacres",
+    "title": "544. The French Revolution: The September Massacres",
+    "episodeIds": [
+      "ep_74744a67a3"
+    ],
+    "topicId": "544-the-french-revolution-the-september-massacres",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "456-fall-of-the-sioux-the-massacre-at-wounded-knee",
+    "title": "456. Fall Of The Sioux: The Massacre At Wounded Knee",
+    "episodeIds": [
+      "ep_76338f18fa"
+    ],
+    "topicId": "456-fall-of-the-sioux-the-massacre-at-wounded-knee",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "200-american-civil-war-the-causes",
+    "title": "200: American Civil War: The Causes",
+    "episodeIds": [
+      "ep_82756e04d6"
+    ],
+    "topicId": "200-american-civil-war-the-causes",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "579-the-irish-war-of-independence-showdown-in-london",
+    "title": "579. The Irish War Of Independence: Showdown In London",
+    "episodeIds": [
+      "ep_bd98422bc1"
+    ],
+    "topicId": "579-the-irish-war-of-independence-showdown-in-london",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "209-londinium",
+    "title": "209. Londinium",
+    "episodeIds": [
+      "ep_eb152611c5"
+    ],
+    "topicId": "209-londinium",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "350-the-triumph-of-george-washington",
+    "title": "350: The Triumph Of George Washington",
+    "episodeIds": [
+      "ep_0154856b39"
+    ],
+    "topicId": "350-the-triumph-of-george-washington",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "395-jfk-hunt-for-a-killer",
+    "title": "395. Jfk: Hunt For A Killer",
+    "episodeIds": [
+      "ep_bdf0243843"
+    ],
+    "topicId": "395-jfk-hunt-for-a-killer",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "315-atlantis-legacy-of-the-lost-empire",
+    "title": "315: Atlantis: Legacy Of The Lost Empire",
+    "episodeIds": [
+      "ep_ba246619c4"
+    ],
+    "topicId": "315-atlantis-legacy-of-the-lost-empire",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "535-emperors-of-rome-tiberius-slaughter-and-scandal",
+    "title": "535. Emperors Of Rome: Tiberius, Slaughter And Scandal",
+    "episodeIds": [
+      "ep_befa488238"
+    ],
+    "topicId": "535-emperors-of-rome-tiberius-slaughter-and-scandal",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "203-american-civil-war-aftermath-legacy",
+    "title": "203. American Civil War: Aftermath & Legacy",
+    "episodeIds": [
+      "ep_567451ed2a"
+    ],
+    "topicId": "203-american-civil-war-aftermath-legacy",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "475-the-french-revolution-marie-antoinette",
+    "title": "475. The French Revolution: Marie Antoinette",
+    "episodeIds": [
+      "ep_e736690e7e"
+    ],
+    "topicId": "475-the-french-revolution-marie-antoinette",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "408-the-nazis-in-power-hitler-s-dream",
+    "title": "408. The Nazis In Power: Hitler'S Dream",
+    "episodeIds": [
+      "ep_b926420a07"
+    ],
+    "topicId": "408-the-nazis-in-power-hitler-s-dream",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "416-the-canterbury-tales",
+    "title": "416. The Canterbury Tales",
+    "episodeIds": [
+      "ep_7771984f57"
+    ],
+    "topicId": "416-the-canterbury-tales",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "390-the-fall-of-the-aztecs-war-to-the-death",
+    "title": "390. The Fall Of The Aztecs: War To The Death",
+    "episodeIds": [
+      "ep_9050251b1a"
+    ],
+    "topicId": "390-the-fall-of-the-aztecs-war-to-the-death",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "564-the-great-northern-war-the-battle-of-the-baltic",
+    "title": "564. The Great Northern War: The Battle Of The Baltic",
+    "episodeIds": [
+      "ep_9972443a25"
+    ],
+    "topicId": "564-the-great-northern-war-the-battle-of-the-baltic",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "349-the-birth-of-the-united-states",
+    "title": "349: The Birth Of The United States",
+    "episodeIds": [
+      "ep_12217910b5"
+    ],
+    "topicId": "349-the-birth-of-the-united-states",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "428-titanic-kings-of-the-world",
+    "title": "428. Titanic: Kings Of The World",
+    "episodeIds": [
+      "ep_47630020db"
+    ],
+    "topicId": "428-titanic-kings-of-the-world",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "235-china-and-world-war-ii",
+    "title": "235. China And World War Ii",
+    "episodeIds": [
+      "ep_d75733229f"
+    ],
+    "topicId": "235-china-and-world-war-ii",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "229-portugal-gold-earthquakes-and-brazil",
+    "title": "229. Portugal: Gold, Earthquakes, And Brazil",
+    "episodeIds": [
+      "ep_f84681628a"
+    ],
+    "topicId": "229-portugal-gold-earthquakes-and-brazil",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "559-the-rolling-stones-satanic-majesties-of-sixties-rebellion",
+    "title": "559. The Rolling Stones: Satanic Majesties Of Sixties Rebellion",
+    "episodeIds": [
+      "ep_f094585777"
+    ],
+    "topicId": "559-the-rolling-stones-satanic-majesties-of-sixties-rebellion",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "391-the-fall-of-the-aztecs-the-last-emperor",
+    "title": "391. The Fall Of The Aztecs: The Last Emperor",
+    "episodeIds": [
+      "ep_417333105c"
+    ],
+    "topicId": "391-the-fall-of-the-aztecs-the-last-emperor",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "521-warlords-of-the-west-killer-queens",
+    "title": "521. Warlords Of The West: Killer Queens",
+    "episodeIds": [
+      "ep_596689017e"
+    ],
+    "topicId": "521-warlords-of-the-west-killer-queens",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "251-alfred-the-great-return-of-the-king",
+    "title": "251. Alfred The Great: Return Of The King",
+    "episodeIds": [
+      "ep_618789146a"
+    ],
+    "topicId": "251-alfred-the-great-return-of-the-king",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "528-the-nazis-road-to-war-hitler-prepares-to-strike",
+    "title": "528. The Nazis' Road To War: Hitler Prepares To Strike",
+    "episodeIds": [
+      "ep_771694265d"
+    ],
+    "topicId": "528-the-nazis-road-to-war-hitler-prepares-to-strike",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "599-the-first-world-war-downfall-of-the-habsburgs",
+    "title": "599. The First World War: Downfall Of The Habsburgs",
+    "episodeIds": [
+      "ep_4200114493"
+    ],
+    "topicId": "599-the-first-world-war-downfall-of-the-habsburgs",
+    "yearFrom": null,
+    "yearTo": null
+  },
+  {
+    "id": "550-the-road-to-1066-rise-of-the-normans",
+    "title": "550. The Road To 1066: Rise Of The Normans",
+    "episodeIds": [
+      "ep_8245571646"
+    ],
+    "topicId": "550-the-road-to-1066-rise-of-the-normans",
     "yearFrom": null,
     "yearTo": null
   }
