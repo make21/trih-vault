@@ -38,11 +38,11 @@ jobs:
             git commit -m "chore: update enrichment data"
           fi
       - name: Push changes
-        if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref_type == 'branch' }}
+        env:
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            git push
-          fi
+          git push origin HEAD:"$BRANCH_NAME"
       - name: Trigger Vercel deploy
         if: ${{ env.VERCEL_DEPLOY_HOOK_URL != '' }}
         run: curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
