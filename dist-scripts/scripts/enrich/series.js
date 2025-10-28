@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.detectSeries = detectSeries;
+exports.detectSeriesGroups = detectSeriesGroups;
 const utils_1 = require("./utils");
 const roman_1 = require("./roman");
 const PART_REGEX = /(.*?)(?:\s*[-–—:]\s*)?(?:part|pt\.?)\s*(?:#|no\.?\s*)?([ivxlcdm]+|\d+)/i;
@@ -24,7 +24,7 @@ function extractSeriesCandidate(title) {
         return null;
     return {
         key,
-        title: rawStem,
+        stem: rawStem,
         part: numeric,
     };
 }
@@ -60,42 +60,31 @@ function isValidSeries(entries) {
     }
     return true;
 }
-function detectSeries(episodes) {
+function detectSeriesGroups(episodes) {
     const grouped = new Map();
     for (const episode of episodes) {
         const candidate = pickCandidate(episode);
         if (!candidate)
             continue;
         const bucket = grouped.get(candidate.key) ?? [];
-        bucket.push({ episode, part: candidate.part, title: candidate.title });
+        bucket.push({ episode, part: candidate.part, stem: candidate.stem });
         grouped.set(candidate.key, bucket);
     }
-    const assignmentsBySlug = new Map();
     const groupsByKey = new Map();
     for (const [key, entries] of grouped.entries()) {
         if (!isValidSeries(entries)) {
             continue;
         }
         const sorted = sortEntries(entries);
-        const title = sorted[0]?.title ?? key;
-        const parts = sorted.map((item) => item.part);
+        const stem = sorted[0]?.stem ?? key;
+        const parts = sorted.map((item, index) => (index + 1));
         const episodesList = sorted.map((item) => item.episode);
-        const group = {
+        groupsByKey.set(key, {
             key,
-            title,
+            stem,
             episodes: episodesList,
             parts,
-        };
-        groupsByKey.set(key, group);
-        for (let i = 0; i < sorted.length; i += 1) {
-            const entry = sorted[i];
-            assignmentsBySlug.set(entry.episode.slug, {
-                key,
-                title,
-                part: entry.part,
-                source: "rules",
-            });
-        }
+        });
     }
-    return { assignmentsBySlug, groupsByKey };
+    return groupsByKey;
 }

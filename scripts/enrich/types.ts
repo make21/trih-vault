@@ -26,47 +26,48 @@ export const EpisodeSchema = z
 
 export type Episode = z.infer<typeof EpisodeSchema>;
 
-export const EnrichedFieldsSchema = z.object({
-  seriesKey: z.string().nullable(),
-  seriesTitle: z.string().nullable(),
-  seriesPart: z.number().int().positive().nullable(),
+export const SeriesSchema = z.object({
+  key: z.string(),
+  title: z.string(),
+  umbrellaKey: z.string(),
+  umbrellaTitle: z.string(),
+  episodeNumbers: z.array(z.number().int()),
+  episodeSlugs: z.array(z.string()),
+  parts: z.array(z.number().int()),
   yearPrimary: z.number().int().nullable(),
   yearFrom: z.number().int().nullable(),
   yearTo: z.number().int().nullable(),
   scope: ScopeSchema,
-  umbrellas: z.array(z.string()),
   confidence: z.number().min(0).max(1).nullable(),
-  source: z.enum(["rules", "series", "century", "llm", "override", "mixed"]).nullable(),
+  singleton: z.boolean(),
+  source: z.enum(["rules", "llm", "override", "mixed"]),
 });
 
-export const EnrichedEpisodeSchema = EpisodeSchema.merge(EnrichedFieldsSchema);
-export type EnrichedEpisode = z.infer<typeof EnrichedEpisodeSchema>;
+export type Series = z.infer<typeof SeriesSchema>;
 
-export const LLMInferenceSchema = z.object({
-  seriesTitle: z.string().nullable(),
+export const SeriesArraySchema = z.array(SeriesSchema);
+
+export const EnrichedEpisodeSchema = EpisodeSchema.extend({
+  seriesKey: z.string(),
   seriesPart: z.number().int().positive().nullable(),
   yearPrimary: z.number().int().nullable(),
   yearFrom: z.number().int().nullable(),
   yearTo: z.number().int().nullable(),
   scope: ScopeSchema,
-  umbrellas: z.array(z.string()),
-  confidence: z.number().min(0).max(1),
-  rationale: z.string(),
+  source: z.enum(["series", "override"]),
 });
-export type LLMInference = z.infer<typeof LLMInferenceSchema>;
 
-export const CachedInferenceSchema = LLMInferenceSchema.omit({ rationale: true }).extend({
-  scope: ScopeSchema,
-});
-export type CachedInference = z.infer<typeof CachedInferenceSchema>;
+export type EnrichedEpisode = z.infer<typeof EnrichedEpisodeSchema>;
 
 export const CollectionSchema = z.object({
   key: z.string(),
   title: z.string(),
+  umbrellaKey: z.string(),
+  umbrellaTitle: z.string(),
   count: z.number().int(),
+  parts: z.array(z.number().int()),
   episodes: z.array(z.number().int()),
   slugs: z.array(z.string()),
-  parts: z.array(z.number().int()),
   years: z.object({
     min: z.number().int().nullable(),
     max: z.number().int().nullable(),
@@ -77,21 +78,62 @@ export type Collection = z.infer<typeof CollectionSchema>;
 
 export const CollectionsSchema = z.array(CollectionSchema);
 
-export const UmbrellaSummarySchema = z.object({
-  index: z.record(z.string(), z.array(z.number().int())),
-  counts: z.record(z.string(), z.number().int()),
+export const UmbrellaIndexSchema = z.object({
+  umbrellas: z.array(
+    z.object({
+      key: z.string(),
+      title: z.string(),
+      seriesKeys: z.array(z.string()),
+      years: z.object({
+        min: z.number().int().nullable(),
+        max: z.number().int().nullable(),
+      }),
+      count: z.number().int(),
+    })
+  ),
 });
-export type UmbrellaSummary = z.infer<typeof UmbrellaSummarySchema>;
 
-export const InferenceCacheSchema = z.record(z.string(), CachedInferenceSchema);
-export type InferenceCache = z.infer<typeof InferenceCacheSchema>;
+export type UmbrellaIndex = z.infer<typeof UmbrellaIndexSchema>;
+
+export const LegacyCachedInferenceSchema = z.object({
+  seriesTitle: z.string().nullable(),
+  seriesPart: z.number().int().positive().nullable(),
+  yearPrimary: z.number().int().nullable(),
+  yearFrom: z.number().int().nullable(),
+  yearTo: z.number().int().nullable(),
+  scope: ScopeSchema,
+  umbrellas: z.array(z.string()),
+  confidence: z.number().min(0).max(1).nullable(),
+}).passthrough();
+
+export type LegacyCachedInference = z.infer<typeof LegacyCachedInferenceSchema>;
+
+export const SeriesInferenceCacheEntrySchema = z.object({
+  title: z.string(),
+  umbrellaKey: z.string(),
+  umbrellaTitle: z.string(),
+  yearPrimary: z.number().int().nullable(),
+  yearFrom: z.number().int().nullable(),
+  yearTo: z.number().int().nullable(),
+  scope: ScopeSchema,
+  confidence: z.number().min(0).max(1).nullable(),
+  version: z.literal(1),
+});
+
+export type SeriesInferenceCacheEntry = z.infer<typeof SeriesInferenceCacheEntrySchema>;
+
+export const SeriesInferenceCacheSchema = z.record(z.string(), SeriesInferenceCacheEntrySchema);
+
+export type SeriesInferenceCache = z.infer<typeof SeriesInferenceCacheSchema>;
 
 export interface EnrichmentSummary {
   totalEpisodes: number;
   totalSeries: number;
+  singletonSeries: number;
   llmCalls: number;
   llmSkipped: number;
-  lowConfidence: { unknown: number; broad: number };
+  umbrellas: number;
+  lowConfidenceSeries: number;
 }
 
 export interface RunContext {
@@ -100,4 +142,5 @@ export interface RunContext {
   verbose: boolean;
   onlySlug: string | null;
   cacheOnly: boolean;
+  seriesOnly: boolean;
 }

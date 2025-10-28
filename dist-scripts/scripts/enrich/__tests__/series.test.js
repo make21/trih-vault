@@ -22,20 +22,19 @@ const baseEpisode = (episode, title, date, extra) => ({
         baseEpisode(13, "Columbus Part III", "2023-01-12"),
         baseEpisode(14, "Bonus Episode", "2023-01-20"),
     ];
-    const result = (0, series_1.detectSeries)(episodes);
-    const assignment = result.assignmentsBySlug.get("ep-13");
-    strict_1.default.ok(assignment);
-    strict_1.default.equal(assignment?.key, "columbus");
-    strict_1.default.equal(assignment?.part, 3);
-    strict_1.default.equal(result.groupsByKey.get("columbus")?.parts.length, 3);
+    const result = (0, series_1.detectSeriesGroups)(episodes);
+    const group = result.get("columbus");
+    strict_1.default.ok(group);
+    strict_1.default.equal(group?.episodes.length, 3);
+    strict_1.default.equal(group?.parts[group.parts.length - 1], 3);
 });
 (0, node_test_1.default)("rejects series with large gaps", () => {
     const episodes = [
         baseEpisode(1, "Vikings Part I", "2023-01-01"),
         baseEpisode(5, "Vikings Part II", "2023-03-01"),
     ];
-    const result = (0, series_1.detectSeries)(episodes);
-    strict_1.default.equal(result.groupsByKey.size, 0);
+    const result = (0, series_1.detectSeriesGroups)(episodes);
+    strict_1.default.equal(result.size, 0);
 });
 (0, node_test_1.default)("handles roman numerals", () => {
     const episodes = [
@@ -43,6 +42,6 @@ const baseEpisode = (episode, title, date, extra) => ({
         baseEpisode(21, "Normans Part II", "2023-02-05"),
         baseEpisode(22, "Normans Part III", "2023-02-10"),
     ];
-    const result = (0, series_1.detectSeries)(episodes);
-    strict_1.default.equal(result.groupsByKey.get("normans")?.parts[2], 3);
+    const result = (0, series_1.detectSeriesGroups)(episodes);
+    strict_1.default.equal(result.get("normans")?.parts[2], 3);
 });

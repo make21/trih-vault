@@ -5,43 +5,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createLLMClient = createLLMClient;
 const p_limit_1 = __importDefault(require("p-limit"));
+const zod_1 = require("zod");
 const types_1 = require("./types");
-const umbrellas_1 = require("./umbrellas");
-const SYSTEM_PROMPT = [
-    "You are a careful historical classifier.",
-    "Infer years only from widely known historical anchors implicit in the text (e.g., people, wars, battles).",
-    "Prefer tight ranges. If the topic spans many centuries, set scope:\"broad\".",
-    "If uncertain, lower confidence and leave years null rather than guessing.",
-    "Choose umbrellas only from the provided list unless an extra is clearly warranted.",
-].join(" ");
-function safeField(value) {
-    return value === null ? "null" : JSON.stringify(value);
-}
+const SYSTEM_PROMPT = "Return concise proper-noun umbrella titles (e.g., 'Horatio Nelson'). Avoid generic tags. Provide tight historical year ranges covering the series as a whole. If the series spans centuries, set scope:'broad'.";
+const SeriesLLMResponseSchema = zod_1.z.object({
+    seriesTitle: zod_1.z.string(),
+    umbrellaTitle: zod_1.z.string(),
+    yearPrimary: zod_1.z.number().int().nullable(),
+    yearFrom: zod_1.z.number().int().nullable(),
+    yearTo: zod_1.z.number().int().nullable(),
+    scope: types_1.ScopeSchema,
+    confidence: zod_1.z.number().min(0).max(1),
+});
 function buildUserPrompt(meta) {
-    const lines = [
-        "Provide JSON only (no prose).",
-        "",
-        "INPUT:",
-        `title_feed: ${safeField(meta.title_feed)}`,
-        `title_sheet: ${safeField(meta.title_sheet)}`,
-        `description: ${safeField(meta.description)}`,
-        `series_hint: ${meta.seriesHint ? JSON.stringify(meta.seriesHint) : "null"}`,
-        `known_century_label: ${safeField(meta.knownCenturyLabel)}`,
-        "",
-        "OUTPUT SHAPE:",
-        '{',
-        '  "seriesTitle": string | null,',
-        '  "seriesPart": number | null,',
-        '  "yearPrimary": number | null,',
-        '  "yearFrom": number | null,',
-        '  "yearTo": number | null,',
-        '  "scope": "point" | "range" | "broad" | "unknown",',
-        '  "umbrellas": string[],',
-        '  "confidence": number,',
-        '  "rationale": string',
-        "}",
-    ];
-    return lines.join("\n");
+    const payload = {
+        provisionalStem: meta.provisionalStem,
+        episodes: meta.episodes.map((episode, index) => ({
+            index: index + 1,
+            title_feed: episode.title_feed,
+            title_sheet: episode.title_sheet,
+            description: episode.description,
+        })),
+        centuryLabels: meta.centuryLabels.length ? meta.centuryLabels : null,
+    };
+    const lines = [];
+    lines.push("Respond with strict JSON matching { \"seriesTitle\": string, \"umbrellaTitle\": string, \"yearPrimary\": number|null, \"yearFrom\": number|null, \"yearTo\": number|null, \"scope\": \"point\"|\"range\"|\"broad\"|\"unknown\", \"confidence\": number }.");
+    lines.push("INPUT:");
+    lines.push(JSON.stringify(payload, null, 2));
+    return lines.join("\n\n");
 }
 function createLLMClient(apiKey, concurrency = 2) {
     const limit = (0, p_limit_1.default)(concurrency);
@@ -68,7 +59,7 @@ function createLLMClient(apiKey, concurrency = 2) {
                                 { role: "system", content: SYSTEM_PROMPT },
                                 { role: "user", content: userPrompt },
                             ],
-                            max_tokens: 600,
+                            max_tokens: 500,
                         }),
                         signal: controller.signal,
                     });
@@ -85,18 +76,16 @@ function createLLMClient(apiKey, concurrency = 2) {
                         ? message.map((item) => item.text ?? "").join("")
                         : message;
                     const parsed = JSON.parse(text);
-                    const validated = types_1.LLMInferenceSchema.parse(parsed);
-                    const sanitized = {
-                        seriesTitle: validated.seriesTitle,
-                        seriesPart: validated.seriesPart ?? null,
+                    const validated = SeriesLLMResponseSchema.parse(parsed);
+                    return {
+                        seriesTitle: validated.seriesTitle.trim(),
+                        umbrellaTitle: validated.umbrellaTitle.trim(),
                         yearPrimary: validated.yearPrimary ?? null,
                         yearFrom: validated.yearFrom ?? null,
                         yearTo: validated.yearTo ?? null,
                         scope: validated.scope,
-                        umbrellas: (0, umbrellas_1.sanitizeUmbrellas)(validated.umbrellas ?? []),
-                        confidence: validated.confidence,
+                        confidence: validated.confidence ?? null,
                     };
-                    return sanitized;
                 }
                 finally {
                     clearTimeout(timeout);
@@ -111,7 +100,7 @@ function createLLMClient(apiKey, concurrency = 2) {
         throw lastError instanceof Error ? lastError : new Error("Failed to contact OpenAI");
     }
     return {
-        inferEpisode(meta) {
+        inferSeries(meta) {
             return limit(() => invoke(meta));
         },
     };

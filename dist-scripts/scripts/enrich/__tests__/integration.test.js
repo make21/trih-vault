@@ -16,10 +16,15 @@ const rootDir = process.cwd();
     });
     strict_1.default.ok(Array.isArray(result.episodes));
     strict_1.default.ok(result.episodes.length > 0);
-    strict_1.default.equal(result.collections.map((item) => item.key).join(","), [...result.collections].map((item) => item.key).sort().join(","));
-    for (const episodes of Object.values(result.umbrellas.index)) {
-        const sorted = [...episodes].sort((a, b) => a - b);
-        strict_1.default.deepEqual(episodes, sorted);
+    const collectionKeys = result.collections.map((item) => item.key);
+    strict_1.default.equal(new Set(collectionKeys).size, collectionKeys.length);
+    for (const umbrella of result.umbrellas.umbrellas) {
+        const uniqueKeys = new Set(umbrella.seriesKeys);
+        strict_1.default.equal(uniqueKeys.size, umbrella.seriesKeys.length);
+        strict_1.default.equal(umbrella.count, umbrella.seriesKeys.length);
+        if (umbrella.years.min !== null && umbrella.years.max !== null) {
+            strict_1.default.ok(umbrella.years.min <= umbrella.years.max);
+        }
     }
     strict_1.default.equal(result.summary.llmCalls, 0);
     strict_1.default.equal(result.summary.llmSkipped, 0);
