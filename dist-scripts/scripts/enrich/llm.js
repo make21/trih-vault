@@ -43,18 +43,7 @@ function buildUserPrompt(meta) {
     ];
     return lines.join("\n");
 }
-function getOpenAI(apiKey) {
-    try {
-        // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-        const OpenAI = require("openai");
-        return new OpenAI({ apiKey });
-    }
-    catch (error) {
-        throw new Error("The openai package is required to run enrichment. Install it and try again.");
-    }
-}
 function createLLMClient(apiKey, concurrency = 2) {
-    const client = getOpenAI(apiKey);
     const limit = (0, p_limit_1.default)(concurrency);
     async function invoke(meta) {
         const userPrompt = buildUserPrompt(meta);
@@ -65,18 +54,30 @@ function createLLMClient(apiKey, concurrency = 2) {
                 const controller = new AbortController();
                 const timeout = setTimeout(() => controller.abort(), 30000);
                 try {
-                    const response = await client.chat.completions.create({
-                        model: "gpt-4o-mini",
-                        temperature: 0,
-                        response_format: { type: "json_object" },
-                        messages: [
-                            { role: "system", content: SYSTEM_PROMPT },
-                            { role: "user", content: userPrompt },
-                        ],
-                        max_tokens: 600,
+                    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${apiKey}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            model: "gpt-4o-mini",
+                            temperature: 0,
+                            response_format: { type: "json_object" },
+                            messages: [
+                                { role: "system", content: SYSTEM_PROMPT },
+                                { role: "user", content: userPrompt },
+                            ],
+                            max_tokens: 600,
+                        }),
                         signal: controller.signal,
                     });
-                    const message = response.choices?.[0]?.message?.content;
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`OpenAI request failed with status ${response.status}: ${errorText.slice(0, 200)}`);
+                    }
+                    const payload = await response.json();
+                    const message = payload?.choices?.[0]?.message?.content;
                     if (!message) {
                         throw new Error("No content returned from OpenAI");
                     }
