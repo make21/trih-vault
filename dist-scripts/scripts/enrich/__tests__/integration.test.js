@@ -22,4 +22,5 @@ const rootDir = process.cwd();
         strict_1.default.deepEqual(episodes, sorted);
     }
     strict_1.default.equal(result.summary.llmCalls, 0);
+    strict_1.default.equal(result.summary.llmSkipped, 0);
 });

@@ -370,29 +370,36 @@ export async function enrichEpisodes(options: EnrichOptions = {}): Promise<Enric
   }
 
   let llmCalls = 0;
+  let llmSkipped = 0;
   if (llmNeeded.length) {
     const apiKey = process.env.OPENAI_API_KEY;
     const activeClient = options.llmClient ?? (apiKey ? createLLMClient(apiKey) : null);
     if (!activeClient) {
-      throw new Error("OPENAI_API_KEY is required for enrichment when cache misses occur.");
-    }
-    if (verbose) {
-      logger.log(`Requesting inference for ${llmNeeded.length} episode(s)...`);
-    }
-    for (const state of llmNeeded) {
-      const input: LLMInput = {
-        title_feed: state.base.title_feed ?? null,
-        title_sheet: state.base.title_sheet ?? null,
-        description: state.base.description ?? null,
-        seriesHint: state.seriesKey
-          ? { seriesKey: state.seriesKey, seriesPart: state.seriesPart ?? undefined }
-          : null,
-        knownCenturyLabel: state.centuryLabel,
-      };
-      const inference = await activeClient.inferEpisode(input);
-      llmCalls += 1;
-      cacheUpdates[state.base.slug] = inference;
-      hydrateFromInference(state, inference);
+      llmSkipped = llmNeeded.length;
+      const hint =
+        "Set OPENAI_API_KEY to enable live enrichment or rerun with --cache-only to avoid LLM calls.";
+      logger.warn(
+        `Skipping ${llmSkipped} LLM inference${llmSkipped === 1 ? "" : "s"} because OPENAI_API_KEY is not set. ${hint}`
+      );
+    } else {
+      if (verbose) {
+        logger.log(`Requesting inference for ${llmNeeded.length} episode(s)...`);
+      }
+      for (const state of llmNeeded) {
+        const input: LLMInput = {
+          title_feed: state.base.title_feed ?? null,
+          title_sheet: state.base.title_sheet ?? null,
+          description: state.base.description ?? null,
+          seriesHint: state.seriesKey
+            ? { seriesKey: state.seriesKey, seriesPart: state.seriesPart ?? undefined }
+            : null,
+          knownCenturyLabel: state.centuryLabel,
+        };
+        const inference = await activeClient.inferEpisode(input);
+        llmCalls += 1;
+        cacheUpdates[state.base.slug] = inference;
+        hydrateFromInference(state, inference);
+      }
     }
   }
 
@@ -417,6 +424,7 @@ export async function enrichEpisodes(options: EnrichOptions = {}): Promise<Enric
     totalEpisodes: states.length,
     totalSeries: groupsByKey.size,
     llmCalls,
+    llmSkipped,
     lowConfidence: { unknown: unknownCount, broad: broadCount },
   };
 

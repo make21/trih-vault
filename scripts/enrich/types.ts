@@ -90,6 +90,7 @@ export interface EnrichmentSummary {
   totalEpisodes: number;
   totalSeries: number;
   llmCalls: number;
+  llmSkipped: number;
   lowConfidence: { unknown: number; broad: number };
 }
 

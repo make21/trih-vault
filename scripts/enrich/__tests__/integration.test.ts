@@ -20,4 +20,5 @@ test("dry-run enrichment builds collections deterministically", async () => {
     assert.deepEqual(episodes, sorted);
   }
   assert.equal(result.summary.llmCalls, 0);
+  assert.equal(result.summary.llmSkipped, 0);
 });

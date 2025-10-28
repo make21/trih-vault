@@ -72,7 +72,7 @@ async function main() {
     const summary = result.summary;
     console.log(
       `Episodes: ${summary.totalEpisodes} | Series: ${summary.totalSeries} | LLM calls: ${summary.llmCalls} | ` +
-        `Unknown: ${summary.lowConfidence.unknown} | Broad: ${summary.lowConfidence.broad}`
+        `Skipped: ${summary.llmSkipped} | Unknown: ${summary.lowConfidence.unknown} | Broad: ${summary.lowConfidence.broad}`
     );
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
