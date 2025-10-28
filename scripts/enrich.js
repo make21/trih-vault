@@ -1,10 +1,12 @@
 import {
+  ARC_GAP_DAYS,
   extractPart,
   kebabCase,
   normalizeTitle,
   readJsonFile,
   seriesHead,
   shortHash,
+  shouldStartNewArc,
   toTitleCase,
   writeJsonFile,
 } from './utils.js';
@@ -57,7 +59,7 @@ async function main() {
     return a.id.localeCompare(b.id);
   });
 
-  const groups = new Map();
+  const candidatesByHead = new Map();
 
   for (const episode of episodesForGrouping) {
     const title = episode.title ?? '';
@@ -76,29 +78,18 @@ async function main() {
     const headKeySlug = kebabCase(headKeyBase);
     const headKey = headKeySlug || kebabCase(episode.id ?? '') || `series-${shortHash(headKeyBase)}`;
 
-    if (!groups.has(headKey)) {
-      groups.set(headKey, {
+    if (!candidatesByHead.has(headKey)) {
+      candidatesByHead.set(headKey, {
         headKey,
         headValue,
-        anchorId: episode.id,
         entries: [],
-        partsSeen: new Set(),
       });
     }
 
-    const group = groups.get(headKey);
-    if (!group) continue;
+    const collection = candidatesByHead.get(headKey);
+    if (!collection) continue;
 
-    if (group.entries.length === 0) {
-      group.anchorId = episode.id;
-    }
-
-    if (group.partsSeen.has(part)) {
-      continue;
-    }
-
-    group.partsSeen.add(part);
-    group.entries.push({
+    collection.entries.push({
       episode,
       part,
       itunesEpisode: getItunesEpisode(episode),
@@ -106,64 +97,125 @@ async function main() {
     });
   }
 
-  const seriesRecords = [];
-  const debugSeries = [];
+  /** @type {Map<string, Array<{ headKey: string, headValue: string, anchorId: string, entries: any[], partsSeen: Set<number>, firstPubValue: number|null, lastPubValue: number|null }>>} */
+  const bucketsByHead = new Map();
 
-  for (const group of groups.values()) {
-    if (group.entries.length < 2) {
-      continue;
-    }
-
-    const sortedEntries = [...group.entries].sort((a, b) => {
-      if (a.part !== b.part) {
-        return a.part - b.part;
+  for (const collection of candidatesByHead.values()) {
+    const sortedEntries = [...collection.entries].sort((a, b) => {
+      if (a.pubDateValue !== b.pubDateValue) {
+        return a.pubDateValue - b.pubDateValue;
       }
       const aEpisode = a.itunesEpisode ?? Number.MAX_SAFE_INTEGER;
       const bEpisode = b.itunesEpisode ?? Number.MAX_SAFE_INTEGER;
       if (aEpisode !== bEpisode) {
         return aEpisode - bEpisode;
       }
-      if (a.pubDateValue !== b.pubDateValue) {
-        return a.pubDateValue - b.pubDateValue;
+      if (a.part !== b.part) {
+        return a.part - b.part;
       }
       return a.episode.id.localeCompare(b.episode.id);
     });
 
-    const seriesId = `s_${shortHash(`${group.headKey}::${group.anchorId}`)}`;
-    const titleSource = group.headValue || group.headKey.replace(/-/g, ' ');
-    const seriesTitle = toTitleCase(titleSource);
+    const headBuckets = [];
 
-    const episodeIds = [];
     for (const entry of sortedEntries) {
-      const existing = baseEpisodes.get(entry.episode.id);
-      if (!existing) {
+      const lastBucket = headBuckets[headBuckets.length - 1];
+      if (shouldStartNewArc(lastBucket, entry, ARC_GAP_DAYS)) {
+        headBuckets.push({
+          headKey: collection.headKey,
+          headValue: collection.headValue,
+          // Use the first episode id in the arc as the anchor to keep hashes stable.
+          anchorId: entry.episode.id,
+          entries: [],
+          partsSeen: new Set(),
+          firstPubValue: Number.isFinite(entry.pubDateValue) ? entry.pubDateValue : null,
+          lastPubValue: Number.isFinite(entry.pubDateValue) ? entry.pubDateValue : null,
+        });
+      }
+
+      const targetBucket = headBuckets[headBuckets.length - 1];
+      if (!targetBucket) {
         continue;
       }
-      existing.part = entry.part;
-      existing.seriesId = seriesId;
-      delete existing.topicId;
-      baseEpisodes.set(entry.episode.id, existing);
-      episodeIds.push(entry.episode.id);
+
+      targetBucket.entries.push(entry);
+      targetBucket.partsSeen.add(entry.part);
+
+      if (Number.isFinite(entry.pubDateValue)) {
+        if (targetBucket.firstPubValue === null || targetBucket.firstPubValue === undefined) {
+          targetBucket.firstPubValue = entry.pubDateValue;
+        }
+        targetBucket.lastPubValue = entry.pubDateValue;
+      }
     }
 
-    const uniqueEpisodeIds = Array.from(new Set(episodeIds));
+    if (headBuckets.length > 0) {
+      bucketsByHead.set(collection.headKey, headBuckets);
+    }
+  }
 
-    seriesRecords.push({
-      id: seriesId,
-      title: seriesTitle,
-      episodeIds: uniqueEpisodeIds,
-      yearFrom: null,
-      yearTo: null,
-      provisional: {
-        head: group.headKey,
-      },
-    });
+  const seriesRecords = [];
+  const debugSeries = [];
 
-    debugSeries.push({
-      headKey: group.headKey,
-      seriesId,
-      parts: sortedEntries.map((entry) => entry.part),
-    });
+  for (const headBuckets of bucketsByHead.values()) {
+    for (const bucket of headBuckets) {
+      if (bucket.entries.length < 2) {
+        continue;
+      }
+
+      const sortedEntries = [...bucket.entries].sort((a, b) => {
+        if (a.part !== b.part) {
+          return a.part - b.part;
+        }
+        const aEpisode = a.itunesEpisode ?? Number.MAX_SAFE_INTEGER;
+        const bEpisode = b.itunesEpisode ?? Number.MAX_SAFE_INTEGER;
+        if (aEpisode !== bEpisode) {
+          return aEpisode - bEpisode;
+        }
+        if (a.pubDateValue !== b.pubDateValue) {
+          return a.pubDateValue - b.pubDateValue;
+        }
+        return a.episode.id.localeCompare(b.episode.id);
+      });
+
+      const seriesId = `s_${shortHash(`${bucket.headKey}::${bucket.anchorId}`)}`;
+      const titleSource = bucket.headValue || bucket.headKey.replace(/-/g, ' ');
+      const seriesTitle = toTitleCase(titleSource);
+
+      const episodeIds = [];
+      for (const entry of sortedEntries) {
+        const existing = baseEpisodes.get(entry.episode.id);
+        if (!existing) {
+          continue;
+        }
+        existing.part = entry.part;
+        existing.seriesId = seriesId;
+        delete existing.topicId;
+        baseEpisodes.set(entry.episode.id, existing);
+        episodeIds.push(entry.episode.id);
+      }
+
+      const uniqueEpisodeIds = Array.from(new Set(episodeIds));
+
+      seriesRecords.push({
+        id: seriesId,
+        title: seriesTitle,
+        episodeIds: uniqueEpisodeIds,
+        yearFrom: null,
+        yearTo: null,
+        provisional: {
+          head: bucket.headKey,
+        },
+      });
+
+      debugSeries.push({
+        headKey: bucket.headKey,
+        seriesId,
+        parts: sortedEntries.map((entry) => entry.part),
+        firstPubValue: bucket.firstPubValue ?? null,
+        lastPubValue: bucket.lastPubValue ?? null,
+      });
+    }
   }
 
   const updatedEpisodes = Array.from(baseEpisodes.values());
@@ -187,27 +239,32 @@ async function main() {
   console.log('Total episodes:', episodes.length);
   console.log('Series (multi-part):', seriesRecords.length);
   console.log('Singletons:', singletonsCount);
+  console.log('Examples:');
 
-  const nelsonSeries = seriesRecords.find(
-    (entry) => entry.episodeIds.includes('ep608') && entry.episodeIds.includes('ep609')
-  );
-  if (nelsonSeries) {
-    const parts = nelsonSeries.episodeIds.map((episodeId) => {
-      const episode = updatedEpisodes.find((entry) => entry.id === episodeId);
-      return typeof episode?.part === 'number' ? episode.part : null;
-    });
-    console.log(
-      `Nelson sanity: series ${nelsonSeries.id} episodeCount=${nelsonSeries.episodeIds.length} episodes=[${nelsonSeries.episodeIds.join(
-        ', '
-      )}] parts=[${parts.join(', ')}]`
-    );
+  const formatDate = (value) => {
+    if (!Number.isFinite(value)) {
+      return 'unknown';
+    }
+    return new Date(value).toISOString().slice(0, 10);
+  };
+
+  const nelsonEntries = debugSeries.filter((entry) => entry.headKey === 'nelson');
+  const remainingSlots = Math.max(0, 10 - nelsonEntries.length);
+  const otherEntries = debugSeries
+    .filter((entry) => entry.headKey !== 'nelson')
+    .slice(0, remainingSlots);
+  const exampleEntries = [...nelsonEntries, ...otherEntries];
+
+  if (exampleEntries.length === 0) {
+    console.log('  (none)');
   } else {
-    console.log('Nelson sanity: no series found for episodes ep608 and ep609');
-  }
-
-  const preview = debugSeries.slice(0, 10);
-  for (const entry of preview) {
-    console.log(` - ${entry.headKey}: ${entry.seriesId} parts=[${entry.parts.join(', ')}]`);
+    for (const entry of exampleEntries) {
+      const firstDate = entry.firstPubValue == null ? 'unknown' : formatDate(entry.firstPubValue);
+      const lastDate = entry.lastPubValue == null ? 'unknown' : formatDate(entry.lastPubValue);
+      console.log(
+        `  - ${entry.headKey}: ${entry.seriesId} parts=[${entry.parts.join(', ')}] first=${firstDate} last=${lastDate}`
+      );
+    }
   }
 }
 

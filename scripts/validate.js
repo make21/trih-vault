@@ -3,9 +3,14 @@ import { readJsonFile } from './utils.js';
 async function main() {
   const episodes = await readJsonFile('public/episodes.json', []);
   const series = await readJsonFile('public/series.json', []);
-  await readJsonFile('public/topics.json', []);
+  const topics = await readJsonFile('public/topics.json', []);
 
   const errors = [];
+  if (!Array.isArray(topics)) {
+    errors.push('topics.json must contain an array');
+  } else if (topics.length !== 0) {
+    errors.push('topics.json must remain empty');
+  }
   const episodesById = new Map();
   for (const episode of episodes) {
     const label = typeof episode.id === 'string' && episode.id ? episode.id : '<missing id>';
@@ -78,7 +83,12 @@ async function main() {
       continue;
     }
 
+    if (entry.episodeIds.length < 2) {
+      errors.push(`Series ${label} must include at least two episodes`);
+    }
+
     const seenEpisodeIds = new Set();
+    const partsInSeries = new Set();
     for (const episodeId of entry.episodeIds) {
       if (typeof episodeId !== 'string' || episodeId.trim() === '') {
         errors.push(`Series ${label} has invalid episode id ${episodeId}`);
@@ -95,6 +105,14 @@ async function main() {
       if (episode.seriesId !== entry.id) {
         errors.push(`Episode ${episode.id} expects series ${episode.seriesId ?? '<none>'} but listed under ${entry.id}`);
       }
+
+      if (typeof episode.part !== 'number' || !Number.isFinite(episode.part)) {
+        errors.push(`Series ${label} episode ${episode.id} missing numeric part`);
+        continue;
+      }
+      if (!partsInSeries.add(episode.part)) {
+        errors.push(`Series ${label} repeats part number ${episode.part}`);
+      }
     }
   }
 
@@ -110,23 +128,6 @@ async function main() {
         errors.push(`Episode ${label} missing from series ${seriesEntry.id} episodeIds`);
       }
     }
-  }
-
-  const nelsonSeries = series.find(
-    (entry) => Array.isArray(entry.episodeIds) && entry.episodeIds.includes('ep608') && entry.episodeIds.includes('ep609')
-  );
-  if (nelsonSeries) {
-    const parts = nelsonSeries.episodeIds.map((episodeId) => {
-      const episode = episodesById.get(episodeId);
-      return typeof episode?.part === 'number' ? episode.part : null;
-    });
-    console.log(
-      `Nelson sanity: series ${nelsonSeries.id} episodeCount=${nelsonSeries.episodeIds.length} episodes=[${nelsonSeries.episodeIds.join(
-        ', '
-      )}] parts=[${parts.join(', ')}]`
-    );
-  } else {
-    console.log('Nelson sanity: no series found for episodes ep608 and ep609');
   }
 
   if (errors.length > 0) {
