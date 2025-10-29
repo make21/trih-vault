@@ -61,6 +61,7 @@ Return JSON:
 const args = process.argv.slice(2);
 const isDryRun = args.includes('--dry-run');
 const bypassCacheReads = args.includes('--no-cache');
+const forceRefresh = args.includes('--refresh') || args.includes('--force');
 
 const apiKey = process.env.OPENAI_API_KEY;
 if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === '') {
@@ -171,6 +172,40 @@ function normalizeExistingYear(value) {
     return Math.trunc(value);
   }
   return null;
+}
+
+function hasEpisodeEnrichment(episode) {
+  if (!episode || typeof episode !== 'object') return false;
+  if (typeof episode.yearFrom === 'number' && Number.isFinite(episode.yearFrom)) return true;
+  if (typeof episode.yearTo === 'number' && Number.isFinite(episode.yearTo)) return true;
+  const arrayFields = [
+    'keyPeople',
+    'keyPlaces',
+    'keyBattles',
+    'keyDates',
+    'organizations',
+    'themes',
+  ];
+  for (const field of arrayFields) {
+    const value = episode[field];
+    if (Array.isArray(value) && value.length > 0) {
+      return true;
+    }
+  }
+  if (typeof episode.confidence === 'number' && episode.confidence > 0) {
+    return true;
+  }
+  return false;
+}
+
+function hasSeriesEnrichment(series) {
+  if (!series || typeof series !== 'object') return false;
+  if (typeof series.publicTitle === 'string') {
+    return series.publicTitle.trim().length > 0;
+  }
+  if (typeof series.yearFrom === 'number' && Number.isFinite(series.yearFrom)) return true;
+  if (typeof series.yearTo === 'number' && Number.isFinite(series.yearTo)) return true;
+  return false;
 }
 
 function applyEpisodeDefaults(episode) {
@@ -361,11 +396,18 @@ async function main() {
   let cacheChanged = false;
   let episodesUpdated = 0;
   let episodesCached = 0;
+  let episodesSkippedExisting = 0;
   let seriesUpdated = 0;
   let seriesCached = 0;
+  let seriesSkippedExisting = 0;
 
   for (const episode of episodes) {
+    const alreadyEnriched = !forceRefresh && hasEpisodeEnrichment(episode);
     applyEpisodeDefaults(episode);
+    if (alreadyEnriched) {
+      episodesSkippedExisting += 1;
+      continue;
+    }
     if (!episode || typeof episode.id !== 'string') {
       continue;
     }
@@ -419,7 +461,12 @@ async function main() {
   }
 
   for (const entry of series) {
+    const alreadyEnriched = !forceRefresh && hasSeriesEnrichment(entry);
     applySeriesDefaults(entry);
+    if (alreadyEnriched) {
+      seriesSkippedExisting += 1;
+      continue;
+    }
     if (!entry || typeof entry.id !== 'string') {
       continue;
     }
@@ -488,7 +535,16 @@ async function main() {
     console.log('Dry run enabled: skipping writes to disk.');
   }
 
-  console.log(`LLM Enrich: episodes updated ${episodesUpdated} (cached ${episodesCached}), series updated ${seriesUpdated} (cached ${seriesCached})${isDryRun ? ' (dry-run)' : ''}`);
+  const summaryParts = [
+    `episodes updated ${episodesUpdated}`,
+    `cached ${episodesCached}`,
+    `skipped existing ${episodesSkippedExisting}`,
+    `series updated ${seriesUpdated}`,
+    `cached ${seriesCached}`,
+    `skipped existing ${seriesSkippedExisting}`,
+  ];
+  const suffix = isDryRun ? ' (dry-run)' : '';
+  console.log(`LLM Enrich: ${summaryParts.join(', ')}${suffix}`);
 }
 
 main().catch((error) => {
