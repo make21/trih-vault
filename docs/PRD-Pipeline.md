@@ -33,15 +33,21 @@ The pipeline uses a layered storage model under `data/` and `public/`.
    - `fingerprint` (hash of `cleanTitle` + `cleanDescription` to invalidate caches when deterministic content changes).
    - `derived` fields such as `year`, `durationSeconds` (if available), `contentWarnings`, etc.
    - `part` (numeric part index when the title contains a "Part N" suffix, otherwise `null`).
-   - `seriesId` (stable identifier shared by every episode in the same multi-part arc; generated when `part` is populated so that `Part 1/Part 2/…` share the same group).
+  - `seriesId` (stable identifier shared by every episode in the same multi-part arc; generated when `part` is populated so that `Part 1/Part 2/…` share the same group).
 3. `data/episodes-llm.json` — cached LLM outputs keyed by `episodeId` and the deterministic `fingerprint`. Stores structured enrichment with the following schema:
    - `keyPeople` — notable individuals mentioned in the synopsis, excluding the hosts Tom Holland and Dominic Sandbrook and generic credit mentions.
    - `keyPlaces` — geographic anchors or locations central to the episode.
    - `keyThemes` — short descriptors that capture the central topics or ideas.
    - `yearFrom` / `yearTo` — numeric year span inferred from the description and episode context; when the LLM cannot infer a period with confidence, both values are set to `"NA"`.
-   - Additional LLM artefacts (e.g. summaries, key questions) may remain alongside these required fields.
+   - Additional LLM artefacts (e.g. key questions) may remain alongside these required fields, but per-episode narrative summaries are no longer required because the cleaned description already fulfils that need.
 
 The programmatic layer is responsible for identifying part indicators (e.g. titles such as `"58. The World Cup of Gods - Part 1"`). The detection logic should consider sequential numbering, publication ordering, and consistent text around the part suffix to ensure all related episodes receive the same `seriesId`.
+
+#### Series Key Extraction
+- When a title matches the canonical pattern `<episodeNumber>. <seriesName>: <rest> (Part N)`, use the portion between the episode number and the first colon as the deterministic `seriesKey`. Normalise whitespace, strip trailing punctuation, and downcase when generating the `seriesId` slug.
+- If a title contains `Part N` but no colon (e.g. `"138. The Princes in the Tower Part 1"`), treat the text between the episode number and the `Part` token as the `seriesKey`.
+- When multiple, non-contiguous arcs reuse the same `seriesKey` (e.g. multiple "Nelson" runs published years apart), differentiate their `seriesId` values by appending the earliest publication date (YYYYMMDD) of the arc or, if unavailable, the lowest `itunesEpisode` number observed for the group.
+- Always assign a `seriesId` whenever a `Part N` pattern is detected, even if the `seriesKey` is ambiguous; the LLM layer can later generate a human-friendly title using the cleaned descriptions.
 
 ### 4.2 Series
 1. `data/series-raw.json` — deterministic grouping step that clusters related episodes and stores membership arrays.
@@ -114,14 +120,13 @@ Each stage reads the previous layer and only appends or updates the keyed object
 
 ### 5.5 LLM Enrichment
 - Episode and series scripts read the programmatic layer, filter for items whose fingerprints lack cached responses, and call OpenAI once per item.
-- `episodes-llm` prompts must surface `keyPeople`, `keyPlaces`, `keyThemes`, and year spans while ignoring hosts and credit-only names.
+- `episodes-llm` prompts must surface `keyPeople`, `keyPlaces`, `keyThemes`, and year spans while ignoring hosts and credit-only names. They should not request a narrative summary because the cleaned description already serves as the canonical episode synopsis.
 - When descriptions jump across multiple periods or remain ahistorical (e.g. "66. Ghosts"), set `yearFrom = "NA"` and `yearTo = "NA"`.
 - `series-llm` prompts must infer a `seriesTitle` from the grouped episodes alongside the narrative summary.
 - Cache format example:
   ```json
   {
     "episodeId:fingerprint": {
-      "summary": "…",
       "keyPeople": ["…"],
       "keyPlaces": ["…"],
       "keyThemes": ["…"],
