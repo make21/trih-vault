@@ -241,9 +241,12 @@ async function main() {
   const args = process.argv.slice(2);
   const isDryRun = args.includes('--dry-run');
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKeyRaw = process.env.OPENAI_API_KEY;
+  const apiKey = typeof apiKeyRaw === 'string' ? apiKeyRaw.trim() : '';
   if (!apiKey) {
-    throw new Error('Missing OPENAI_API_KEY environment variable.');
+    console.log('🧩 Topics Enrichment');
+    console.log('- Missing OPENAI_API_KEY. Skipping topics generation.');
+    return;
   }
 
   const series = await readJsonFile('public/series.json', []);
