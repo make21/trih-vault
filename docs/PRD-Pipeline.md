@@ -10,6 +10,7 @@ Deliver a deterministic, append-only data pipeline that ingests *The Rest Is His
   - Deterministic series grouping with derived aggregates (e.g. `yearFrom`, `yearTo`).
   - LLM passes for episodes and series that consume the programmatic fingerprints and reuse cached responses.
   - Composition of public JSON outputs without regenerating historical data unnecessarily.
+  - Schema-backed validation, referential integrity checks, and CI ergonomics.
 - **Out of scope**
   - Any topic generation, storage, or validation.
   - UI or playback features; this PRD focuses purely on the data pipeline.
@@ -21,52 +22,290 @@ Deliver a deterministic, append-only data pipeline that ingests *The Rest Is His
 | Downstream consumer | Read `public/episodes.json` and `public/series.json` with complete metadata, including deterministic episode cleanup and series spans. |
 | Cost controller | Keep OpenAI usage low by caching outputs and avoiding re-requests unless fingerprints change. |
 
-## 4. Data Layers
-The pipeline uses a layered storage model under `data/` and `public/`.
+## 4. Data Model & Storage
+### 4.1 Conventions & Identifiers
+- **Canonical IDs**
+  - `episodeId` = normalised RSS `<guid>` string. Persist the raw RSS GUID under `source.guid` for traceability.
+  - `seriesId` = `slug(seriesKey) + "-" + firstPubYYYYMMDD` for the arc. This ID MUST be stable across reruns and cannot be reused for a different arc.
+- **Source mapping** — Every episode retains `source` metadata:
+  - `source.guid` (string, required)
+  - `source.itunesEpisode` (number \| null, required, mirror the RSS value; null when absent)
+  - `source.megaphoneId` (string \| null, optional; populate when present in the feed)
+  - `source.enclosureUrl` (string, required)
+- **Date handling**
+  - `publishedAt` is an ISO 8601 UTC timestamp derived from RSS `pubDate`; present in all layers.
+  - `rssLastSeenAt` is an ISO 8601 UTC timestamp representing the last time the RSS entry was observed; stored on raw episodes and propagated through programmatic and public layers.
+  - Daily RSS snapshots (`data/source/rss.YYYY-MM-DD.json`) store `fetchedAt` (ISO 8601 UTC) at the file root for provenance.
+- **Year semantics**
+  - `yearFrom` and `yearTo` are `number \| null` throughout the pipeline.
+  - Replace all prior `"NA"` sentinels with `null`.
+  - `yearConfidence` captures precision with enum `"high" | "medium" | "low" | "unknown"`.
+- **Series grouping confidence**
+  - `seriesGroupingConfidence` enum `"high" | "medium" | "low"` documents how certain the programmatic grouping is.
+  - Persist `seriesKeyRaw` when ambiguity remains; confidence defaults to `"low"` in that case.
+- **Ordering & determinism**
+  - `public/episodes.json` and `public/series.json` are arrays sorted by `publishedAt` ascending, then `episodeId`.
+  - All JSON serialisation uses stable key ordering (sorted keys) to minimise diffs.
 
-### 4.1 Episodes
-1. `data/episodes-raw.json` — append-only output of the RSS fetch step. Each item contains minimal metadata (`id`, `title`, `pubDate`, `description`, `audioUrl`, optional `itunesEpisode`).
-2. `data/episodes-programmatic.json` — deterministic enrichment keyed by `episodeId`. Fields include the existing cleanup artefacts plus:
-   - `cleanTitle`, `cleanDescription` (plain text or light Markdown after HTML parsing).
-   - `descriptionBlocks` (array of paragraphs for later use).
-   - `credits` object (e.g. `producer`, `execProducers`).
-   - `fingerprint` (hash of `cleanTitle` + `cleanDescription` to invalidate caches when deterministic content changes).
-   - `derived` fields such as `year`, `durationSeconds` (if available), `contentWarnings`, etc.
-   - `part` (numeric part index when the title contains a "Part N" suffix, otherwise `null`).
-  - `seriesId` (stable identifier shared by every episode in the same multi-part arc; generated when `part` is populated so that `Part 1/Part 2/…` share the same group).
-3. `data/episodes-llm.json` — cached LLM outputs keyed by `episodeId` and the deterministic `fingerprint`. Stores structured enrichment with the following schema:
-   - `keyPeople` — notable individuals mentioned in the synopsis, excluding the hosts Tom Holland and Dominic Sandbrook and generic credit mentions.
-   - `keyPlaces` — geographic anchors or locations central to the episode.
-   - `keyThemes` — short descriptors that capture the central topics or ideas.
-   - `yearFrom` / `yearTo` — numeric year span inferred from the description and episode context; when the LLM cannot infer a period with confidence, both values are set to `"NA"`.
-   - Additional LLM artefacts (e.g. key questions) may remain alongside these required fields, but per-episode narrative summaries are no longer required because the cleaned description already fulfils that need.
+### 4.2 File Specifications
+Explicit field inventories for each artefact:
 
-The programmatic layer is responsible for identifying part indicators (e.g. titles such as `"58. The World Cup of Gods - Part 1"`). The detection logic should consider sequential numbering, publication ordering, and consistent text around the part suffix to ensure all related episodes receive the same `seriesId`.
+#### `data/source/rss.YYYY-MM-DD.json`
+- Root object with keys:
+  - `fetchedAt` — string (ISO 8601 UTC), required.
+  - `items` — array of raw RSS item payloads (structure defined by the feed), required; stored for auditing only.
 
-#### Series Key Extraction
-- When a title matches the canonical pattern `<episodeNumber>. <seriesName>: <rest> (Part N)`, use the portion between the episode number and the first colon as the deterministic `seriesKey`. Normalise whitespace, strip trailing punctuation, and downcase when generating the `seriesId` slug.
-- If a title contains `Part N` but no colon (e.g. `"138. The Princes in the Tower Part 1"`), treat the text between the episode number and the `Part` token as the `seriesKey`.
-- When multiple, non-contiguous arcs reuse the same `seriesKey` (e.g. multiple "Nelson" runs published years apart), differentiate their `seriesId` values by appending the earliest publication date (YYYYMMDD) of the arc or, if unavailable, the lowest `itunesEpisode` number observed for the group.
-- Always assign a `seriesId` whenever a `Part N` pattern is detected, even if the `seriesKey` is ambiguous; the LLM layer can later generate a human-friendly title using the cleaned descriptions.
+#### `data/episodes-raw.json`
+- Append-only array of episode metadata harvested from RSS.
+- Fields per entry:
 
-### 4.2 Series
-1. `data/series-raw.json` — deterministic grouping step that clusters related episodes and stores membership arrays.
-2. `data/series-programmatic.json` — aggregates computed from the raw grouping and programmatic episode data:
-   - `seriesId` (copied from the episode layer so each multi-part arc can be traced end-to-end).
-   - `yearFrom`, `yearTo` (min and max of member episode years).
-   - `episodeIds` (ordered array for reference).
-   - `fingerprint` (hash of member episode fingerprints + ordering).
-   - Any other deterministic metadata (e.g. inferred subject tags, episode counts).
-3. `data/series-llm.json` — cached LLM metadata keyed by `seriesId` and the deterministic `fingerprint`. Required fields include:
-   - `seriesTitle` — human-friendly title derived from the episode titles/descriptions within the series.
-   - Narrative summaries, tonal descriptors, and other prompts carried over from the previous spec.
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `episodeId` | string | Required | Normalised RSS GUID; canonical ID. |
+| `title` | string | Required | Original episode title. |
+| `publishedAt` | string | Required | ISO 8601 UTC derived from RSS `pubDate`. |
+| `description` | string | Required | Raw HTML or text description from RSS. |
+| `audioUrl` | string | Required | Direct media URL. |
+| `rssLastSeenAt` | string | Required | ISO 8601 UTC when the item was last seen in RSS. |
+| `source` | object | Required | Provenance object (`guid`, `itunesEpisode`, `megaphoneId`, `enclosureUrl`); `itunesEpisode` stored as number \| null. |
 
-### 4.3 Public Outputs
-- `public/episodes.json` — overlay of raw + programmatic + LLM data per episode.
-- `public/series.json` — overlay of raw + programmatic + LLM data per series.
-- `public/topics.json` — **removed**; the compose step and validators must no longer expect it.
+#### `data/episodes-programmatic.json`
+- Deterministic enrichment stored as an object keyed by `episodeId`.
+- Fields per entry:
 
-## 5. Pipeline Flow
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `episodeId` | string | Required | Mirrors raw `episodeId`. |
+| `publishedAt` | string | Required | Carried through from raw layer. |
+| `rssLastSeenAt` | string | Required | Copied from raw layer for provenance. |
+| `cleanTitle` | string | Required | HTML-stripped, whitespace-normalised title. |
+| `cleanDescription` | string | Required | Plain text synopsis after cleanup. |
+| `descriptionBlocks` | string[] | Required | Paragraph-level breakdown used by prompts. |
+| `credits` | object | Optional | Keys map to contributor arrays (strings). |
+| `fingerprint` | string | Required | See §5 for the algorithm; must reflect the `cleanupVersion`. |
+| `cleanupVersion` | number | Required | Current deterministic cleanup version (initially `1`). |
+| `derived` | object | Optional | Deterministic facts such as `durationSeconds` (number), `contentWarnings` (string[]), and `yearHints` (object with inferred numeric spans). |
+| `part` | number \| null | Optional | Numeric part index; `null` when not applicable. |
+| `seriesId` | string \| null | Optional | Stable identifier shared by multi-part arcs; required when `part` is non-null. |
+| `seriesKey` | string \| null | Optional | Canonical human-readable key extracted from the title. |
+| `seriesKeyRaw` | string \| null | Optional | Original ambiguous key when fallback logic applies. |
+| `seriesGroupingConfidence` | string | Required | Enum `"high" | "medium" | "low"`. |
+| `yearFrom` | number \| null | Optional | Deterministic span when derivable without LLM. |
+| `yearTo` | number \| null | Optional | Deterministic span when derivable without LLM. |
+| `yearConfidence` | string | Optional | Enum defined above; reflects programmatic certainty. |
+
+#### `data/series-raw.json`
+- Deterministic grouping step represented as an object keyed by `seriesId`.
+- Fields per entry:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `seriesId` | string | Required | Stable identifier copied from programmatic episodes. |
+| `seriesKey` | string | Optional | Normalised textual key derived from titles. |
+| `seriesKeyRaw` | string \| null | Optional | Original ambiguous key when heuristic fallback used. |
+| `episodeIds` | string[] | Required | Ordered membership of the series; minimum length 2. |
+| `firstPublishedAt` | string | Required | ISO 8601 UTC earliest publication in the arc. |
+| `seriesGroupingConfidence` | string | Required | Enum `"high" | "medium" | "low"`. |
+
+#### `data/series-programmatic.json`
+- Aggregates computed from raw groupings and programmatic episodes.
+- Fields per entry:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `seriesId` | string | Required | Mirrors `data/series-raw.json.seriesId`. |
+| `episodeIds` | string[] | Required | Ordered list matching the raw grouping. |
+| `fingerprint` | string | Required | See §5 for the algorithm. |
+| `memberEpisodeFingerprints` | string[] | Required | Ordered fingerprints from the episode layer. |
+| `yearFrom` | number \| null | Required | Minimum member year or null. |
+| `yearTo` | number \| null | Required | Maximum member year or null. |
+| `yearConfidence` | string | Required | Enum; lowest confidence across members. |
+| `seriesTitleFallback` | string | Required | Cleaned `seriesKey` used when LLM title is unavailable. |
+| `derived` | object | Optional | Deterministic metadata such as `episodeCount` (number) or `subjectTags` (string[]). |
+
+#### `data/episodes-llm.json`
+- Cached LLM enrichments keyed by `${episodeId}:${fingerprint}`.
+- Minimal schema (see §12) enforced per entry:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `episodeId` | string | Required | Episode identifier used to construct the cache key. |
+| `fingerprint` | string | Required | Programmatic fingerprint associated with the response. |
+| `model` | string | Required | LLM model identifier (`gpt-5-nano` primary, fallback lesser model when unavailable). |
+| `promptVersion` | string | Required | Semantic version of the prompt template. |
+| `createdAt` | string | Required | ISO 8601 UTC timestamp recorded at write. |
+| `status` | string | Required | Enum `"ok" | "skipped" | "error"`. |
+| `notes` | string \| null | Optional | Human-readable context for skipped/error states. |
+| `keyPeople` | string[] | Required | Max 12, unique, hosts removed, whitespace-trimmed. |
+| `keyPlaces` | string[] | Required | Max 12, unique, whitespace-trimmed. |
+| `keyThemes` | string[] | Required | Between 3 and 8 entries, kebab-case, trimmed. |
+| `yearFrom` | number \| null | Required | Numeric year or null. |
+| `yearTo` | number \| null | Required | Numeric year or null. |
+| `yearConfidence` | string | Required | Enum defined above. |
+
+#### `data/series-llm.json`
+- Cached LLM metadata keyed by `${seriesId}:${fingerprint}`.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `seriesId` | string | Required | Identifier shared across series layers. |
+| `fingerprint` | string | Required | Mirrors the programmatic fingerprint used when requesting the LLM. |
+| `model` | string | Required | LLM model identifier (`gpt-5-nano` primary with fallback lesser model). |
+| `promptVersion` | string | Required | Semantic version string. |
+| `createdAt` | string | Required | ISO 8601 UTC timestamp. |
+| `status` | string | Required | Enum `"ok" | "skipped" | "error"`. |
+| `notes` | string \| null | Optional | Context for skipped/error outputs. |
+| `seriesTitle` | string \| null | Optional | LLM-provided human title. |
+| `narrativeSummary` | string \| null | Optional | Markdown-friendly synopsis. |
+| `tonalDescriptors` | string[] | Optional | Unique descriptors when present. |
+| `yearFrom` | number \| null | Optional | Harmonised span aligned with episodes. |
+| `yearTo` | number \| null | Optional | Harmonised span aligned with episodes. |
+| `yearConfidence` | string | Required | Enum defined above. |
+
+#### `public/episodes.json`
+- Ordered array combining raw, programmatic, and LLM data per episode, sorted as described.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | string | Required | Mirrors `episodeId`; maintained for consumer continuity. |
+| `episodeId` | string | Required | Canonical ID for forward compatibility. |
+| `title` | string | Required | Original episode title. |
+| `publishedAt` | string | Required | ISO 8601 UTC. |
+| `description` | string | Required | Original description. |
+| `audioUrl` | string | Required | Direct media URL. |
+| `rssLastSeenAt` | string | Required | Provenance timestamp. |
+| `itunesEpisode` | number \| null | Optional | Nullable alias of the RSS iTunes episode number. |
+| `cleanTitle` | string | Required | Programmatic field. |
+| `cleanDescription` | string | Required | Programmatic field. |
+| `descriptionBlocks` | string[] | Required | Programmatic field. |
+| `credits` | object | Optional | Programmatic field. |
+| `fingerprint` | string | Required | Programmatic fingerprint. |
+| `cleanupVersion` | number | Required | Deterministic cleanup version used. |
+| `derived` | object | Optional | Programmatic metadata. |
+| `part` | number \| null | Optional | Multi-part index. |
+| `seriesId` | string \| null | Optional | Present when part populated. |
+| `seriesKey` | string \| null | Optional | Canonical key. |
+| `seriesKeyRaw` | string \| null | Optional | Ambiguity trace. |
+| `seriesGroupingConfidence` | string | Required | Enum. |
+| `keyPeople` | string[] | Required | LLM enrichment. |
+| `keyPlaces` | string[] | Required | LLM enrichment. |
+| `keyThemes` | string[] | Required | LLM enrichment. |
+| `yearFrom` | number \| null | Required | LLM-derived or programmatic fallback. |
+| `yearTo` | number \| null | Required | LLM-derived or programmatic fallback. |
+| `yearConfidence` | string | Required | Highest confidence among sources; prefer LLM. |
+
+#### `public/series.json`
+- Ordered array combining raw, programmatic, and LLM data per series, sorted by earliest `publishedAt` then `seriesId`.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `id` | string | Required | Mirrors `seriesId` for backwards compatibility. |
+| `seriesId` | string | Required | Stable identifier used across layers. |
+| `seriesKey` | string \| null | Optional | Canonical key. |
+| `seriesKeyRaw` | string \| null | Optional | Ambiguity trace. |
+| `seriesGroupingConfidence` | string | Required | Enum defined above. |
+| `episodeIds` | string[] | Required | Ordered membership of the series. |
+| `yearFrom` | number \| null | Required | Span start. |
+| `yearTo` | number \| null | Required | Span end. |
+| `yearConfidence` | string | Required | Confidence score. |
+| `fingerprint` | string | Required | Programmatic fingerprint. |
+| `memberEpisodeFingerprints` | string[] | Optional | Ordered fingerprints for downstream debugging. |
+| `derived` | object | Optional | Deterministic metadata such as counts or subject tags. |
+| `seriesTitle` | string | Required | LLM title or fallback. |
+| `narrativeSummary` | string \| null | Optional | LLM narrative summary. |
+| `tonalDescriptors` | string[] | Optional | LLM tone descriptors. |
+| `rssLastSeenAt` | string \| null | Optional | Highest `rssLastSeenAt` among members. |
+
+#### `data/errors.jsonl`
+- Append-only JSON Lines ledger capturing recoverable issues.
+- Each line is a JSON object with fields:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `stage` | string | Required | Pipeline stage emitting the error (e.g., `llm:episodes`). |
+| `itemId` | string | Required | `episodeId` or `seriesId`. |
+| `when` | string | Required | ISO 8601 UTC timestamp. |
+| `message` | string | Required | Human-readable description. |
+| `details` | object \| null | Optional | Structured payload for debugging. |
+
+### 4.3 Formal Schemas
+- Authoritative JSON Schemas live alongside the repository under:
+  - [`schema/episode.public.schema.json`](../schema/episode.public.schema.json)
+  - [`schema/series.public.schema.json`](../schema/series.public.schema.json)
+  - [`schema/cache.llm.schema.json`](../schema/cache.llm.schema.json)
+- Schemas must explicitly type every field above, including enum restrictions and `number \| null` variants for year fields.
+- All public JSON artefacts (`public/episodes.json`, `public/series.json`) and cache files (`data/episodes-llm.json`, `data/series-llm.json`) MUST validate against the appropriate schema via `scripts/validate.js` using AJV.
+- Schema evolution must remain backwards compatible; coordinate breaking changes with consumer version bumps.
+
+## 5. Fingerprints & Cleanup Versioning
+- Episode fingerprint formula:
+  ```
+  fingerprint = sha256("epfp:v1\ncleanup_v=" + CLEANUP_VERSION + "\n" + cleanTitle + "\n" + cleanDescription)
+  ```
+- Series fingerprint formula:
+  ```
+  seriesFingerprint = sha256("srfp:v1\n" + seriesId + "\n" + memberEpisodeFingerprints.join("\n"))
+  ```
+- `CLEANUP_VERSION` is a constant (initially `1`) defined alongside the cleanup helpers. Increment the version whenever deterministic cleanup behaviour changes; doing so invalidates caches intentionally.
+
+## 6. Series Key Extraction & Grouping Rules
+- Recognise part indicators with flexible patterns: `Part`, `Pt`, `Pt.`, roman numerals (`I`, `II`, `III`, …), and hyphen/colon variants. Matching is case-insensitive.
+- When ambiguity remains, still assign a `seriesId` but set `seriesGroupingConfidence = "low"` and persist `seriesKeyRaw`.
+- Normalise `seriesKey` by trimming whitespace, collapsing repeated separators, and downcasing when generating the slug for `seriesId`.
+- `seriesId` MUST remain stable across reruns and cannot be reused for a different arc.
+
+## 7. Programmatic Cleanup Rules
+- Boilerplate markers and credit extraction regexes live in `data/rules/cleanup.yaml`. This YAML file contains:
+  - `boilerplateMarkers`: arrays of strings to remove.
+  - `creditPatterns`: named regex patterns for credit extraction.
+  - `htmlCollapseRules`: directives for collapsing `<br>` spam and redundant tags.
+- `stripHtml` must collapse `<br>` spam using the YAML-configured rules.
+- Cleanup scripts load rules from YAML at runtime; no hard-coded markers remain in code.
+- Maintain unit tests under `tests/cleanup/` covering a representative sample corpus to guard against regressions.
+
+## 8. LLM Enrichment & Cache Discipline
+- Episode cache schema is locked to the minimal shape described in §4.2; extra keys are forbidden.
+- Validator behaviour:
+  - Trim whitespace on every string, dropping entries shorter than two characters.
+  - De-duplicate arrays while preserving original order.
+  - Enforce array length constraints and kebab-case for `keyThemes`.
+- Cache keys remain `${itemId}:${fingerprint}`.
+- `data/series-llm.json` may omit `seriesTitle` when status is not `ok`; compose will fall back to programmatic defaults.
+
+## 9. Compose, Redaction & Public Exposure
+- Compose precedence is explicit: `publicEpisode = { ...rawEpisode, ...programmaticEpisode, ...llmEpisode }`.
+- Series entries apply the same overlay and publish `seriesTitle = llm.seriesTitle || seriesTitleFallback`.
+- Fields excluded from the public artefacts:
+  - Entire `source` object except `itunesEpisode` (mirrored as a nullable top-level field) and `rssLastSeenAt` (retained for provenance).
+  - Internal helper values such as intermediate `yearHints` are not surfaced.
+  - LLM metadata (`model`, `promptVersion`, `status`, `notes`) remain internal.
+  - `cleanupVersion`, `fingerprint`, and `seriesGroupingConfidence` **are** public for transparency.
+- Public field visibility matrix:
+
+| Field | data/episodes | data/series | Public exposure |
+| --- | --- | --- | --- |
+| `fingerprint` | Programmatic | Programmatic | ✅ (public) |
+| `cleanupVersion` | Programmatic | — | ✅ |
+| `source.*` | Raw | — | ❌ (`itunesEpisode` exposed via alias) |
+| `rssLastSeenAt` | Raw | Derived | ✅ |
+| `model/promptVersion/status/notes` | LLM | LLM | ❌ |
+| `seriesGroupingConfidence` | Programmatic | Programmatic | ✅ |
+| `yearConfidence` | Programmatic/LLM | Programmatic/LLM | ✅ |
+
+## 10. Validation & Contract Checks
+- `scripts/validate.js` MUST:
+  1. Load schemas via AJV for all public and cache files.
+  2. Enforce referential integrity:
+     - `episodeId` and `seriesId` uniqueness across all artefacts.
+     - All `series.episodeIds[]` exist in `public/episodes.json`.
+     - `yearFrom <= yearTo` whenever both values are non-null.
+     - When `part` is non-null, `seriesId` MUST be non-null.
+  3. Validate data hygiene:
+     - Arrays (`keyPeople`, `keyPlaces`, `keyThemes`, derived tags) contain no empty strings and are de-duplicated.
+     - Enumerated confidence values match the declared enums.
+     - Object keys follow the stable ordering helper (fail validation if unsorted serialisation is detected).
+
+## 11. Pipeline Flow
 ```
 [RSS Feed]
     ↓
@@ -88,79 +327,98 @@ The programmatic layer is responsible for identifying part indicators (e.g. titl
     ↓
 [validate]
 ```
-Each stage reads the previous layer and only appends or updates the keyed objects for newly discovered items.
+Each stage reads the previous layer and only appends or updates the keyed objects for newly discovered items. Non-fatal per-item errors are logged to `data/errors.jsonl`; the pipeline continues unless validation fails.
 
-### 5.1 Fetch RSS
+### 11.1 Fetch RSS
 - Script reads from the live feed (`FEED_URL`) and falls back to `data/source/rss.sample.xml` when offline.
-- Writes a daily snapshot under `data/source/rss.YYYY-MM-DD.json` for reproducibility.
+- Writes a daily snapshot under `data/source/rss.YYYY-MM-DD.json` with `fetchedAt`.
 - Appends unseen episodes into `data/episodes-raw.json` without altering existing entries.
 
-### 5.2 Build Series (Raw)
+### 11.2 Build Series (Raw)
 - Deterministic script analyses episodes to group arcs and writes `data/series-raw.json`.
-- Must handle part numbers, shared prefixes, or explicit markers already present in titles.
+- Must handle flexible part numbering, shared prefixes, and hyphen/colon variants as described in §6.
 
-### 5.3 Programmatic Episode Enrichment
-- Shared utilities (e.g. `stripHtml`, boilerplate markers) extract clean text once per episode.
+### 11.3 Programmatic Episode Enrichment
+- Shared utilities (e.g., `stripHtml`, boilerplate markers) extract clean text once per episode.
 - Steps:
-  1. Parse HTML → keep only meaningful paragraphs; collapse `<br>` spam.
-  2. Identify and drop boilerplate (tour promos, social links, generic "Learn more" lines) using marker lists.
-  3. Extract credits into structured fields (`producer`, `execProducers`, etc.).
+  1. Parse HTML → keep only meaningful paragraphs; collapse `<br>` spam using YAML rules.
+  2. Identify and drop boilerplate (tour promos, social links, generic "Learn more" lines) using marker lists loaded from `data/rules/cleanup.yaml`.
+  3. Extract credits into structured fields (`producer`, `execProducers`, etc.) per YAML regexes.
   4. Normalise whitespace, punctuation, and HTML entities.
-  5. Compute `fingerprint = hash(cleanTitle + '\n' + cleanDescription)`.
-  6. Detect `Part N` suffixes and assign `part` and `seriesId` values consistently across all matching episodes.
-- Results persisted in `data/episodes-programmatic.json` keyed by `episodeId`.
+  5. Compute fingerprints and persist `cleanupVersion` alongside results.
+  6. Detect `Part`/`Pt`/roman numeral suffixes and assign `part`, `seriesId`, and confidence consistently.
 
-### 5.4 Programmatic Series Enrichment
+### 11.4 Programmatic Series Enrichment
 - Input: `data/series-raw.json` + `data/episodes-programmatic.json`.
 - For each series:
-  - Collect member episode years to derive `yearFrom`/`yearTo`.
-  - Aggregate credit contributors if relevant.
-  - Generate `fingerprint = hash(seriesId + JSON.stringify(memberEpisodeFingerprints))`.
-  - Store deterministic descriptors ready for LLM prompts.
+  - Collect member episode fingerprints to compute the series fingerprint (see §5).
+  - Aggregate spans and confidence across members.
+  - Derive additional deterministic metadata as needed.
 
-### 5.5 LLM Enrichment
-- Episode and series scripts read the programmatic layer, filter for items whose fingerprints lack cached responses, and call OpenAI once per item.
-- `episodes-llm` prompts must surface `keyPeople`, `keyPlaces`, `keyThemes`, and year spans while ignoring hosts and credit-only names. They should not request a narrative summary because the cleaned description already serves as the canonical episode synopsis.
-- When descriptions jump across multiple periods or remain ahistorical (e.g. "66. Ghosts"), set `yearFrom = "NA"` and `yearTo = "NA"`.
-- `series-llm` prompts must infer a `seriesTitle` from the grouped episodes alongside the narrative summary.
-- Cache format example:
-  ```json
-  {
-    "episodeId:fingerprint": {
-      "keyPeople": ["…"],
-      "keyPlaces": ["…"],
-      "keyThemes": ["…"],
-      "yearFrom": "…",
-      "yearTo": "…"
-    }
-  }
-  ```
+### 11.5 LLM Enrichment
+- Episode and series scripts read the programmatic layer, filter for items whose fingerprints lack cached responses, and call OpenAI once per item unless `--force-llm <ID>` is supplied to ignore caches for specific IDs.
+- Episode prompts must ignore hosts and boilerplate credits, returning only the minimal schema.
+- Series prompts may supply titles, summaries, and tonal descriptors; when unavailable or status is not `ok`, compose falls back to programmatic defaults.
 - Use the lightweight client in `vendor/openai` and the shared helper for retries/backoff.
+- Default to the `gpt-5-nano` model (no temperature parameter supported); fall back to the designated lesser model when the primary is unavailable.
+- Errors during enrichment write structured entries to `data/errors.jsonl` without aborting the run.
 
-### 5.6 Compose
-- Script merges the three layers to produce `public/*.json`. Example merging logic:
-  ```js
-  const mergedEpisode = {
-    ...rawEpisode,
-    ...programmatic[episode.id],
-    ...llm[cacheKeyFor(episode.id, programmatic[episode.id].fingerprint)],
-  };
-  ```
-- Compose can run twice (before and after LLM) to give deterministic outputs even when LLM tokens are unavailable.
+### 11.6 Compose
+- Script merges the three layers to produce `public/*.json` using the precedence rule in §9.
+- Series entries apply the same overlay and publish `seriesTitle = llm.seriesTitle || seriesTitleFallback`.
+- Programmatic inputs supply `seriesTitleFallback = cleaned seriesKey` (see §13).
+- Produces sorted arrays and stable key ordering.
 
-### 5.7 Validate
-- Contract checks ensure:
-  - Every `public/episodes.json` entry has a `fingerprint`, cleaned text fields, and (when applicable) `part`/`seriesId` alignment.
-  - Every series references existing episode IDs and has `yearFrom <= yearTo` (or both `"NA"`).
-  - No references to topics remain.
+### 11.7 Validate
+- Executes the full schema + contract checks described in §10.
+- Fails the pipeline when validation errors occur; otherwise succeeds even if LLM stages logged errors.
 
-## 6. Incremental Behaviour
+## 12. Minimal Episode LLM Schema
+```
+{
+  "keyPeople": string[] (max 12, unique, no hosts),
+  "keyPlaces": string[] (max 12, unique),
+  "keyThemes": string[] (3–8, kebab-case, unique),
+  "yearFrom": number \| null,
+  "yearTo": number \| null,
+  "yearConfidence": "high" | "medium" | "low" | "unknown"
+}
+```
+- Validator trims whitespace, de-duplicates arrays, and drops entries shorter than 2 characters before persistence.
+
+## 13. Series Title Fallback
+- Programmatic fallback `seriesTitleFallback = cleaned seriesKey` ensures compose does not block on LLM availability.
+- Public compose exposes `seriesTitle = llm.seriesTitle || seriesTitleFallback` and records `seriesTitleFallback` internally for auditing.
+
+## 14. Error Handling & Ledger
+- Non-fatal errors append to `data/errors.jsonl`; the run continues so long as validation passes.
+- Validation remains the gatekeeper for exit codes.
+- Include log entries for LLM errors, cleanup anomalies, and compose fallbacks.
+
+## 15. Validation-Adjacent Guarantees
+- Arrays (`keyPeople`, `keyPlaces`, `keyThemes`, `episodeIds`, derived tags) must be de-duplicated.
+- No empty strings or whitespace-only entries are permitted.
+- File size and ordering remain predictable via the stable serialiser.
+
+## 16. CI & Tooling
+- Command-line flags:
+  - `--dry` — perform a dry run without writes.
+  - `--since=YYYY-MM-DD` — limit processing to episodes published on/after the date.
+  - `--force-llm <ID>` — bypass caches for a specific `episodeId` or `seriesId`.
+- GitHub Actions:
+  - Upload build artefacts for `public/*.json` and a `diff.txt` comparing `main` vs PR outputs.
+  - Fail the job when validation fails; succeed even when LLM stages log recoverable errors.
+  - Surface `data/errors.jsonl` as an artefact when entries are produced.
+
+## 17. Incremental Behaviour & Migration
 - Raw files are append-only; never rewrite old items.
 - Programmatic and LLM layers are dictionaries keyed by stable IDs; only new or changed fingerprints trigger updates.
-- Provide a seeding/migration utility to backfill caches from legacy data on first run.
+- Provide `scripts/migrate-legacy-caches.mjs` to read legacy caches and emit `episodes-llm.json` / `series-llm.json` entries keyed by the new `{id}:{fingerprint}` format with `promptVersion = "legacy-import"` and `status = "ok"`.
+- Migration runs once before the new pipeline executes; document its usage alongside the other scripts.
 
-## 7. Operational Considerations
-- **Environment variables**: `OPENAI_API_KEY` must be set locally and as a GitHub repo secret (`secrets.OPENAI_API_KEY`) for CI, as referenced in `.github/workflows/enrich.yml`.
+## 18. Operational Considerations
+- **Environment variables**: `OPENAI_API_KEY` must be set locally and as a GitHub repo secret (`secrets.OPENAI_API_KEY`).
+- **Model defaults**: configure the OpenAI client for `gpt-5-nano` with automatic fallback to the lesser model and omit temperature arguments (unsupported by the primary model).
 - **Commands** (to be updated in `package.json`):
   ```json
   {
@@ -172,25 +430,27 @@ Each stage reads the previous layer and only appends or updates the keyed object
       "llm:episodes": "node scripts/llm/episodes.mjs",
       "llm:series": "node scripts/llm/series.mjs",
       "compose": "node scripts/enrich/compose.mjs",
-      "validate": "node scripts/validate.js"
+      "validate": "node scripts/validate.js",
+      "migrate:caches": "node scripts/migrate-legacy-caches.mjs"
     }
   }
   ```
 - **CI sequence**: mirror the command flow above; drop any topic-related steps.
 
-## 8. Success Metrics
+## 19. Success Metrics
 - Running the full pipeline with no new episodes should make zero OpenAI requests and leave git clean.
 - New episodes should appear end-to-end (raw → public) after a single pipeline execution.
 - Manual reruns should be idempotent even if LLM calls fail (compose still produces deterministic outputs from available layers).
 
-## 9. Risks & Mitigations
+## 20. Risks & Mitigations
 | Risk | Mitigation |
 | --- | --- |
 | Fingerprint drift causing unnecessary LLM calls | Keep programmatic cleanup deterministic, version cleanup helpers carefully, and document fingerprint formula. |
 | Boilerplate rules accidentally remove genuine content | Maintain a test corpus of sample descriptions and review diffs when rules change. |
 | Series membership changes invalidating caches | Fingerprint combines ordered episode fingerprints so membership updates automatically invalidate relevant LLM entries. |
+| RSS changes or removals | Track `rssLastSeenAt` and retain snapshots for auditing; provenance allows selective backfills. |
 
-## 10. Open Questions
-- Do we need additional metadata (e.g. guest bios) that could be programmatically derived from show notes? (Requires further discovery.)
+## 21. Open Questions
+- Do we need additional metadata (e.g., guest bios) that could be programmatically derived from show notes? (Requires further discovery.)
 - Should we expose cleaned Markdown or plain text only? (Decide based on downstream consumer preferences.)
 - Are there thresholds for delaying LLM enrichment when OpenAI rate limits occur? (Potential future enhancement.)
