@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "fetch": "node scripts/fetch-rss.js",
-    "enrich": "node scripts/enrich.js",
+    "enrich": "node scripts/enrich.js && node scripts/topics-enrich.js",
     "llm:enrich": "node scripts/llm-enrich.js",
     "validate": "node scripts/validate.js"
   },

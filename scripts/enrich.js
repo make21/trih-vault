@@ -232,8 +232,6 @@ async function main() {
 
   await writeJsonFile('public/episodes.json', updatedEpisodes);
   await writeJsonFile('public/series.json', seriesRecords);
-  await writeJsonFile('public/topics.json', []);
-
   const singletonsCount = updatedEpisodes.reduce((count, episode) => (episode.seriesId ? count : count + 1), 0);
 
   console.log('Total episodes:', episodes.length);
