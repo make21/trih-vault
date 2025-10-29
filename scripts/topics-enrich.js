@@ -1,3 +1,4 @@
+import OpenAI from 'openai';
 import {
   kebabCase,
   readJsonFile,
@@ -242,21 +243,7 @@ async function main() {
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    console.log('🧩 Topics Enrichment');
-    console.log('- Skipping topics generation (missing OPENAI_API_KEY).');
-    return;
-  }
-
-  let OpenAI;
-  try {
-    ({ default: OpenAI } = await import('openai'));
-  } catch (error) {
-    if (error?.code === 'ERR_MODULE_NOT_FOUND') {
-      console.log('🧩 Topics Enrichment');
-      console.log('- Skipping topics generation (OpenAI client not installed).');
-      return;
-    }
-    throw error;
+    throw new Error('Missing OPENAI_API_KEY environment variable.');
   }
 
   const series = await readJsonFile('public/series.json', []);
