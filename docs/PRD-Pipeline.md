@@ -25,23 +25,35 @@ Deliver a deterministic, append-only data pipeline that ingests *The Rest Is His
 The pipeline uses a layered storage model under `data/` and `public/`.
 
 ### 4.1 Episodes
-1. `data/episodes-raw.json` — append-only output of the RSS fetch step. Each item contains minimal metadata (`id`, `title`, `pubDate`, `description`, `audioUrl`, optional `itunesEpisode` and `part`).
-2. `data/episodes-programmatic.json` — deterministic enrichment keyed by `episodeId`. Fields include:
+1. `data/episodes-raw.json` — append-only output of the RSS fetch step. Each item contains minimal metadata (`id`, `title`, `pubDate`, `description`, `audioUrl`, optional `itunesEpisode`).
+2. `data/episodes-programmatic.json` — deterministic enrichment keyed by `episodeId`. Fields include the existing cleanup artefacts plus:
    - `cleanTitle`, `cleanDescription` (plain text or light Markdown after HTML parsing).
    - `descriptionBlocks` (array of paragraphs for later use).
    - `credits` object (e.g. `producer`, `execProducers`).
    - `fingerprint` (hash of `cleanTitle` + `cleanDescription` to invalidate caches when deterministic content changes).
    - `derived` fields such as `year`, `durationSeconds` (if available), `contentWarnings`, etc.
-3. `data/episodes-llm.json` — cached LLM outputs keyed by `episodeId` and the deterministic `fingerprint`. Stores structured enrichment (summaries, key takeaways, curated quotes). This replaces `data/episode-enrichment.json`.
+   - `part` (numeric part index when the title contains a "Part N" suffix, otherwise `null`).
+   - `seriesId` (stable identifier shared by every episode in the same multi-part arc; generated when `part` is populated so that `Part 1/Part 2/…` share the same group).
+3. `data/episodes-llm.json` — cached LLM outputs keyed by `episodeId` and the deterministic `fingerprint`. Stores structured enrichment with the following schema:
+   - `keyPeople` — notable individuals mentioned in the synopsis, excluding the hosts Tom Holland and Dominic Sandbrook and generic credit mentions.
+   - `keyPlaces` — geographic anchors or locations central to the episode.
+   - `keyThemes` — short descriptors that capture the central topics or ideas.
+   - `yearFrom` / `yearTo` — numeric year span inferred from the description and episode context; when the LLM cannot infer a period with confidence, both values are set to `"NA"`.
+   - Additional LLM artefacts (e.g. summaries, key questions) may remain alongside these required fields.
+
+The programmatic layer is responsible for identifying part indicators (e.g. titles such as `"58. The World Cup of Gods - Part 1"`). The detection logic should consider sequential numbering, publication ordering, and consistent text around the part suffix to ensure all related episodes receive the same `seriesId`.
 
 ### 4.2 Series
 1. `data/series-raw.json` — deterministic grouping step that clusters related episodes and stores membership arrays.
 2. `data/series-programmatic.json` — aggregates computed from the raw grouping and programmatic episode data:
+   - `seriesId` (copied from the episode layer so each multi-part arc can be traced end-to-end).
    - `yearFrom`, `yearTo` (min and max of member episode years).
    - `episodeIds` (ordered array for reference).
    - `fingerprint` (hash of member episode fingerprints + ordering).
    - Any other deterministic metadata (e.g. inferred subject tags, episode counts).
-3. `data/series-llm.json` — cached LLM metadata keyed by `seriesId` and the deterministic `fingerprint` (title, synopsis, tonal descriptors). Replaces `data/series-enrichment.json`.
+3. `data/series-llm.json` — cached LLM metadata keyed by `seriesId` and the deterministic `fingerprint`. Required fields include:
+   - `seriesTitle` — human-friendly title derived from the episode titles/descriptions within the series.
+   - Narrative summaries, tonal descriptors, and other prompts carried over from the previous spec.
 
 ### 4.3 Public Outputs
 - `public/episodes.json` — overlay of raw + programmatic + LLM data per episode.
@@ -50,7 +62,25 @@ The pipeline uses a layered storage model under `data/` and `public/`.
 
 ## 5. Pipeline Flow
 ```
-RSS fetch → episodes-raw → series-raw → episodes-programmatic → series-programmatic → LLM episodes → LLM series → compose → validate
+[RSS Feed]
+    ↓
+[data/source/rss.YYYY-MM-DD.json]
+    ↓
+[data/episodes-raw.json]
+    ↓
+[data/episodes-programmatic.json]
+    ↓
+[data/series-raw.json]
+    ↓
+[data/series-programmatic.json]
+    ↓
+[data/episodes-llm.json]
+    ↓
+[data/series-llm.json]
+    ↓
+[public/episodes.json, public/series.json]
+    ↓
+[validate]
 ```
 Each stage reads the previous layer and only appends or updates the keyed objects for newly discovered items.
 
@@ -71,6 +101,7 @@ Each stage reads the previous layer and only appends or updates the keyed object
   3. Extract credits into structured fields (`producer`, `execProducers`, etc.).
   4. Normalise whitespace, punctuation, and HTML entities.
   5. Compute `fingerprint = hash(cleanTitle + '\n' + cleanDescription)`.
+  6. Detect `Part N` suffixes and assign `part` and `seriesId` values consistently across all matching episodes.
 - Results persisted in `data/episodes-programmatic.json` keyed by `episodeId`.
 
 ### 5.4 Programmatic Series Enrichment
@@ -83,13 +114,19 @@ Each stage reads the previous layer and only appends or updates the keyed object
 
 ### 5.5 LLM Enrichment
 - Episode and series scripts read the programmatic layer, filter for items whose fingerprints lack cached responses, and call OpenAI once per item.
+- `episodes-llm` prompts must surface `keyPeople`, `keyPlaces`, `keyThemes`, and year spans while ignoring hosts and credit-only names.
+- When descriptions jump across multiple periods or remain ahistorical (e.g. "66. Ghosts"), set `yearFrom = "NA"` and `yearTo = "NA"`.
+- `series-llm` prompts must infer a `seriesTitle` from the grouped episodes alongside the narrative summary.
 - Cache format example:
   ```json
   {
     "episodeId:fingerprint": {
       "summary": "…",
-      "questions": ["…"],
-      "notableGuests": ["…"]
+      "keyPeople": ["…"],
+      "keyPlaces": ["…"],
+      "keyThemes": ["…"],
+      "yearFrom": "…",
+      "yearTo": "…"
     }
   }
   ```
@@ -108,8 +145,8 @@ Each stage reads the previous layer and only appends or updates the keyed object
 
 ### 5.7 Validate
 - Contract checks ensure:
-  - Every `public/episodes.json` entry has a `fingerprint` and cleaned text fields.
-  - Every series references existing episode IDs and has `yearFrom <= yearTo`.
+  - Every `public/episodes.json` entry has a `fingerprint`, cleaned text fields, and (when applicable) `part`/`seriesId` alignment.
+  - Every series references existing episode IDs and has `yearFrom <= yearTo` (or both `"NA"`).
   - No references to topics remain.
 
 ## 6. Incremental Behaviour
@@ -152,4 +189,3 @@ Each stage reads the previous layer and only appends or updates the keyed object
 - Do we need additional metadata (e.g. guest bios) that could be programmatically derived from show notes? (Requires further discovery.)
 - Should we expose cleaned Markdown or plain text only? (Decide based on downstream consumer preferences.)
 - Are there thresholds for delaying LLM enrichment when OpenAI rate limits occur? (Potential future enhancement.)
-

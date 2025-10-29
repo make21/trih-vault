@@ -1,0 +1,14 @@
+{
+  "series_world_cup_of_gods": {
+    "seriesTitle": "The World Cup of Gods",
+    "summary": "A playful tournament that pits mythological pantheons against one another while unpacking their cultural origins.",
+    "keyThemes": ["mythology", "comparative religion", "storytelling"],
+    "confidence": 0.78
+  },
+  "series_young_napoleon": {
+    "seriesTitle": "Young Napoleon",
+    "summary": "An exploration of Napoleon Bonaparte's formative years and the revolutionary forces that shaped him.",
+    "keyThemes": ["French Revolution", "leadership", "biography"],
+    "confidence": 0.82
+  }
+}
