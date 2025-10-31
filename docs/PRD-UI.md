@@ -1,7 +1,6 @@
 # The Rest Is History Explorer — UI PRD (v1)
 
 Last updated: 2025-10-30  
-Owner: TBD (product) · Eng partner: TBD
 
 ---
 
