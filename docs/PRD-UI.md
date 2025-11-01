@@ -38,6 +38,7 @@ Make it effortless to “see the show as history”: a mobile-first vertical tim
 - Server-side or hosted search engine.
 - Advanced filters (themes, regions, timelines).
 - Apple/Spotify canonical links (fallback to store search URLs).
+- Personalized recommendations.
 
 ---
 
