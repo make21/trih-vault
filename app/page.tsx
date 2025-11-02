@@ -6,7 +6,7 @@ import { Timeline } from '@/ui/timeline/Timeline';
 import { buildTimeline, type RawEpisodeInput, type RawSeriesInput } from '@/ui/timeline/buildTimeline';
 
 export default function HomePage() {
-  const { items, undated } = buildTimeline({
+  const { rows, undated } = buildTimeline({
     episodes: episodesData as RawEpisodeInput[],
     series: seriesData as RawSeriesInput[]
   });
@@ -23,7 +23,7 @@ export default function HomePage() {
       </header>
 
       <main className="page__content">
-        <Timeline items={items} undatedEpisodes={undated} />
+        <Timeline rows={rows} undatedEpisodes={undated} />
       </main>
 
       <BackToTop />

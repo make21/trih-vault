@@ -88,12 +88,14 @@ Composer writes the chosen slug onto each record and updates the registry atomic
 
 - Vertical spine with decade/century markers (markers sticky as the list scrolls).
 - **Series cards**: title, part-count badge, optional year-span chip; expands inline to list parts with direct links.
-- **Episode markers**: compact card/dot with title; links to episode detail.
+- **Episode cards**: compact card/dot with title; links to episode detail.
+- **Gap markers**: large empty spans collapse to a spine-mounted vertical ellipsis button; accessible labels announce the skipped years and the gap expands on click.
+- BCE support: negative `yearFrom`/`yearTo` render with `BC` suffixes (e.g. “264 BC – 216 BC”).
 - Ordering rules:
   - Series sorted by `min(yearFrom)` ascending, ties broken by `max(yearTo)` then `seriesTitle`.
   - Standalone episodes sorted by `yearFrom` / `yearTo`; ties break on `cleanTitle`.
   - Items lacking year ranges appear under “Undated” beneath the hero section, ordered by `publishedAt`.
-- Virtualised list (e.g., `react-virtuoso` or `react-window`) for performance on large datasets.
+- Virtualised list (e.g., `react-virtuoso` or `react-window`) remains a stretch goal once we exceed a few hundred rows.
 - Keyboard navigation follows timeline order; focus states clearly visible.
 
 ---

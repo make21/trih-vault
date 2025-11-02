@@ -106,6 +106,87 @@ h4 {
   gap: 16px;
 }
 
+.timeline__gap {
+  position: relative;
+}
+
+.timeline__gap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.03));
+}
+
+.timeline__gap-marker {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.timeline__gap-button {
+  pointer-events: auto;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.timeline__gap-button:hover {
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.16);
+  transform: translateY(-1px);
+}
+
+.timeline__gap-button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.timeline__gap-button,
+.timeline__gap-button:hover,
+.timeline__gap-button:focus-visible {
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline__gap-button,
+  .timeline__gap-button:hover,
+  .timeline__gap-button:focus-visible {
+    transition: none;
+    transform: none;
+  }
+}
+
+.timeline__gap-dots {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.timeline__gap-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: #111827;
+}
+
 .timeline__marker {
   flex: none;
   width: 16px;

@@ -198,14 +198,17 @@ const parseJsonContent = (content: string): unknown => {
 };
 
 const ensureYear = (value: unknown): number | null => {
-  if (typeof value === "number" && Number.isFinite(value)) {
-    const parsed = Math.trunc(value);
-    if (parsed < 0 || parsed > 9999) {
-      return null;
-    }
-    return parsed;
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    return null;
   }
-  return null;
+
+  const parsed = Math.trunc(value);
+  // Accept extended historical spans (e.g. 5000 BC = -4999) while guarding against wild outputs.
+  if (parsed < -9999 || parsed > 9999) {
+    return null;
+  }
+
+  return parsed;
 };
 
 const normaliseYearConfidence = (value: unknown): YearConfidence => {

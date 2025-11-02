@@ -1,6 +1,7 @@
 "use client";
 
 const periods = [
+  { id: "prehistory", label: "Prehistory" },
   { id: "antiquity", label: "Antiquity" },
   { id: "late-antiquity", label: "Late Antiquity" },
   { id: "middle-ages", label: "Middle Ages" },
@@ -35,4 +36,3 @@ export default function JumpBar(): JSX.Element {
     </nav>
   );
 }
-

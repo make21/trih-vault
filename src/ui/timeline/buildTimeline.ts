@@ -1,3 +1,5 @@
+import type { TimelineRow } from "@/ui/timeline/layout";
+
 export type RawEpisodeInput = {
   id: string;
   cleanTitle: string;
@@ -34,73 +36,70 @@ export type EpisodeSummary = {
   partLabel: string | null;
 };
 
-export type TimelineEpisodeItem = {
-  kind: 'episode';
-  id: string;
-  title: string;
-  yearLabel: string;
-  yearValue: number;
-  offset: number;
-};
-
-export type TimelineSeriesItem = {
-  kind: 'series';
-  id: string;
-  title: string;
-  yearLabel: string;
-  yearValue: number;
-  offset: number;
-  episodeCount: number;
-  episodes: EpisodeSummary[];
-};
-
-export type TimelineItem = TimelineEpisodeItem | TimelineSeriesItem;
-
 export type UndatedEpisode = {
   id: string;
   title: string;
   publishedLabel: string;
 };
 
+export type TimelineEpisodeRowData = {
+  kind: "episode";
+  yearLabel: string;
+  yearValue: number | null;
+};
+
+export type TimelineSeriesRowData = {
+  kind: "series";
+  yearLabel: string;
+  yearValue: number | null;
+  episodeCount: number;
+  episodes: EpisodeSummary[];
+};
+
+export type TimelineDisplayRowData = TimelineEpisodeRowData | TimelineSeriesRowData;
+export type TimelineDisplayRow = TimelineRow<TimelineDisplayRowData>;
+
 export type BuildTimelineOptions = {
   episodes: RawEpisodeInput[];
   series: RawSeriesInput[];
-  yearPixelMultiplier?: number;
-  minGapPx?: number;
 };
 
 export type BuildTimelineResult = {
-  items: TimelineItem[];
+  rows: TimelineDisplayRow[];
   undated: UndatedEpisode[];
 };
 
-const DEFAULT_YEAR_PIXEL_MULTIPLIER = 2;
-const DEFAULT_MIN_GAP_PX = 48;
-
 const primaryYear = (yearFrom: number | null, yearTo: number | null): number | null => {
-  if (typeof yearFrom === 'number') {
+  if (typeof yearFrom === "number") {
     return yearFrom;
   }
-  if (typeof yearTo === 'number') {
+  if (typeof yearTo === "number") {
     return yearTo;
   }
   return null;
 };
 
+const formatYearValue = (year: number): string => {
+  if (year < 0) {
+    return `${Math.abs(year)} BC`;
+  }
+  return `${year}`;
+};
+
 const formatYearRange = (yearFrom: number | null, yearTo: number | null): string => {
-  if (typeof yearFrom === 'number' && typeof yearTo === 'number') {
+  if (typeof yearFrom === "number" && typeof yearTo === "number") {
     if (yearFrom === yearTo) {
-      return `${yearFrom}`;
+      return formatYearValue(yearFrom);
     }
-    return `${yearFrom} – ${yearTo}`;
+    return `${formatYearValue(yearFrom)} – ${formatYearValue(yearTo)}`;
   }
-  if (typeof yearFrom === 'number') {
-    return `${yearFrom}`;
+  if (typeof yearFrom === "number") {
+    return formatYearValue(yearFrom);
   }
-  if (typeof yearTo === 'number') {
-    return `${yearTo}`;
+  if (typeof yearTo === "number") {
+    return formatYearValue(yearTo);
   }
-  return 'Undated';
+  return "Undated";
 };
 
 const formatPartLabel = (part: number | null): string | null => {
@@ -112,28 +111,23 @@ const formatPartLabel = (part: number | null): string | null => {
 
 const formatPublishedLabel = (publishedAt: string | null): string => {
   if (!publishedAt) {
-    return 'Published date unknown';
+    return "Published date unknown";
   }
 
   const time = Date.parse(publishedAt);
   if (Number.isNaN(time)) {
-    return 'Published date unknown';
+    return "Published date unknown";
   }
 
-  return `Published ${new Intl.DateTimeFormat('en-GB', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
+  return `Published ${new Intl.DateTimeFormat("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "numeric"
   }).format(time)}`;
 };
 
 export function buildTimeline(options: BuildTimelineOptions): BuildTimelineResult {
-  const {
-    episodes,
-    series,
-    yearPixelMultiplier = DEFAULT_YEAR_PIXEL_MULTIPLIER,
-    minGapPx = DEFAULT_MIN_GAP_PX
-  } = options;
+  const { episodes, series } = options;
 
   const episodesById = new Map<string, RawEpisodeInput>();
   episodes.forEach((episode) => {
@@ -164,16 +158,16 @@ export function buildTimeline(options: BuildTimelineOptions): BuildTimelineResul
 
   const datedStandaloneEpisodes = standaloneEpisodes.filter((episode) => episode.primaryYear !== null);
 
-  const seriesItems = series.map((seriesRecord) => {
+  const seriesRows: TimelineDisplayRow[] = series.map((seriesRecord) => {
     const orderIndex = new Map<string, number>();
     seriesRecord.episodeIds.forEach((episodeId, index) => {
       orderIndex.set(episodeId, index);
     });
 
     const resolvedEpisodeCount =
-      typeof seriesRecord.derived?.episodeCount === 'number'
+      typeof seriesRecord.derived?.episodeCount === "number"
         ? seriesRecord.derived.episodeCount
-        : typeof seriesRecord.episodeCount === 'number'
+        : typeof seriesRecord.episodeCount === "number"
           ? seriesRecord.episodeCount
           : seriesRecord.episodeIds.length;
 
@@ -182,7 +176,7 @@ export function buildTimeline(options: BuildTimelineOptions): BuildTimelineResul
       .filter((episode): episode is RawEpisodeInput => Boolean(episode));
 
     const derivedYearFrom =
-      typeof seriesRecord.yearFrom === 'number'
+      typeof seriesRecord.yearFrom === "number"
         ? seriesRecord.yearFrom
         : memberEpisodes.reduce<number | null>((acc, episode) => {
             const candidate = primaryYear(episode.yearFrom, episode.yearTo);
@@ -196,11 +190,11 @@ export function buildTimeline(options: BuildTimelineOptions): BuildTimelineResul
           }, null);
 
     const derivedYearTo =
-      typeof seriesRecord.yearTo === 'number'
+      typeof seriesRecord.yearTo === "number"
         ? seriesRecord.yearTo
         : memberEpisodes.reduce<number | null>((acc, episode) => {
             const candidate =
-              typeof episode.yearTo === 'number' ? episode.yearTo : primaryYear(episode.yearFrom, episode.yearTo);
+              typeof episode.yearTo === "number" ? episode.yearTo : primaryYear(episode.yearFrom, episode.yearTo);
             if (candidate === null) {
               return acc;
             }
@@ -234,80 +228,42 @@ export function buildTimeline(options: BuildTimelineOptions): BuildTimelineResul
       title: seriesRecord.seriesTitle,
       yearFrom: derivedYearFrom,
       yearTo: derivedYearTo,
-      episodeCount: resolvedEpisodeCount,
-      primaryYear: primaryYear(derivedYearFrom, derivedYearTo),
-      episodes: sortedMemberEpisodes.map((episode) => ({
-        id: episode.id,
-        title: episode.cleanTitle,
-        yearLabel:
-          typeof episode.yearFrom === 'number' || typeof episode.yearTo === 'number'
-            ? formatYearRange(episode.yearFrom, episode.yearTo)
-            : null,
-        partLabel: formatPartLabel(episode.part)
-      }))
-    };
-  });
-
-  const datedSeries = seriesItems.filter((seriesItem) => seriesItem.primaryYear !== null);
-
-  const combined = [
-    ...datedSeries.map((seriesItem) => ({
-      kind: 'series' as const,
-      id: seriesItem.id,
-      title: seriesItem.title,
-      yearLabel: formatYearRange(seriesItem.yearFrom, seriesItem.yearTo),
-      primaryYear: seriesItem.primaryYear!,
-      episodeCount: seriesItem.episodeCount,
-      episodes: seriesItem.episodes
-    })),
-    ...datedStandaloneEpisodes.map((episode) => ({
-      kind: 'episode' as const,
-      id: episode.id,
-      title: episode.title,
-      yearLabel: formatYearRange(episode.yearFrom, episode.yearTo),
-      primaryYear: episode.primaryYear!
-    }))
-  ];
-
-  combined.sort((a, b) => {
-    if (a.primaryYear === b.primaryYear) {
-      if (a.kind === b.kind) {
-        return a.title.localeCompare(b.title);
+      data: {
+        kind: "series" as const,
+        yearLabel: formatYearRange(derivedYearFrom, derivedYearTo),
+        yearValue: primaryYear(derivedYearFrom, derivedYearTo),
+        episodeCount: resolvedEpisodeCount,
+        episodes: sortedMemberEpisodes.map((episode) => ({
+          id: episode.id,
+          title: episode.cleanTitle,
+          yearLabel:
+            typeof episode.yearFrom === "number" || typeof episode.yearTo === "number"
+              ? formatYearRange(episode.yearFrom, episode.yearTo)
+              : null,
+          partLabel: formatPartLabel(episode.part)
+        }))
       }
-      return a.kind === 'series' ? -1 : 1;
-    }
-    return a.primaryYear - b.primaryYear;
-  });
-
-  let lastYear: number | null = null;
-  const timelineItems: TimelineItem[] = combined.map((item, index) => {
-    const { primaryYear: itemYear } = item;
-    const gap = lastYear === null ? 0 : Math.max(0, itemYear - lastYear);
-    const offset = index === 0 ? 0 : Math.max(minGapPx, gap * yearPixelMultiplier);
-    lastYear = itemYear;
-
-    if (item.kind === 'series') {
-      return {
-        kind: 'series',
-        id: item.id,
-        title: item.title,
-        yearLabel: item.yearLabel,
-        yearValue: item.primaryYear,
-        offset,
-        episodeCount: item.episodeCount,
-        episodes: item.episodes
-      };
-    }
-
-    return {
-      kind: 'episode',
-      id: item.id,
-      title: item.title,
-      yearLabel: item.yearLabel,
-      yearValue: item.primaryYear,
-      offset
     };
   });
 
-  return { items: timelineItems, undated: undatedEpisodes };
+  const datedSeriesRows = seriesRows.filter(
+    (row) => typeof row.yearFrom === "number" || typeof row.yearTo === "number"
+  );
+
+  const episodeRows: TimelineDisplayRow[] = datedStandaloneEpisodes.map((episode) => ({
+    id: episode.id,
+    title: episode.title,
+    yearFrom: episode.yearFrom,
+    yearTo: episode.yearTo,
+    data: {
+      kind: "episode" as const,
+      yearLabel: formatYearRange(episode.yearFrom, episode.yearTo),
+      yearValue: primaryYear(episode.yearFrom, episode.yearTo)
+    }
+  }));
+
+  return {
+    rows: [...datedSeriesRows, ...episodeRows],
+    undated: undatedEpisodes
+  };
 }

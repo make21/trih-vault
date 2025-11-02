@@ -24,8 +24,8 @@
         "keyPeople": { "type": "array", "items": { "type": "string" }, "maxItems": 12, "uniqueItems": true },
         "keyPlaces": { "type": "array", "items": { "type": "string" }, "maxItems": 12, "uniqueItems": true },
         "keyThemes": { "type": "array", "items": { "type": "string" }, "minItems": 0, "maxItems": 8, "uniqueItems": true },
-        "yearFrom": { "type": ["integer", "null"], "minimum": 0 },
-        "yearTo": { "type": ["integer", "null"], "minimum": 0 },
+        "yearFrom": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
+        "yearTo": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
         "yearConfidence": { "type": "string", "enum": ["high", "medium", "low", "unknown"] }
       },
       "required": [
@@ -46,8 +46,8 @@
         "seriesTitle": { "type": ["string", "null"] },
         "narrativeSummary": { "type": ["string", "null"] },
         "tonalDescriptors": { "type": ["array", "null"], "items": { "type": "string" }, "uniqueItems": true },
-        "yearFrom": { "type": ["integer", "null"], "minimum": 0 },
-        "yearTo": { "type": ["integer", "null"], "minimum": 0 },
+        "yearFrom": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
+        "yearTo": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
         "yearConfidence": { "type": "string", "enum": ["high", "medium", "low", "unknown"] }
       },
       "required": [

@@ -85,8 +85,8 @@
       "maxItems": 8,
       "uniqueItems": true
     },
-    "yearFrom": { "type": ["integer", "null"], "minimum": 0 },
-    "yearTo": { "type": ["integer", "null"], "minimum": 0 },
+    "yearFrom": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
+    "yearTo": { "type": ["integer", "null"], "minimum": -9999, "maximum": 9999 },
     "yearConfidence": {
       "type": "string",
       "enum": ["high", "medium", "low", "unknown"]

@@ -37,7 +37,7 @@ Deliver a deterministic, append-only data pipeline that ingests *The Rest Is His
   - `rssLastSeenAt` is an ISO 8601 UTC timestamp representing the last time the RSS entry was observed; stored on raw episodes and propagated through programmatic and public layers.
   - Daily RSS snapshots (`data/source/rss.YYYY-MM-DD.json`) store `fetchedAt` (ISO 8601 UTC) at the file root for provenance.
 - **Year semantics**
-  - `yearFrom` and `yearTo` are `number \| null` throughout the pipeline.
+  - `yearFrom` and `yearTo` are `number \| null` throughout the pipeline. Negative values denote BCE years and must be preserved end-to-end.
   - Replace all prior `"NA"` sentinels with `null`.
   - `yearConfidence` captures precision with enum `"high" | "medium" | "low" | "unknown"`.
 - **Series grouping confidence**

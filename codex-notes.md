@@ -11,13 +11,14 @@
 - **Reference:** Product requirements live in `docs/PRD-Pipeline.md`.
 
 ## Current Focus
-- Data layer solid — prepare UI PRD to guide frontend phase.
+- Frontend timeline polish: BCE-aware ranges, collapsible long gaps, and updated UI PRD alignment.
 
 ## Next Steps
-- Outline initial UI PRD covering episode/series browsing experiences fed by current JSON artefacts.
+- Wire up remaining performance/accessibility tasks for the timeline (gap skip short-circuit, optional virtualization).
 - Monitor the scheduled GitHub Actions publish + Vercel revalidation webhook once deployed to ensure artefacts update as expected.
 
 ## Recent Changes
+- **2025-11-01:** Timeline now keeps BCE spans intact, collapses large gaps with spine-mounted markers, and scales spacing at 1.5px/year; PRDs updated accordingly.
 - **2025-10-31:** Replaced Vercel cron/Blob pipeline with scheduled GitHub Actions publish that auto-commits artefacts and calls the Vercel revalidation webhook.
 - **2025-10-30:** Full LLM backfill completed with `gpt-5-nano`; added deterministic year-range propagation from episode cache to series output; schema validation passes on refreshed artefacts.
 - **2025-10-30:** Added `scripts/iterate-llm-enrichment.mjs` and enhanced CLI flags so `--force-llm episodes|series|all` expands cleanly; fixed max-call handling and ensured `gpt-5-nano` usage via OpenAI Responses API.
