@@ -684,6 +684,7 @@ Each stage reads the previous layer and only appends or updates the keyed object
 - Do we need additional metadata (e.g., guest bios) that could be programmatically derived from show notes? (Requires further discovery.)
 - Should we expose cleaned Markdown or plain text only? (Decide based on downstream consumer preferences.)
 - Are there thresholds for delaying LLM enrichment when OpenAI rate limits occur? (Potential future enhancement.)
+- Should we upgrade change detection to treat GUID + enclosure URL mutations as first-class updates? (See §24.)
 
 ## 22. Slugging & Normalization Algorithm
 - `toSlug(str)` MUST:
@@ -699,3 +700,35 @@ Each stage reads the previous layer and only appends or updates the keyed object
 - The pipeline processes public RSS content only and must never ingest or store Personally Identifiable Information (PII).
 - CI logs and runtime logging must redact API keys and avoid printing full LLM prompts or responses; log only item identifiers, status, and metadata such as latency.
 - Treat the guidance here as non-negotiable guardrails for both local runs and CI executions.
+
+## 24. Potential Enhancement — GUID + Enclosure Change Detection
+
+**Status:** Parked (2025-11-04). Track here so the idea is not lost; only schedule work if we encounter recurring freshness issues.
+
+**Problem we’d solve**
+- RSS editors sometimes revise audio files or descriptions without changing GUIDs. The current fetcher treats GUID as immutable, so late updates are missed unless we backfill manually.
+
+**Implementation sketch**
+- Update `src/pipeline/fetcher.ts` to persist the latest `{ guid, enclosureUrl, rssLastSeenAt }` tuple per item.
+- On each fetch, diff against the stored tuple:
+  - New GUID → append (existing behaviour).
+  - Known GUID with enclosure URL (including query tokens such as `?updated=`) change → record as an update, bump `rssLastSeenAt`, and flag downstream stages as dirty.
+  - Optionally maintain a lightweight checksum (e.g., hash of title + description) to catch metadata edits while avoiding churn on trivial ordering changes.
+- Propagate updates through enrichment layers:
+  - Programmatic layer rewrites the affected entries.
+  - Composer merges refreshed metadata and republishes artefacts.
+  - Evaluate whether the programmatic fingerprint should incorporate enclosure or description hashes so LLM caches invalidate only when content meaningfully changes.
+- Keep publish idempotence: only commit when diffs exist, honour grace windows to prevent thrash, and document the behaviour.
+
+**Pros**
+- Keeps published artefacts aligned with corrected audio or text without manual intervention.
+- Provides clearer audit trail—updates appear as explicit commits with refreshed timestamps.
+- Reduces risk of serving stale audio when the enclosure URL rotates.
+
+**Cons**
+- Medium-sized refactor (fetcher, enrichment pipeline, cache invalidation) with regression risk.
+- Increased artefact churn and commit noise when the feed makes minor tweaks.
+- Potential for unnecessary LLM re-enrichment if fingerprints are mis-scoped, increasing token usage.
+- Requires new tests and docs to guarantee determinism and avoid duplicate records.
+
+Revisit when we observe repeated missed updates or commit to broader change-detection improvements.
