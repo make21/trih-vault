@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "dev:pipeline": "tsx --tsconfig tsconfig.json src/run-local-pipeline.ts",
-    "build:slug-registry": "ts-node --esm --project tsconfig.json -r tsconfig-paths/register scripts/build-slug-registry.ts",
+    "build:slug-registry": "node --import tsx --experimental-specifier-resolution=node --no-warnings scripts/build-slug-registry.ts",
     "migrate:caches": "node scripts/migrate-legacy-caches.mjs",
     "test": "vitest run",
     "schema:check": "node scripts/schema-check.mjs",
