@@ -237,6 +237,14 @@ Explicit field inventories for each artefact:
 | `message` | string | Required | Human-readable description. |
 | `details` | object \| null | Optional | Structured payload for debugging. |
 
+#### Review console (`/review`)
+- Local-only admin screen that surfaces unresolved proposals parsed from `data/errors.jsonl`. The API backing the page (`/api/review/proposals`) filters out any label that already maps to a canonical registry entry or an existing alias/mapping from `data/pending/reviews.jsonl`.
+- Moderators can **Accept**, **Reject**, or **Map** any proposal:
+  - **Accept** inserts the entity into the appropriate registry file and appends a corresponding record to `data/pending/reviews.jsonl`.
+  - **Map** either adds an alias to an existing person/place entry or writes a `topicsMapped` entry (for topics) so future runs auto-resolve the same label.
+  - **Reject** logs the decision to `data/pending/reviews.jsonl`.
+- The review UI replaces the manual “edit JSON by hand” workflow outlined earlier in this PRD and is the expected way to curate new people/places/topics between pipeline runs.
+
 ### 4.3 Formal Schemas
 - Authoritative JSON Schemas live alongside the repository under:
   - [`schema/episode.public.schema.json`](../schema/episode.public.schema.json)

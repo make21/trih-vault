@@ -32,6 +32,7 @@ Make it effortless to “see the show as history”: a mobile-first vertical tim
 - Deterministic slugs emitted during composition, plus `public/slug-registry.json`.
 - Canonical URLs, sitemap, robots.txt, JSON-LD metadata, GA4 event instrumentation.
 - Twitter/OG summary card (no custom image in v1).
+- Local-only admin console at `/review` (hidden from crawlers) that lists unresolved LLM proposals and lets editors accept, reject, or map them without touching JSON files. Actions write directly to the registries and review log.
 
 **Out of Scope (defer or post-v1)**
 - Rich OG images.

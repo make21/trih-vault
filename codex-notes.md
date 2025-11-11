@@ -28,6 +28,7 @@
 ## Next Steps
 - Re-run the composer with cached data (`OPENAI_API_KEY=dummy npm run dev:pipeline -- --max-llm-calls 0`) whenever registries change so artefacts pick up the latest canonical refs without new LLM calls.
 - Continue curating pending entities: review `data/errors.jsonl` (especially new Tudor + Disney proposals), update `data/rules/{people,places,topics}.json`, and log each decision in `data/pending/reviews.jsonl`.
+- Use the local review console (`npm run dev` → `http://localhost:3000/review`) to accept/map/reject proposals instead of editing JSON by hand; it writes straight to the registries and review log.
 - Use the playbook (`docs/entity-curation-playbook.md`) as the blueprint for accept/map/reject decisions so new LLM proposals stay deterministic.
 - Plan the next enrichment batch (mid/late catalogue) once the current proposals are cleared, using `--force-llm` to target the chosen episode IDs and cap spend with `--max-llm-calls`.
 - Keep auditing registries for cross-entity collisions; reconcile duplicates early so the validator guardrail doesn’t block future pipeline runs.

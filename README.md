@@ -71,6 +71,14 @@ source .env.local && npm run dev:pipeline
 - `npm run schema:check` runs AJV against `schema/*.json` to guarantee artefact compatibility.
 - `npm run migrate:caches` upgrades legacy LLM cache formats when needed.
 
+### Reviewing LLM proposals
+
+- Run `npm run dev` and open `http://localhost:3000/review` to moderate pending people/place/topic proposals with a point-and-click UI. The page surfaces only unresolved items (parsed from `data/errors.jsonl`) and lets you accept, reject, or map entries without editing JSON manually.
+- **Accept** writes the entity straight into `data/rules/{people,places,topics}.json` and appends an entry to `data/pending/reviews.jsonl`.
+- **Map** links the proposal to an existing canonical entry (topics add a `topicsMapped` record; people/places append an alias to the target registry entry).
+- **Reject** records the decision in `data/pending/reviews.jsonl` so future pipeline runs auto-ignore the same proposal.
+- After finishing a review pass, re-run `OPENAI_API_KEY=dummy npm run dev:pipeline -- --max-llm-calls 0` (and any targeted `--force-llm` runs) so artefacts pick up the canonical IDs.
+
 ### Artefact quick reference
 
 | Location | Description |
