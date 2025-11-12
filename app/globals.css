@@ -486,6 +486,13 @@ a.timeline__card:focus-visible {
   gap: 8px;
 }
 
+.timeline-loading {
+  text-align: center;
+  color: var(--color-ink-light);
+  padding: 48px 0;
+  font-size: 1rem;
+}
+
 .timeline__gap-button {
   pointer-events: auto;
   width: 48px;

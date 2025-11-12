@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import episodesData from '../public/episodes.json';
 import seriesData from '../public/series.json';
 import BackToTop from '@/components/BackToTop';
@@ -28,19 +29,21 @@ export default function HomePage() {
       </header>
 
       <main className="page__content">
-        <Timeline
-          rows={rows}
-          undatedEpisodes={undated}
-          latestEpisode={
-            latestEpisode
-              ? {
-                  title: latestEpisode.cleanTitle,
-                  slug: latestEpisode.slug,
-                  publishedAt: latestEpisode.publishedAt ?? ''
-                }
-              : null
-          }
-        />
+        <Suspense fallback={<div className="timeline-loading">Loading timeline…</div>}>
+          <Timeline
+            rows={rows}
+            undatedEpisodes={undated}
+            latestEpisode={
+              latestEpisode
+                ? {
+                    title: latestEpisode.cleanTitle,
+                    slug: latestEpisode.slug,
+                    publishedAt: latestEpisode.publishedAt ?? ''
+                  }
+                : null
+            }
+          />
+        </Suspense>
       </main>
 
       <BackToTop />
