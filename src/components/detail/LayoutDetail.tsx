@@ -33,6 +33,10 @@ export function LayoutDetail({
   hideBreadcrumbs = false,
   heroVariant = "default"
 }: LayoutDetailProps): JSX.Element {
+  const hasSupportingHeroContent = Boolean(subtitle || meta || actions);
+  const useCondensedHero =
+    heroVariant === "condensed" || (!hasSupportingHeroContent && heroVariant !== "condensed");
+
   return (
     <div className={styles.page}>
       {!hideBreadcrumbs && breadcrumbs.length > 0 ? (
@@ -45,8 +49,7 @@ export function LayoutDetail({
           ))}
         </nav>
       ) : null}
-
-      <header className={classNames(styles.hero, heroVariant === "condensed" && styles.heroCondensed)}>
+      <header className={classNames(styles.hero, useCondensedHero && styles.heroCondensed)}>
         <h1 className={styles.heroTitle}>{title}</h1>
         {subtitle ? <div className={styles.heroSubtitle}>{subtitle}</div> : null}
         {meta ? <div className={styles.metaRow}>{meta}</div> : null}
