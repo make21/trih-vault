@@ -2,6 +2,8 @@ import Link from "next/link";
 
 import type { PublicEpisode } from "@/types";
 
+import { getPersonHref, getPlaceHref, getTopicHref } from "@/lib/entityLinks";
+
 import { PillLink } from "./PillLink";
 import styles from "./EpisodeCard.module.css";
 
@@ -31,13 +33,27 @@ export function EpisodeCard({
   seriesHref,
   seriesLabel
 }: EpisodeCardProps): JSX.Element {
-  const people = (episode.people && episode.people.length > 0
-    ? episode.people
-    : (episode.keyPeople ?? []).map((name) => ({ id: null, name }))
+  const people = (
+    episode.people && episode.people.length > 0
+      ? episode.people.map((person) => ({
+          name: person.name,
+          href: getPersonHref(person.name, person.id)
+        }))
+      : (episode.keyPeople ?? []).map((name) => ({
+          name,
+          href: getPersonHref(name)
+        }))
   ).slice(0, showPeopleCount);
-  const places = (episode.places && episode.places.length > 0
-    ? episode.places
-    : (episode.keyPlaces ?? []).map((name) => ({ id: null, name }))
+  const places = (
+    episode.places && episode.places.length > 0
+      ? episode.places.map((place) => ({
+          name: place.name,
+          href: getPlaceHref(place.name, place.id)
+        }))
+      : (episode.keyPlaces ?? []).map((name) => ({
+          name,
+          href: getPlaceHref(name)
+        }))
   ).slice(0, showPlacesCount);
   const themes = (episode.keyThemes ?? []).slice(0, showThemesCount);
   const topics = (episode.keyTopics ?? []).slice(0, showTopicsCount);
@@ -77,27 +93,19 @@ export function EpisodeCard({
 
       <div className={styles.chipRow}>
         {people.map((person) => (
-          <PillLink
-            key={person.id ?? person.name}
-            href={`/people/${encodeURIComponent(person.id ?? person.name)}`}
-            variant="people"
-          >
+          <PillLink key={person.href} href={person.href} variant="people">
             {person.name}
           </PillLink>
         ))}
         {places.map((place) => (
-          <PillLink
-            key={place.id ?? place.name}
-            href={`/places/${encodeURIComponent(place.id ?? place.name)}`}
-            variant="places"
-          >
+          <PillLink key={place.href} href={place.href} variant="places">
             {place.name}
           </PillLink>
         ))}
         {topics.map((topic) => (
           <PillLink
             key={topic.id}
-            href={`/search?topic=${encodeURIComponent(topic.slug)}`}
+            href={getTopicHref(topic.slug)}
             variant="topics"
             title={topic.isPending ? "Pending topic proposal" : undefined}
           >

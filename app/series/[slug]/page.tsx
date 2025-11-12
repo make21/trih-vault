@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { EpisodeCard, FindAndListen, LayoutDetail, PillLink, QuickFacts, RelatedRow } from "@/components/detail";
 import { getAllSeries, getSeriesAggregate, getSeriesBySlug } from "@/lib/data";
+import { getPersonHref, getPlaceHref } from "@/lib/entityLinks";
 import { getTopPeopleForSeries, getTopPlacesForSeries } from "@/lib/indexes";
 import { findRelatedSeries } from "@/lib/similar";
 
@@ -99,12 +100,12 @@ export default function SeriesPage({ params }: SeriesPageProps): JSX.Element {
           <h2>Key People & Places</h2>
           <div className={styles.pillList}>
             {topPeople.map((person) => (
-              <PillLink key={person.name} href={`/people/${encodeURIComponent(person.name)}`} variant="people">
+              <PillLink key={person.name} href={getPersonHref(person.name)} variant="people">
                 {person.name}
               </PillLink>
             ))}
             {topPlaces.map((place) => (
-              <PillLink key={place.name} href={`/places/${encodeURIComponent(place.name)}`} variant="places">
+              <PillLink key={place.name} href={getPlaceHref(place.name)} variant="places">
                 {place.name}
               </PillLink>
             ))}

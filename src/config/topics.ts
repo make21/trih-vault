@@ -46,3 +46,7 @@ export function findTopic(value: string): TopicDefinition | undefined {
   const trimmed = value.trim().toLowerCase();
   return TOPIC_BY_ID[trimmed] ?? TOPIC_ALIASES[trimmed];
 }
+
+export function findTopicBySlug(slug: string): TopicDefinition | undefined {
+  return TOPIC_DEFINITIONS.find((topic) => topic.slug === slug) ?? findTopic(slug);
+}

@@ -2,12 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { EpisodeCard, FindAndListen, LayoutDetail, PillLink, QuickFacts, RelatedRow } from "@/components/detail";
-import {
-  getAllEpisodes,
-  getEpisodeBySlug,
-  getEpisodesForSeries,
-  getSeriesById
-} from "@/lib/data";
+import { getAllEpisodes, getEpisodeBySlug, getEpisodesForSeries, getSeriesById } from "@/lib/data";
+import { getPersonHref, getPlaceHref, getTopicHref } from "@/lib/entityLinks";
 import { findRelatedEpisodes } from "@/lib/similar";
 
 import styles from "./page.module.css";
@@ -83,6 +79,28 @@ export default function EpisodePage({ params }: EpisodePageProps): JSX.Element {
   const publishedLabel = episode.publishedAt ? episode.publishedAt.slice(0, 10) : "Unknown";
   const topics = episode.keyTopics ?? [];
   const topicsToShow = topics.slice(0, 4);
+  const people = (
+    episode.people && episode.people.length > 0
+      ? episode.people.map((person) => ({
+          name: person.name,
+          href: getPersonHref(person.name, person.id)
+        }))
+      : (episode.keyPeople ?? []).map((name) => ({
+          name,
+          href: getPersonHref(name)
+        }))
+  ).slice(0, 8);
+  const places = (
+    episode.places && episode.places.length > 0
+      ? episode.places.map((place) => ({
+          name: place.name,
+          href: getPlaceHref(place.name, place.id)
+        }))
+      : (episode.keyPlaces ?? []).map((name) => ({
+          name,
+          href: getPlaceHref(name)
+        }))
+  ).slice(0, 6);
 
   const quickFacts = [
     { term: "Series", detail: series ? <PillLink href={`/series/${series.slug}`} variant="series">{series.seriesTitle}</PillLink> : "Standalone" },
@@ -102,7 +120,7 @@ export default function EpisodePage({ params }: EpisodePageProps): JSX.Element {
           {topicsToShow.map((topic) => (
             <PillLink
               key={topic.id}
-              href={`/search?topic=${encodeURIComponent(topic.slug)}`}
+              href={getTopicHref(topic.slug)}
               variant="topics"
               title={topic.isPending ? "Pending topic proposal" : undefined}
             >
@@ -120,9 +138,6 @@ export default function EpisodePage({ params }: EpisodePageProps): JSX.Element {
     { label: episode.cleanTitle, href: `/episode/${episode.slug}` }
   ];
 
-  const people = (episode.keyPeople ?? []).slice(0, 8);
-  const places = (episode.keyPlaces ?? []).slice(0, 6);
-
   return (
     <LayoutDetail title={episode.cleanTitle} subtitle={cleanedDescription} breadcrumbs={breadcrumbs}>
       <QuickFacts items={quickFacts} columns={2} />
@@ -132,13 +147,13 @@ export default function EpisodePage({ params }: EpisodePageProps): JSX.Element {
           <h2>At a glance</h2>
           <div className={styles.pillList}>
             {people.map((person) => (
-              <PillLink key={person} href={`/people/${encodeURIComponent(person)}`} variant="people">
-                {person}
+              <PillLink key={person.href} href={person.href} variant="people">
+                {person.name}
               </PillLink>
             ))}
             {places.map((place) => (
-              <PillLink key={place} href={`/places/${encodeURIComponent(place)}`} variant="places">
-                {place}
+              <PillLink key={place.href} href={place.href} variant="places">
+                {place.name}
               </PillLink>
             ))}
           </div>
