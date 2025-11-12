@@ -20,7 +20,7 @@
       "War Between the States"
     ],
     "type": "conflict",
-    "description": "Union vs Confederacy conflict (1861\u20131865)."
+    "description": "Union vs Confederacy conflict (1861–1865)."
   },
   {
     "id": "american-indian-wars",
@@ -44,7 +44,7 @@
       "American War of Independence"
     ],
     "type": "conflict",
-    "description": "The 1765\u20131783 revolutionary period that created the United States."
+    "description": "The 1765–1783 revolutionary period that created the United States."
   },
   {
     "id": "ancient-egypt",
@@ -351,6 +351,18 @@
     "description": "Evolution of clothing, textiles, and style trends across eras."
   },
   {
+    "id": "fiction",
+    "preferredName": "Fiction",
+    "label": "Fiction",
+    "slug": "fiction",
+    "aliases": [
+      "Literary Fiction",
+      "Detective Fiction"
+    ],
+    "type": "literature",
+    "description": "Novels and stories that the show covers as cultural history (Sherlock Holmes, Tolkien, etc.)."
+  },
+  {
     "id": "falklands-war",
     "preferredName": "Falklands War",
     "label": "Falklands War",
@@ -379,7 +391,7 @@
       "Reign of Terror"
     ],
     "type": "revolution",
-    "description": "Revolutionary upheaval in France (1789\u20131799)."
+    "description": "Revolutionary upheaval in France (1789–1799)."
   },
   {
     "id": "gladiator-history",
@@ -456,7 +468,8 @@
     "label": "Islamic History",
     "slug": "islamic-history",
     "aliases": [
-      "History of Islam"
+      "History of Islam",
+      "Prophet Muhammad"
     ],
     "type": "religion",
     "description": "Sacred sites, movements, and historical developments across the Islamic world."
@@ -648,7 +661,7 @@
       "Nazi Party"
     ],
     "type": "regime",
-    "description": "National Socialist government and ideology in Germany (1933\u20131945)."
+    "description": "National Socialist government and ideology in Germany (1933–1945)."
   },
   {
     "id": "norman-conquest",
@@ -670,7 +683,7 @@
       "Flemish Renaissance"
     ],
     "type": "culture",
-    "description": "Artistic and cultural flowering in the Low Countries and Northern Europe during the 15th\u201316th centuries."
+    "description": "Artistic and cultural flowering in the Low Countries and Northern Europe during the 15th–16th centuries."
   },
   {
     "id": "paganism",
@@ -780,7 +793,7 @@
       "Russian Revolutions"
     ],
     "type": "event",
-    "description": "The 1905\u20131921 revolutionary waves that reshaped Russia."
+    "description": "The 1905–1921 revolutionary waves that reshaped Russia."
   },
   {
     "id": "slavery",
@@ -845,7 +858,7 @@
       "Thatcherism"
     ],
     "type": "era",
-    "description": "British political, economic, and cultural landscape during Margaret Thatcher's premiership (1979\u20131990)."
+    "description": "British political, economic, and cultural landscape during Margaret Thatcher's premiership (1979–1990)."
   },
   {
     "id": "titanic",
@@ -972,7 +985,7 @@
     "slug": "tudor-england",
     "aliases": [],
     "type": "era",
-    "description": "England under the Tudor dynasty (1485\u20131603)."
+    "description": "England under the Tudor dynasty (1485–1603)."
   },
   {
     "id": "uk-regional-identity",
@@ -1015,7 +1028,7 @@
     "slug": "victorian-england",
     "aliases": [],
     "type": "era",
-    "description": "England during the reign of Queen Victoria (1837\u20131901)."
+    "description": "England during the reign of Queen Victoria (1837–1901)."
   },
   {
     "id": "wars-of-the-roses",
@@ -1057,7 +1070,7 @@
       "WWI"
     ],
     "type": "conflict",
-    "description": "Global conflict of 1914\u20131918."
+    "description": "Global conflict of 1914–1918."
   },
   {
     "id": "world-war-ii",
@@ -1070,6 +1083,6 @@
       "WW2"
     ],
     "type": "conflict",
-    "description": "Global conflict of 1939\u20131945."
+    "description": "Global conflict of 1939–1945."
   }
 ]

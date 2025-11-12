@@ -24,7 +24,7 @@
     "preferredName": "Adolf Hitler",
     "aliases": [
       "Hitler",
-      "Der F\u00fchrer",
+      "Der Führer",
       "Der Fuhrer"
     ],
     "type": "person:historical"
@@ -47,7 +47,7 @@
   },
   {
     "id": "alfred-wetzler",
-    "preferredName": "Alfr\u00e9d Wetzler",
+    "preferredName": "Alfréd Wetzler",
     "aliases": [
       "Alfred Wetzler"
     ],
@@ -141,7 +141,7 @@
     "preferredName": "Catherine of Aragon",
     "aliases": [
       "Queen Catherine of Aragon",
-      "Catalina de Arag\u00f3n"
+      "Catalina de Aragón"
     ],
     "type": "person:historical"
   },
@@ -227,7 +227,7 @@
     "preferredName": "Crazy Horse",
     "aliases": [
       "Tasunke Witko",
-      "T\u021fa\u0161\u00fa\u014bke Witk\u00f3",
+      "Tȟašúŋke Witkó",
       "Tashunke Witko",
       "Thasuke Witko"
     ],
@@ -297,10 +297,10 @@
   },
   {
     "id": "eva-peron",
-    "preferredName": "Eva Per\u00f3n",
+    "preferredName": "Eva Perón",
     "aliases": [
-      "Evita Per\u00f3n",
-      "Mar\u00eda Eva Duarte de Per\u00f3n",
+      "Evita Perón",
+      "María Eva Duarte de Perón",
       "Evita Peron",
       "Maria Eva Duarte de Peron",
       "Eva Peron"
@@ -446,7 +446,7 @@
   },
   {
     "id": "hernan-cortes",
-    "preferredName": "Hern\u00e1n Cort\u00e9s",
+    "preferredName": "Hernán Cortés",
     "aliases": [
       "Hernan Cortes",
       "Hernan Cortez"
@@ -549,7 +549,7 @@
   },
   {
     "id": "juan-peron",
-    "preferredName": "Juan Per\u00f3n",
+    "preferredName": "Juan Perón",
     "aliases": [
       "Juan Peron"
     ],
@@ -665,7 +665,7 @@
     "aliases": [
       "La Malinche",
       "Malintzin",
-      "Do\u00f1a Marina",
+      "Doña Marina",
       "Dona Marina"
     ],
     "type": "person:historical"
@@ -833,7 +833,7 @@
   },
   {
     "id": "panfilo-de-narvaez",
-    "preferredName": "P\u00e1nfilo de Narv\u00e1ez",
+    "preferredName": "Pánfilo de Narváez",
     "aliases": [
       "Panfilo de Narvaez",
       "Panfilo Narvaez"
@@ -878,6 +878,15 @@
     "type": "person:historical"
   },
   {
+    "id": "prophet-muhammad",
+    "preferredName": "Prophet Muhammad",
+    "aliases": [
+      "Muhammad",
+      "The Prophet Muhammad"
+    ],
+    "type": "person:religious"
+  },
+  {
     "id": "queen-victoria",
     "preferredName": "Queen Victoria",
     "aliases": [
@@ -889,7 +898,7 @@
     "id": "red-cloud",
     "preferredName": "Red Cloud",
     "aliases": [
-      "Ma\u021fp\u00edya L\u00fata",
+      "Maȟpíya Lúta",
       "Mahpiya Luta"
     ],
     "type": "person:historical"
