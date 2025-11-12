@@ -95,20 +95,11 @@
     "preferredName": "Anglo-Saxon England",
     "label": "Anglo-Saxon England",
     "slug": "anglo-saxon",
-    "aliases": [],
-    "type": "era",
-    "description": "Britain between the fall of Rome and the Norman Conquest."
-  },
-  {
-    "id": "anglo-saxon-england",
-    "preferredName": "Anglo-Saxon England",
-    "label": "Anglo-Saxon England",
-    "slug": "anglo-saxon-england",
     "aliases": [
       "Early Medieval England"
     ],
     "type": "era",
-    "description": "England from the 5th century settlement of Anglo-Saxons to the Norman Conquest."
+    "description": "Britain between the fall of Rome and the Norman Conquest."
   },
   {
     "id": "australian-politics",
