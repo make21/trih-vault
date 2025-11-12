@@ -35,7 +35,7 @@ export function LayoutDetail({
 }: LayoutDetailProps): JSX.Element {
   const hasSupportingHeroContent = Boolean(subtitle || meta || actions);
   const useCondensedHero =
-    heroVariant === "condensed" || (!hasSupportingHeroContent && heroVariant !== "condensed");
+    heroVariant === "condensed" || (!hasSupportingHeroContent && heroVariant === "default");
 
   return (
     <div className={styles.page}>
