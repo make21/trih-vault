@@ -20,7 +20,7 @@ The pipeline turns the official RSS feed into stable JSON artefacts that downstr
 
 ### Explorer UI
 
-- **Timeline home** — Mobile-first vertical timeline (`app/page.tsx`) that blends series and standalone episodes, respects BCE ranges, collapses large gaps, and surfaces undated content separately.
+- **Timeline home** — Mobile-first vertical timeline (`app/page.tsx`) that blends series and standalone episodes, respects BC ranges, collapses large gaps, and surfaces undated content (including a dedicated chip) separately.
 - **Detail routes** — Deterministic slugs drive `/series/[slug]` and `/episode/[slug]` with narrative summaries, part lists, audio playback, and “connected threads” metadata (people, places, related episodes).
 - **Shared data model** — UI reads the published artefacts directly; helper indexes, slug utilities, and similarity scoring live in `src/lib/` and `src/components/` so rendering stays deterministic and cache-friendly.
 

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { TimelineDisplayRow, TimelineSeriesRowData, TimelineEpisodeRowData, UndatedEpisode } from "./buildTimeline";
 import { computeTimelineLayout } from "./layout";
 import { GapMarker } from "@/components/GapMarker";
@@ -9,6 +10,11 @@ import { GapMarker } from "@/components/GapMarker";
 type TimelineProps = {
   rows: TimelineDisplayRow[];
   undatedEpisodes: UndatedEpisode[];
+  latestEpisode: {
+    title: string;
+    slug: string;
+    publishedAt: string;
+  } | null;
 };
 
 const PIXELS_PER_YEAR = 1.5;
@@ -17,39 +23,110 @@ const MAX_GAP_PX = 240;
 const COLLAPSED_GAP_PX = 64;
 const SAME_YEAR_GAP_PX = 28;
 
+const ERA_OPTIONS = [
+  { id: "all", label: "All Eras" },
+  { id: "prehistory", label: "Prehistory", range: { from: -5000, to: -3000 } },
+  { id: "ancient", label: "Ancient World", range: { from: -3000, to: 500 } },
+  { id: "late-antiquity", label: "Late Antiquity & Early Middle Ages", range: { from: 500, to: 1000 } },
+  { id: "high-middle-ages", label: "High Middle Ages", range: { from: 1000, to: 1500 } },
+  { id: "early-modern", label: "Early Modern", range: { from: 1500, to: 1800 } },
+  { id: "long-19th", label: "Long 19th Century", range: { from: 1789, to: 1914 } },
+  { id: "twentieth", label: "20th Century", range: { from: 1914, to: 2000 } },
+  { id: "twenty-first", label: "21st Century", range: { from: 2000, to: 3000 } },
+  { id: "undated", label: "Undated / Special" }
+] as const;
+
 const getPeriodId = (yearValue: number | null): string | null => {
   if (yearValue === null || Number.isNaN(yearValue)) {
     return null;
   }
-  if (yearValue <= -1000) return "prehistory";
-  if (yearValue <= 476) return "antiquity";
-  if (yearValue <= 800) return "late-antiquity";
-  if (yearValue <= 1500) return "middle-ages";
+  if (yearValue <= -3000) return "prehistory";
+  if (yearValue <= 500) return "ancient";
+  if (yearValue <= 1000) return "late-antiquity";
+  if (yearValue <= 1500) return "high-middle-ages";
   if (yearValue <= 1800) return "early-modern";
-  if (yearValue <= 1900) return "c19";
-  if (yearValue <= 2000) return "c20";
-  return "c21";
+  if (yearValue <= 1914) return "long-19th";
+  if (yearValue <= 2000) return "twentieth";
+  return "twenty-first";
+};
+
+const isValidEra = (value: string | null): value is (typeof ERA_OPTIONS)[number]["id"] => {
+  if (!value) return false;
+  return ERA_OPTIONS.some((era) => era.id === value);
+};
+
+const filterRowsByEra = (rows: TimelineDisplayRow[], eraId: string): TimelineDisplayRow[] => {
+  if (eraId === "all" || eraId === "undated") return rows;
+  const era = ERA_OPTIONS.find((option) => option.id === eraId);
+  if (!era || !era.range) return rows;
+  const { from, to } = era.range;
+  return rows.filter((row) => {
+    const start = row.yearFrom ?? row.yearTo;
+    const end = row.yearTo ?? row.yearFrom;
+    if (start == null && end == null) {
+      return false;
+    }
+    const rowFrom = (start ?? end)!;
+    const rowTo = (end ?? start ?? rowFrom)!;
+    return rowTo >= from && rowFrom <= to;
+  });
 };
 
 export function Timeline(props: TimelineProps) {
-  const { rows, undatedEpisodes } = props;
+  const { rows, undatedEpisodes, latestEpisode } = props;
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const deriveEraFromQuery = useCallback(() => {
+    const param = searchParams?.get("era");
+    return isValidEra(param) ? param : "all";
+  }, [searchParams]);
+
+  const [selectedEra, setSelectedEra] = useState<string>(deriveEraFromQuery);
   const [expandedSeries, setExpandedSeries] = useState<Set<string>>(new Set());
   const [expandedGaps, setExpandedGaps] = useState<Record<string, boolean>>({});
 
+  useEffect(() => {
+    const next = deriveEraFromQuery();
+    setSelectedEra(next);
+  }, [deriveEraFromQuery]);
+
+  const filteredRows = useMemo(() => filterRowsByEra(rows, selectedEra), [rows, selectedEra]);
+
   const layout = useMemo(
     () =>
-      computeTimelineLayout(rows, expandedGaps, {
+      computeTimelineLayout(filteredRows, expandedGaps, {
         pixelsPerYear: PIXELS_PER_YEAR,
         minGapPx: MIN_GAP_PX,
         maxGapPx: MAX_GAP_PX,
         collapsedGapPx: COLLAPSED_GAP_PX,
         sameYearGapPx: SAME_YEAR_GAP_PX
       }),
-    [rows, expandedGaps]
+    [filteredRows, expandedGaps]
   );
 
-  const hasTimelineContent = layout.nodes.some((node) => node.kind === "item");
+  const baseHasTimelineContent = layout.nodes.some((node) => node.kind === "item");
+  const showUndatedPrimary = selectedEra === "undated";
+  const hasTimelineContent = showUndatedPrimary ? undatedEpisodes.length > 0 : baseHasTimelineContent;
+  const latestPublishedLabel = useMemo(() => {
+    if (!latestEpisode?.publishedAt) return null;
+    try {
+      return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(
+        new Date(latestEpisode.publishedAt)
+      );
+    } catch {
+      return latestEpisode.publishedAt;
+    }
+  }, [latestEpisode?.publishedAt]);
   const hasUndated = undatedEpisodes.length > 0;
+  const [pendingScroll, setPendingScroll] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (pendingScroll !== null) {
+      window.scrollTo({ top: pendingScroll });
+      setPendingScroll(null);
+    }
+  }, [pendingScroll, filteredRows]);
 
   const toggleSeries = (id: string) => {
     setExpandedSeries((prev) => {
@@ -62,6 +139,22 @@ export function Timeline(props: TimelineProps) {
       return next;
     });
   };
+  const handleEraChange = (nextEra: string) => {
+    if (nextEra === selectedEra) return;
+    const scrollPosition = typeof window !== "undefined" ? window.scrollY : null;
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
+    if (nextEra === "all") {
+      params.delete("era");
+    } else {
+      params.set("era", nextEra);
+    }
+    setSelectedEra(nextEra);
+    if (scrollPosition !== null) {
+      setPendingScroll(scrollPosition);
+    }
+    const query = params.toString();
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+  };
 
   const toggleGap = (id: string) => {
     setExpandedGaps((prev) => ({
@@ -70,9 +163,36 @@ export function Timeline(props: TimelineProps) {
     }));
   };
 
-  let timelineContent: JSX.Element | null = <p>No timeline content with year data yet.</p>;
+  const renderUndatedSection = (variant: "inline" | "primary") => (
+    <section
+      id="bucket-undated"
+      className={`undated-section${variant === "primary" ? " undated-section--primary" : ""}`}
+    >
+      <h2>{variant === "primary" ? "Undated / Special Episodes" : "Undated Episodes"}</h2>
+      <p>
+        Timeless conversations, mythic deep-dives, and other episodes without a clear year span. They&apos;re still worth
+        a listen—just tougher to pin on the timeline.
+      </p>
+      <ul className="undated-list">
+        {undatedEpisodes.map((episode) => (
+          <li key={episode.id} className="undated-item">
+            <Link href={`/episode/${episode.slug}`} className="undated-item__link">
+              <div className="undated-item__title">{episode.title}</div>
+              <div className="undated-item__meta">{episode.publishedLabel}</div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 
-  if (hasTimelineContent) {
+  const emptyMessage =
+    selectedEra === "all" ? "No timeline content with year data yet." : "No entries in this era (yet).";
+  let timelineContent: JSX.Element | null = <p className="timeline__empty">{emptyMessage}</p>;
+
+  if (showUndatedPrimary) {
+    timelineContent = renderUndatedSection("primary");
+  } else if (hasTimelineContent) {
     const renderedBuckets = new Set<string>();
     let cursor = 0;
 
@@ -125,6 +245,7 @@ export function Timeline(props: TimelineProps) {
             <div className="timeline__entry timeline__entry--series" style={{ marginTop }}>
               <span className="timeline__marker timeline__marker--series" aria-hidden />
               <div className="timeline__card timeline__card--series">
+                <span className="timeline__pill">Series</span>
                 <div className="timeline__series-header">
                   <Link href={seriesHref} className="timeline__series-link">
                     <div className="timeline__year">{seriesData.yearLabel}</div>
@@ -194,28 +315,48 @@ export function Timeline(props: TimelineProps) {
     timelineContent = <div className="timeline">{timelineNodes}</div>;
   }
 
+  const selectedEraLabel = ERA_OPTIONS.find((era) => era.id === selectedEra)?.label ?? "All Eras";
+
   return (
-    <>
-      <section>
-        <h2>Timeline (alpha)</h2>
+    <div className="timeline-shell">
+      {latestEpisode ? (
+        <div className="latest-banner" role="status">
+          <div className="latest-banner__icon" aria-hidden>
+            ⏰
+          </div>
+          <div className="latest-banner__copy">
+            <p className="latest-banner__label">Latest Episode</p>
+            <p className="latest-banner__title">{latestEpisode.title}</p>
+            {latestPublishedLabel ? <p className="latest-banner__meta">{latestPublishedLabel}</p> : null}
+          </div>
+          <Link href={`/episode/${latestEpisode.slug}`} className="latest-banner__link">
+            Listen now
+          </Link>
+        </div>
+      ) : null}
+
+      <div className="era-filter">
+        <div className="era-filter__label">Browse by era</div>
+        <div className="era-chips" role="toolbar" aria-label="Filter timeline by era">
+          {ERA_OPTIONS.map((era) => (
+            <button
+              key={era.id}
+              type="button"
+              className={`era-chip${selectedEra === era.id ? " era-chip--active" : ""}`}
+              onClick={() => handleEraChange(era.id)}
+              aria-pressed={selectedEra === era.id}
+            >
+              {era.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <section aria-live="polite" aria-label={`Timeline — ${selectedEraLabel}`}>
         {timelineContent}
       </section>
 
-      {hasUndated ? (
-        <section id="bucket-undated" className="undated-section">
-          <h2>Undated Episodes</h2>
-          <p>Items without a usable year range. We will revisit once we have a better strategy.</p>
-          <ul className="undated-list">
-            {undatedEpisodes.map((episode) => (
-              <li key={episode.id} className="undated-item">
-                <Link href={`/episode/${episode.slug}`} className="undated-item__link">
-                  <div className="undated-item__title">{episode.title}</div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-    </>
+      {selectedEra === "all" && hasUndated ? renderUndatedSection("inline") : null}
+    </div>
   );
 }

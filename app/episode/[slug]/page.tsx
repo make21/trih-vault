@@ -16,7 +16,7 @@ const formatYear = (value: number | null): string | null => {
   if (value === null || value === undefined) {
     return null;
   }
-  return value < 0 ? `${Math.abs(value)} BCE` : value.toString();
+  return value < 0 ? `${Math.abs(value)} BC` : value.toString();
 };
 
 const formatYearRange = (from: number | null, to: number | null): string | null => {

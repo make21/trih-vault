@@ -28,6 +28,9 @@ export function GapMarker(props: GapMarkerProps) {
           <span />
         </span>
       </button>
+      <span className="timeline__gap-label" aria-hidden>
+        Gap of {yearsLabel} years
+      </span>
     </div>
   );
 }

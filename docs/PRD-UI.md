@@ -1,6 +1,6 @@
 # The Rest Is History Explorer — UI PRD (v1)
 
-Last updated: 2025-10-30  
+Last updated: 2025-11-11  
 
 ---
 
@@ -25,7 +25,7 @@ Make it effortless to “see the show as history”: a mobile-first vertical tim
 
 **In v1**
 - Mobile-first vertical timeline on `/` combining `public/series.json` and `public/episodes.json`.
-- Undated items pinned in a dedicated “Undated” section.
+- Undated items discoverable via a dedicated “Undated / Special” chip plus a supplemental list when browsing “All Eras.”
 - Mixed client-side search (episodes + series) with People/Places facet chips (no type filter).
 - Series detail pages (`/series/[slug]`) with narrative summaries and part lists.
 - Episode detail pages (`/episode/[slug]`) with audio playback, people/places chips, and breadcrumbs.
@@ -90,114 +90,35 @@ Composer (or the registry build step) writes the resolved slugs onto artefacts a
 
 ## 6. Timeline Experience (Home)
 
-- Vertical spine with decade/century markers (markers sticky as the list scrolls) centred beneath cards across breakpoints.
-- **Series cards**: title, part-count badge, optional year-span chip; expands inline to list parts with direct links.
-- **Episode cards**: full-width cards (within safe area) that link to episode detail; include year range as leading text.
-- **Gap markers**: large empty spans collapse to a spine-mounted vertical ellipsis button; accessible labels announce the skipped years and the gap expands on click.
-- BCE support: negative `yearFrom`/`yearTo` render with `BC` suffixes (e.g. “264 BC – 216 BC”).
-- Ordering rules:
-  - Series sorted by `min(yearFrom)` ascending, ties broken by `max(yearTo)` then `seriesTitle`.
-  - Standalone episodes sorted by `yearFrom` / `yearTo`; ties break on `cleanTitle`.
-  - Items lacking year ranges appear under “Undated” beneath the hero section, ordered by `publishedAt`.
-- Virtualised list (e.g., `react-virtuoso` or `react-window`) remains a stretch goal once we exceed a few hundred rows.
-- Keyboard navigation follows timeline order; focus states clearly visible.
+- **Hero & palette** — Parchment (#F8F6F3) background with oxblood (#6A1F1B) headline, serif typography, subtle radial gradients.
+- **Latest Episode banner** — Beige capsule with clock icon, published date, CTA to the latest `/episode` slug. Fully keyboard-accessible.
+- **Era chips** — Rounded pills in beige/oxblood. Options: All Eras, Prehistory, Ancient World, Late Antiquity & Early Middle Ages, High Middle Ages, Early Modern, Long 19th Century, 20th Century, 21st Century, Undated / Special. Chips update the `?era=` query param without a reload and preserve scroll position.
+- **Timeline spine** — Stays centered on all breakpoints. Series and episode markers share the same axis; series markers use the secondary tint.
+- **Cards** — Floating cards with parchment styling. Series cards include a “Series” pill, beige background, and collapsible part list; episodes stay white. Hover/focus lifts the card slightly.
+- **Gap markers** — Collapsible dotted buttons with textual labels (“Gap of 642 years”). Expanded state stored per ID.
+- **Undated / Special** — Selecting the undated chip shows the non-chronological drawer; otherwise, the drawer appears under the main timeline when viewing “All Eras.”
+- **Ordering** — Series sorted by `yearFrom`/`yearTo` (ties by title). Standalone episodes sorted by `yearFrom`/`yearTo` then `cleanTitle`. Undated rows ordered by `publishedAt`.
+- **Accessibility** — Chips expose `aria-pressed`, gap markers announce skipped years, cards retain visible focus rings. Contrasts adhere to WCAG AA.
+- **BC labelling** — Negative `yearFrom`/`yearTo` render with `BC` suffixes (e.g. “264 BC – 216 BC”).
 
 ---
 
-## 7. Visual System: Era Themes & Illustrations
+## 7. Visual System (Brand Palette)
 
-### Overview
-
-The timeline’s visual language shifts as users progress through history. Each era applies its own palette, typography accent, and lightweight illustration so the experience feels like moving through design epochs rather than a single static UI. Transitions are data-driven from a central configuration and blend smoothly in the scroll direction.
-
-### Goals
-
-- Reinforce the sense of time passing via evolving but harmonious visuals.
-- Keep transitions light and performant (color morphs, no layout jumps, minimal paints).
-- Centralise theming in `eras.ts` so design tokens and illustrations are editable without code churn.
-- Use subtle pencil-style illustrations that add depth while preserving text contrast and readability.
-
-### Era Breakdown (targeted for v2 visual pass)
-
-| # | Era | Years | Visual Mood | Illustration Motif (pencil sketch) |
-| --- | --- | --- | --- | --- |
-| 1 | Ancient Civilisations | 3000 BC – 476 AD | Marble, parchment, empire | Ionic column, chariot, ancient galley |
-| 2 | Early Medieval (Dark Ages) | 477 – 1000 | Monastic manuscript | Candle, quill, simple cross motif |
-| 3 | High Medieval / Gothic | 1000 – 1492 | Cathedral & heraldry | Castle silhouette, stained-glass rose |
-| 4 | Renaissance & Discovery | 1493 – 1650 | Mapmaker aesthetic | Caravel ship, compass rose |
-| 5 | Enlightenment & Revolutions | 1651 – 1789 | Diagrams, salons, reason | Telescope, astrolabe |
-| 6 | Industrial Revolution (Early) | 1790 – 1850 | Steam & invention | Steam locomotive, gear, smokestack |
-| 7 | Victorian / Belle Époque | 1851 – 1914 | Ornate poster art | Wrought-iron ornament, early camera |
-| 8 | Interwar / Early Modernism | 1915 – 1945 | Bauhaus geometry | Radio tower, geometric grid |
-| 9 | Postwar Modern (Mid-Century) | 1946 – 1970 | Magazine minimalism | Jet, television, space rocket |
-| 10 | Late 20th Century (Digital Dawn) | 1971 – 1990 | Analog → digital transition | Cassette tape, pixel grid |
-| 11 | Early Internet / Win95 Era | 1991 – 2008 | Nostalgic beige UI | CRT monitor, floppy disk, mouse |
-| 12 | Contemporary / Streaming Age | 2009 – Today | Flat, neon minimalism | Cloud, fibre-optic arcs |
-
-### Illustration Workflow
-
-1. **AI concept pass** — Generate base pencil-style sketches (DALL·E, Midjourney, etc.) using prompts in a Tolkien map aesthetic. Keep outputs centred, white background, minimal shading.
-2. **Manual cleanup** — Process in Canva (or equivalent): remove background, adjust contrast, crop to 1024×1024, export transparent SVG (preferred) with PNG fallback. Naming convention: `public/illu/<era-key>.svg`.
-3. **Texture pairing** — Produce subtle paper/linen textures per era (`public/tx/<era-key>.webp`) for optional overlay, tuned for 0.2–0.3 opacity.
-
-### Technical Implementation
-
-- `src/ui/eras.ts` exports an ordered array of era configs:
-
-```ts
-export const ERAS = [
-  {
-    key: 'industrial',
-    start: 1790,
-    end: 1850,
-    tokens: {
-      bg: '#F6F1E8',
-      ink: '#2A2622',
-      accent: '#9A5F3E',
-      texture: '/tx/industrial.webp',
-      illustration: '/illu/industrial.svg',
-      fontFamily: 'var(--font-serif)'
-    }
-  },
-  // …
-];
-```
-
-- The active era is derived from the current timeline waypoint (IntersectionObserver or scroll listener). CSS custom properties (`--bg`, `--ink`, `--accent`, `--texture`, `--illustration`) tween between eras with a 300–500 px overlap to avoid hard cuts.
-- A single fixed overlay element renders texture + illustration layers:
-
-```css
-.app-texture::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: var(--texture), var(--illustration);
-  background-repeat: repeat, no-repeat;
-  background-size: cover, min(900px, 70vw) auto;
-  background-position: center, right 8% bottom 12%;
-  opacity: var(--texture-opacity, 0.25);
-  mix-blend-mode: multiply;
-  transition: background-image 260ms ease, opacity 200ms ease;
-}
-```
-
-- Fonts shift only at era boundaries; specify fallback stacks to avoid flashes.
-- Support dark mode by extending tokens with `dark` variants while keeping illustration linework legible (adjust opacity or invertation on demand).
-- Preload illustration assets to avoid fetch jank; clamp file size (<200 KB) to maintain initial load performance.
-
-### Design Tone
-
-- Illustrations act as faint artefacts—present but never overpowering timeline content.
-- Transitions should feel “buttery” and storybook-like; aim for eased color interpolation rather than instantaneous swaps.
-- Ensure WCAG contrast for all text/card states regardless of background tint.
-
-### Deliverables
-
-- Era config file with colour/typography/asset tokens for all 12 eras.
-- 12 cleaned transparent illustrations (SVG + PNG fallback).
-- 12 subtle textures (WEBP), or confirmed decision to reuse a single neutral texture.
-- Implementation of the IntersectionObserver + CSS variable theming system.
+- **Colors**
+  - Background: parchment `#F8F6F3`.
+  - Primary text: `#2A2522`.
+  - Primary accent: oxblood `#6A1F1B` (hover `#8C2B24`).
+  - Secondary accent: tan `#B89464` (hover `#D3B785`).
+  - Cards: `#FFFFFF` / `#F2E4D4` (series tint).
+  - Borders: `rgba(42, 37, 34, 0.12)`.
+- **Typography**
+  - Headlines: “Source Serif 4” (or Georgia fallback) with oxblood color.
+  - Body copy: Inter/System stack in dark brown.
+- **Texture**
+  - Optional radial gradient overlays evoke parchment; no heavy illustrations in the current pass.
+- **Components**
+  - Pills, banners, chips, and quick-fact cards all reuse the palette above. Audio player uses the same card treatment for brand consistency.
 - QA on mobile and desktop to verify performance, contrast, and scroll behaviour.
 
 ---

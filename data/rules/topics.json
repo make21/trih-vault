@@ -360,7 +360,19 @@
       "Detective Fiction"
     ],
     "type": "literature",
-    "description": "Novels and stories that the show covers as cultural history (Sherlock Holmes, Tolkien, etc.)."
+    "description": "Novels, stories, and literary worlds covered on the show (Sherlock Holmes, Tolkien, etc.)."
+  },
+  {
+    "id": "music",
+    "preferredName": "Music History",
+    "label": "Music History",
+    "slug": "music-history",
+    "aliases": [
+      "Classical Music",
+      "Music"
+    ],
+    "type": "culture",
+    "description": "Composers, performances, and musical movements examined on the podcast."
   },
   {
     "id": "falklands-war",
@@ -785,6 +797,17 @@
     "description": "Britannia under Roman rule and its aftermath."
   },
   {
+    "id": "russian-empire",
+    "preferredName": "Russian Empire",
+    "label": "Russian Empire",
+    "slug": "russian-empire",
+    "aliases": [
+      "Imperial Russia"
+    ],
+    "type": "politics",
+    "description": "Imperial Russia from the Romanovs through Peter the Great and the Great Northern War."
+  },
+  {
     "id": "russian-revolution",
     "preferredName": "Russian Revolution",
     "label": "Russian Revolution",
@@ -1038,6 +1061,15 @@
     "aliases": [],
     "type": "conflict",
     "description": "Dynastic civil wars between the houses of Lancaster and York."
+  },
+  {
+    "id": "great-northern-war",
+    "preferredName": "Great Northern War",
+    "label": "Great Northern War",
+    "slug": "great-northern-war",
+    "aliases": [],
+    "type": "conflict",
+    "description": "The 1700–1721 conflict between Sweden and the alliance led by Russia, Denmark–Norway, and Saxony-Poland."
   },
   {
     "id": "wild-west-myth",

@@ -18,8 +18,10 @@
 .audio {
   width: 100%;
   border-radius: 12px;
-  background: #0f172a;
+  background: var(--color-card);
   padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 10px 25px rgba(42, 37, 34, 0.12);
 }
 
 .episodeGrid {

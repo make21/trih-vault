@@ -22,7 +22,7 @@ const baseEpisode = (overrides: Partial<RawEpisodeInput>): RawEpisodeInput => {
 };
 
 describe("buildTimeline", () => {
-  it("returns episode rows with formatted BCE ranges", () => {
+  it("returns episode rows with formatted BC ranges", () => {
     const episodes: RawEpisodeInput[] = [
       baseEpisode({ id: "ep-44bc", cleanTitle: "44 BC", yearFrom: -44, yearTo: -44 }),
       baseEpisode({ id: "ep-cross", cleanTitle: "Birth of Christ", yearFrom: -4, yearTo: 33 })

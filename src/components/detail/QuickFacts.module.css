@@ -1,10 +1,11 @@
 .container {
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 16px;
-  background: #ffffff;
-  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-card);
+  padding: 1.5rem;
   display: grid;
   gap: 1rem;
+  box-shadow: 0 18px 40px rgba(42, 37, 34, 0.08);
 }
 
 .list {
@@ -23,12 +24,12 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(15, 23, 42, 0.55);
+  color: var(--color-secondary);
 }
 
 .detail {
   font-size: 0.95rem;
-  color: #0f172a;
+  color: var(--color-text);
   line-height: 1.4;
 }
 

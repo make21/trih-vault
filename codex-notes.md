@@ -45,11 +45,12 @@ source .env.local && npm run dev:pipeline -- \
 _After the run_: review `data/errors.jsonl`, curate registries, append a review record to `data/pending/reviews.jsonl`, then recompose with `OPENAI_API_KEY=dummy npm run dev:pipeline -- --max-llm-calls 0` so artefacts pick up the canonical refs.
 
 ## Recent Changes
+- **2025-11-11:** Timeline/UI refresh shipped—parchment background, oxblood + beige palette, centered spine, “Latest Episode” banner, rounded era chips (including the Undated/Special filter), tactile cards with gap markers, and matching detail-page styling (series + episode) using the same brand tokens.
 - **2025-11-10:** Ingested the Nov 10 RSS snapshot, force-enriched episodes `615`, `616`, and the Bob Iger RIHC special, enforced cross-entity guardrails in `src/pipeline/validator.ts`, cleaned legacy pending topics that duplicated people/places, renamed the Rome/Greece entries to separate polity vs. topic labels, and added canonical people for Anne Boleyn, Catherine of Aragon, and Bob Iger.
 - **2025-11-04:** Introduced canonical people/places/topic registries end-to-end (prompt v3, composer/validator/schema updates), enriched a 20-episode pilot batch (`2, 4–7, 360–364, 505, 507, 510, 511, 519, 601–605`), accepted 24 new people + 13 places, added topics (`thatcher-era`, `the-sixties`, `ancient-mesopotamia`, `mughal-empire`, `us-politics`), and logged decisions in `data/pending/reviews.jsonl`; artefacts (`public/episodes.json`) now ship structured entity refs alongside legacy arrays.
 - **2025-11-03:** Timeline re-centered with linked episode/series cards, responsive mobile layout, and slug-aware data mappers feeding the new detail pages.
 - **2025-11-02:** Added deterministic slug registry tooling (helpers, build script, tests) and refreshed PRDs/detail-view docs with V7 slug rules + layout notes.
-- **2025-11-01:** Timeline now keeps BCE spans intact, collapses large gaps with spine-mounted markers, and scales spacing at 1.5px/year; PRDs updated accordingly.
+- **2025-11-01:** Timeline now keeps BC spans intact, collapses large gaps with spine-mounted markers, and scales spacing at 1.5px/year; PRDs updated accordingly.
 - **2025-10-31:** Replaced Vercel cron/Blob pipeline with scheduled GitHub Actions publish that auto-commits artefacts and calls the Vercel revalidation webhook.
 - **2025-10-30:** Full LLM backfill completed with `gpt-5-nano`; added deterministic year-range propagation from episode cache to series output; schema validation passes on refreshed artefacts.
 - **2025-10-30:** Added `scripts/iterate-llm-enrichment.mjs` and enhanced CLI flags so `--force-llm episodes|series|all` expands cleanly; fixed max-call handling and ensured `gpt-5-nano` usage via OpenAI Responses API.

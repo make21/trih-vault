@@ -19,7 +19,7 @@ const formatYear = (value: number | null): string | null => {
   if (value === null || value === undefined) {
     return null;
   }
-  return value < 0 ? `${Math.abs(value)} BCE` : String(value);
+  return value < 0 ? `${Math.abs(value)} BC` : String(value);
 };
 
 export function EpisodeCard({
