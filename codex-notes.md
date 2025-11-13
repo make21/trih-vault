@@ -73,4 +73,4 @@ _After the run_: review `data/errors.jsonl`, curate registries, append a review 
   - `npm run lint` — Next.js ESLint.
   - `npm test` — Vitest suite.
   - `npm run migrate:caches` — migrate legacy LLM cache format.
-- **Environment variables:** `OPENAI_API_KEY`, `OPENAI_MODEL_PRIMARY` (default `gpt-5-nano`), `OPENAI_MODEL_FALLBACK` (default `gpt-4o-mini`), `VERCEL_REVALIDATE_URL` (webhook hit after scheduled publish).
+- **Environment variables:** `OPENAI_API_KEY`, `OPENAI_MODEL_PRIMARY` (default `gpt-5-nano`), `OPENAI_MODEL_FALLBACK` (default `gpt-4o-mini`), `VERCEL_REVALIDATE_URL` (webhook hit after scheduled publish), `NEXT_PUBLIC_GA_ID` pointing at `G-R3VK4GWFD4` so analytics load after Interactive builds.

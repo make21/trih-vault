@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { TimelineDisplayRow, TimelineSeriesRowData, TimelineEpisodeRowData, UndatedEpisode } from "./buildTimeline";
 import { computeTimelineLayout } from "./layout";
 import { GapMarker } from "@/components/GapMarker";
+import { trackEvent } from "@/lib/analytics";
 
 type TimelineProps = {
   rows: TimelineDisplayRow[];
@@ -86,6 +87,12 @@ export function Timeline(props: TimelineProps) {
   const [selectedEra, setSelectedEra] = useState<string>(deriveEraFromQuery);
   const [expandedSeries, setExpandedSeries] = useState<Set<string>>(new Set());
   const [expandedGaps, setExpandedGaps] = useState<Record<string, boolean>>({});
+  const entryRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const markerLabelsRef = useRef<Record<string, string>>({});
+  const seenSetRef = useRef<Set<string>>(new Set());
+  const seenOrderRef = useRef<string[]>([]);
+  const lastLoggedCountRef = useRef(0);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const next = deriveEraFromQuery();
@@ -123,11 +130,88 @@ export function Timeline(props: TimelineProps) {
   const [pendingScroll, setPendingScroll] = useState<number | null>(null);
 
   useEffect(() => {
+    seenSetRef.current = new Set();
+    seenOrderRef.current = [];
+    lastLoggedCountRef.current = 0;
+    entryRefs.current = {};
+    markerLabelsRef.current = {};
+  }, [selectedEra]);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") {
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entriesList) => {
+        entriesList.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          const key = entry.target.getAttribute("data-scroll-key");
+          if (!key || seenSetRef.current.has(key)) {
+            return;
+          }
+          seenSetRef.current.add(key);
+          seenOrderRef.current.push(key);
+          const count = seenOrderRef.current.length;
+          if (count >= 3 && count - lastLoggedCountRef.current >= 3) {
+            const firstKey = seenOrderRef.current[0];
+            const lastKey = seenOrderRef.current[seenOrderRef.current.length - 1];
+            trackEvent("timeline_scroll", {
+              first_marker: markerLabelsRef.current[firstKey] ?? firstKey,
+              last_marker: markerLabelsRef.current[lastKey] ?? lastKey,
+              total_markers: count,
+              era: selectedEra
+            });
+            lastLoggedCountRef.current = count;
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+    observerRef.current = observer;
+    Object.values(entryRefs.current).forEach((node) => {
+      if (node) {
+        observer.observe(node);
+      }
+    });
+
+    return () => {
+      observer.disconnect();
+      observerRef.current = null;
+    };
+  }, [selectedEra]);
+
+  useEffect(() => {
     if (pendingScroll !== null) {
       window.scrollTo({ top: pendingScroll });
       setPendingScroll(null);
     }
   }, [pendingScroll, filteredRows]);
+
+  const registerEntryRef = useCallback(
+    (id: string, label: string) => (node: HTMLDivElement | null) => {
+      markerLabelsRef.current[id] = label;
+      const existing = entryRefs.current[id];
+      if (existing && observerRef.current) {
+        observerRef.current.unobserve(existing);
+      }
+      if (node) {
+        entryRefs.current[id] = node;
+        if (observerRef.current) {
+          observerRef.current.observe(node);
+        }
+      } else {
+        delete entryRefs.current[id];
+      }
+    },
+    []
+  );
+
+  const logCardOpen = useCallback((type: "episode" | "series", href: string) => {
+    const slug = href.split("/").pop() ?? href;
+    trackEvent("card_open", { source: "timeline", target_type: type, slug });
+  }, []);
 
   const toggleSeries = (id: string) => {
     setExpandedSeries((prev) => {
@@ -142,6 +226,7 @@ export function Timeline(props: TimelineProps) {
   };
   const handleEraChange = (nextEra: string) => {
     if (nextEra === selectedEra) return;
+    trackEvent("chip_click", { chip_type: "era", chip_slug: nextEra });
     const scrollPosition = typeof window !== "undefined" ? window.scrollY : null;
     const params = new URLSearchParams(searchParams?.toString() ?? "");
     if (nextEra === "all") {
@@ -239,16 +324,26 @@ export function Timeline(props: TimelineProps) {
         const partsLabel = `${seriesData.episodeCount} part${seriesData.episodeCount === 1 ? "" : "s"}`;
 
         const seriesHref = row.href ?? `/series/${row.id}`;
+        const markerLabel = `${seriesData.yearLabel ?? "Undated"} — ${row.title}`;
 
         return (
           <Fragment key={key}>
             {anchors}
-            <div className="timeline__entry timeline__entry--series" style={{ marginTop }}>
+            <div
+              className="timeline__entry timeline__entry--series"
+              style={{ marginTop }}
+              data-scroll-key={row.id}
+              ref={registerEntryRef(row.id, markerLabel)}
+            >
               <span className="timeline__marker timeline__marker--series" aria-hidden />
               <div className="timeline__card timeline__card--series">
                 <span className="timeline__pill">Series</span>
                 <div className="timeline__series-header">
-                  <Link href={seriesHref} className="timeline__series-link">
+                  <Link
+                    href={seriesHref}
+                    className="timeline__series-link"
+                    onClick={() => logCardOpen("series", seriesHref)}
+                  >
                     <div className="timeline__year">{seriesData.yearLabel}</div>
                     <span className="timeline__title-group">
                       <span className="timeline__title">{row.title}</span>
@@ -274,7 +369,11 @@ export function Timeline(props: TimelineProps) {
                       const episodeHref = episode.slug ? `/episode/${episode.slug}` : `/episode/${episode.id}`;
                       return (
                         <li key={episode.id}>
-                          <Link href={episodeHref} className="timeline__series-episode">
+                          <Link
+                            href={episodeHref}
+                            className="timeline__series-episode"
+                            onClick={() => logCardOpen("episode", episodeHref)}
+                          >
                             <div className="timeline__series-episode-title">
                               {episode.title}
                               {episode.partLabel ? (
@@ -298,13 +397,23 @@ export function Timeline(props: TimelineProps) {
 
       const episodeData = data as TimelineEpisodeRowData | undefined;
       const episodeHref = row.href ?? `/episode/${row.id}`;
+      const markerLabel = `${episodeData?.yearLabel ?? "Undated"} — ${row.title}`;
 
       return (
         <Fragment key={key}>
           {anchors}
-          <div className="timeline__entry" style={{ marginTop }}>
+          <div
+            className="timeline__entry"
+            style={{ marginTop }}
+            data-scroll-key={row.id}
+            ref={registerEntryRef(row.id, markerLabel)}
+          >
             <span className="timeline__marker" aria-hidden />
-            <Link href={episodeHref} className="timeline__card timeline__card--episode">
+            <Link
+              href={episodeHref}
+              className="timeline__card timeline__card--episode"
+              onClick={() => logCardOpen("episode", episodeHref)}
+            >
               <div className="timeline__year">{episodeData?.yearLabel ?? "Undated"}</div>
               <div className="timeline__title">{row.title}</div>
             </Link>

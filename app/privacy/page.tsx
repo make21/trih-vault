@@ -27,8 +27,11 @@ export default function PrivacyPage(): JSX.Element {
           automatically rotated by the host and are never pulled into a separate database.
         </p>
         <p>
-          There are currently no analytics, ad tags, or third-party trackers embedded in the site. If light-weight
-          instrumentation is added in the future, this page will be updated before it goes live.
+          The site does embed Google Analytics (`G-R3VK4GWFD4`) so we can understand how visitors use the Vault, which
+          sections they explore, and whether the search/timeline interactions meet our expectations. This data is
+          collected anonymously—no login data or device identifiers are stored—and it helps prioritise future
+          improvements. We still do not deploy any third-party cookies, advertising trackers, or behavioural profiling
+          scripts beyond this simple analytics layer.
         </p>
         <p>
           If you have questions or need something removed, reach out to the maintainers through the contact channels

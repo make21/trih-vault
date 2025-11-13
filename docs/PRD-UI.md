@@ -194,6 +194,8 @@ Accessibility: provide `aria-expanded` for collapsible sections, descriptive but
 
 ## 12. Analytics (GA4)
 
+We load the provided GA4 tag (`G-R3VK4GWFD4`) via `next/script` so the standard pageview + custom events fire as the overlay, timeline, and other components interact; everything still flows through the shared `trackEvent` wrapper.
+
 Baseline GA4 wiring captures page views plus the following custom events:
 
 - `timeline_scroll` — fires whenever users cross ≥3 decade markers or pause for ≥2 s after scrolling. Payload: `{ first_marker, last_marker, total_pixels, dwell_ms }`.

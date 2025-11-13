@@ -365,7 +365,7 @@ export function SearchOverlay(): JSX.Element | null {
                   className={`${styles.chip} ${
                     activeFilter?.type === "person" && activeFilter.slug === option.id ? styles.chipActive : ""
                   }`}
-                  onClick={() => handleFilterToggle("person", option)}
+                  onClick={() => handleFilterToggle("person", option, { prefillQuery: true })}
                 >
                   👤 {option.label}
                 </button>
@@ -377,7 +377,7 @@ export function SearchOverlay(): JSX.Element | null {
                   className={`${styles.chip} ${
                     activeFilter?.type === "place" && activeFilter.slug === option.id ? styles.chipActive : ""
                   }`}
-                  onClick={() => handleFilterToggle("place", option)}
+                  onClick={() => handleFilterToggle("place", option, { prefillQuery: true })}
                 >
                   📍 {option.label}
                 </button>
@@ -389,7 +389,7 @@ export function SearchOverlay(): JSX.Element | null {
                   className={`${styles.chip} ${
                     activeFilter?.type === "topic" && activeFilter.slug === option.id ? styles.chipActive : ""
                   }`}
-                  onClick={() => handleFilterToggle("topic", option)}
+                  onClick={() => handleFilterToggle("topic", option, { prefillQuery: true })}
                 >
                   🗂 {option.label}
                 </button>
@@ -398,6 +398,11 @@ export function SearchOverlay(): JSX.Element | null {
           ) : (
             defaultFacetButtons
           )}
+          <div className={styles.headerActions}>
+            <button type="button" className={styles.closePill} onClick={close} aria-label="Close search overlay">
+              × Close
+            </button>
+          </div>
         </form>
 
         <div className={styles.content}>

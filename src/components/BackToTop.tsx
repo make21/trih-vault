@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { trackEvent } from "@/lib/analytics";
+
 export default function BackToTop(): JSX.Element | null {
   const [visible, setVisible] = useState(false);
 
@@ -32,10 +34,12 @@ export default function BackToTop(): JSX.Element | null {
         background: "#fff",
         cursor: "pointer"
       }}
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={() => {
+        trackEvent("utility_click", { action: "back_to_top" });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
     >
       ↑ Top
     </button>
   );
 }
-

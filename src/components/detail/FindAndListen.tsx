@@ -23,7 +23,14 @@ export function FindAndListen({ title = "Find and listen", className }: FindAndL
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.links}>
         {PROVIDERS.map((provider) => (
-          <Link key={provider.name} href={provider.href} className={styles.link} rel="noopener noreferrer" target="_blank">
+          <Link
+            key={provider.name}
+            href={provider.href}
+            className={styles.link}
+            rel="noopener noreferrer"
+            target="_blank"
+            data-analytics-context="listen_links"
+          >
             {provider.name}
           </Link>
         ))}
