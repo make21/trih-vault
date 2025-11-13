@@ -10,6 +10,7 @@
     "dev:pipeline": "tsx --tsconfig tsconfig.json src/run-local-pipeline.ts",
     "build:search": "node --import tsx --experimental-specifier-resolution=node --no-warnings scripts/build-search-index.ts",
     "build:slug-registry": "node --import tsx --experimental-specifier-resolution=node --no-warnings scripts/build-slug-registry.ts",
+    "generate:sitemap": "node --import tsx --experimental-specifier-resolution=node --no-warnings scripts/generate-sitemap.ts",
     "migrate:caches": "node scripts/migrate-legacy-caches.mjs",
     "test": "vitest run",
     "schema:check": "node scripts/schema-check.mjs",
