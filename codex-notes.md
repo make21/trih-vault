@@ -23,7 +23,7 @@
 - **Reference:** Product requirements live in `docs/PRD-Pipeline.md`.
 
 ## Current Focus
-- Structured entity rollout for people/places/topics, validating LLM outputs against the canonical registries and backfilling early/mid/late episode batches.
+- Structured entity rollout for people/places/topics, validating LLM outputs against the canonical registries and backfilling early/mid/late episode batches. Search UX is now live (overlay + triggers), keep iterating on SERP polish and analytics wiring.
 
 ## Next Steps
 - Re-run the composer with cached data (`OPENAI_API_KEY=dummy npm run dev:pipeline -- --max-llm-calls 0`) whenever registries change so artefacts pick up the latest canonical refs without new LLM calls.
@@ -33,8 +33,8 @@
 - Backlog status: `/review` is clear after the 2025-11-11 batches. Just monitor for new entries (nightly pipeline reruns) and map them immediately so the queue stays empty.
 - Upcoming work ideas:
   1. Site-wide search experience (start with filtered list, grow into richer query if needed).
-  2. Instrumentation (Google Analytics or preferred analytics stack) before launch.
-- Next session focus: broaden the entity layout polish to episode/series detail pages (spacing + hero sizing) and keep iterating on footer/legal polish as needed.
+- Instrumentation (Google Analytics or preferred analytics stack) before launch; search events are stubbed but disabled until GA is wired up globally.
+- Next session focus: keep polishing the search SERP (result grouping, chips, accessibility) and finish analytics once GA is available; continue entity layout/hero refinements as needed.
 - Use the playbook (`docs/entity-curation-playbook.md`) as the blueprint for accept/map/reject decisions so new LLM proposals stay deterministic.
 - Plan the next enrichment batch (mid/late catalogue) once the current proposals are cleared, using `--force-llm` to target the chosen episode IDs and cap spend with `--max-llm-calls`.
 - Keep auditing registries for cross-entity collisions; reconcile duplicates early so the validator guardrail doesn’t block future pipeline runs.
@@ -50,6 +50,7 @@ source .env.local && npm run dev:pipeline -- \
 _After the run_: review `data/errors.jsonl`, curate registries, append a review record to `data/pending/reviews.jsonl`, then recompose with `OPENAI_API_KEY=dummy npm run dev:pipeline -- --max-llm-calls 0` so artefacts pick up the canonical refs.
 
 ## Recent Changes
+- **2025-11-14**: Landed end-to-end search overlay (MiniSearch index builder + lazy client overlay + triggers). Added global utility bar with contextual latest-episode link, centered the homepage hero/search, and standardized the 1990s topic to the new `the-nineties` registry entry. Search GA events are stubbed but paused until site-wide GA lands.
 - **2025-11-13**: Split detail layouts so topics/people/places use a purpose-built `EntityLayout` (title-only heroes now compact, consistent quick-facts spacing), while About/Privacy/Terms moved onto a new `StaticPageLayout`. Updated PRD + notes to reflect the UI polish and removed personal references from the legal pages.
 - **2025-11-12**: Added global footer with fan disclaimer + quick links, launched lightweight About/Privacy/Terms pages, and tightened the home hero copy to “The Rest Is History Explorer”. Entity page styling investigation still pending—people/places/topics with sparse data continue to show oversized heroes (see Rome vs Christmas screenshots).
 

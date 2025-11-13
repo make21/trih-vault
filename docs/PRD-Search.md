@@ -126,7 +126,43 @@ Deliver a single omnibox (“Global Search”) that lets mobile users quickly ju
 
 ---
 
-## 8. References
+## 8. Implementation Plan (2025-11-13)
+
+### 8.1 Build-Time Index Generation
+- Add `scripts/build-search-index.ts` that loads `public/episodes.json`, `public/series.json`, and the curated entity registries via the existing catalog helpers. The script normalises IDs/slugs, builds a MiniSearch instance with weighted fields (title 10, summary 4, keywords 3, description 1), and emits deterministic documents for:
+  - **Episodes** – include slug, title, summary, series meta, year range, part badge, trimmed people/place/topic slug arrays, and keyword unions (title tokens, description highlights, entity aliases).
+  - **Series** – include slug, title, narrative summary, episode count, year range, and aggregated entity keywords.
+  - **Entities** – pull straight from the registries with aliases + notes.
+- Serialise the ready-to-query index via `MiniSearch.saveJSON` to `public/search-index.json` plus a companion metadata file (counts + SHA hash). Fail the script if the gzipped payload exceeds 1 MB to guard mobile performance.
+- Ship unit coverage that loads the saved JSON, hydrates MiniSearch, and asserts representative queries (e.g., “Nelson”, “1066”) return deterministic slugs.
+- Hook the script into npm as `build:search` and document the workflow (`npm run dev:pipeline && npm run build:search`). CI should run the script (with the gzip budget enforced) after pipeline plan mode so PRs fail fast if the index build or size check fails.
+
+### 8.2 Client Overlay & Lazy Loading
+- Create a search index hook (`src/lib/search/useSearchIndex.ts`) that dynamically imports MiniSearch, fetches `/search-index.json`, caches the hydrated instance, and exposes `prime()` + `search(query, filters)` APIs. Handle errors with retries and fire the `search_error` GA event.
+- Build a reusable overlay in `src/components/search/` comprised of:
+  - `SearchOverlay` shell with focus trap, ESC handling, and responsive layouts (full-screen on mobile, centered panel on desktop).
+  - `SearchInput` pill control with clear button, minimum query enforcement, and `search_submit` instrumentation.
+  - `SearchFilterChips` for people/place/topic filters (single-select per type) that emit `filter_chip_click`.
+  - `SearchResults` list that mixes episodes/series/entities with badges, year spans, and pill snippets; keyboard navigation (Up/Down, Enter) and `search_result_click` telemetry.
+- Lazy mount the overlay via `next/dynamic`/`useSearchOverlay` so no additional JS is loaded until the user triggers search.
+
+### 8.3 Global Triggers & Layout Integration
+- Add a slim “utility” top bar (light beige) rendered through `LayoutDetail`/`app/layout.tsx` so every major page shows a left-aligned “← Timeline” link and a right-aligned search trigger button (icon-only on mobile, pill with label on desktop). Trigger opens the overlay and focuses the shared input.
+- Update the timeline/homepage hero: treat the hero as a responsive two-column layout on desktop with the latest-episode card on the right. Place a pill-style search input directly under that card (or stacked below the hero content on mobile). This input is a trigger only—clicking/tapping it opens the overlay.
+- Ensure the overlay trigger also appears on entity pages by virtue of the shared top bar; no per-page duplication.
+
+### 8.4 Analytics & QA
+- GA4 events (paused until global instrumentation is live):
+  - `search_submit` (payload `{ query, result_count, filters }`).
+  - `search_result_click` (payload `{ query, rank, type, slug, filters }`).
+  - `filter_chip_click` (payload `{ chip_type, chip_slug, state }`).
+  - `search_error`.
+- Add accessibility polish: `aria-label` on the input (“Search episodes, series, people, places, topics”), `role="dialog"` on the overlay, `role="listbox"`/`role="option"` for results, ESC closes overlay, focus returns to the trigger.
+- Validate bundle impact (overlay bundle stays out of the critical path), confirm search-index fetch remains ≤1 MB gzipped, and run Lighthouse on mobile after integration.
+
+---
+
+## 9. References
 - `docs/PRD-UI.md` — high-level Explorer UI specification.
 - `docs/PRD-Pipeline.md` — describes artefact generation that feeds the index.
 - `docs/PRD-UI-DetailViews.md` — describes episode/series detail requirements consumed by search results.

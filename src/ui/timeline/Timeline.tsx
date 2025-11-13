@@ -15,6 +15,7 @@ type TimelineProps = {
     slug: string;
     publishedAt: string;
   } | null;
+  showLatestBanner?: boolean;
 };
 
 const PIXELS_PER_YEAR = 1.5;
@@ -73,7 +74,7 @@ const filterRowsByEra = (rows: TimelineDisplayRow[], eraId: string): TimelineDis
 };
 
 export function Timeline(props: TimelineProps) {
-  const { rows, undatedEpisodes, latestEpisode } = props;
+  const { rows, undatedEpisodes, latestEpisode, showLatestBanner = true } = props;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -319,22 +320,6 @@ export function Timeline(props: TimelineProps) {
 
   return (
     <div className="timeline-shell">
-      {latestEpisode ? (
-        <div className="latest-banner" role="status">
-          <div className="latest-banner__icon" aria-hidden>
-            ⏰
-          </div>
-          <div className="latest-banner__copy">
-            <p className="latest-banner__label">Latest Episode</p>
-            <p className="latest-banner__title">{latestEpisode.title}</p>
-            {latestPublishedLabel ? <p className="latest-banner__meta">{latestPublishedLabel}</p> : null}
-          </div>
-          <Link href={`/episode/${latestEpisode.slug}`} className="latest-banner__link">
-            Listen now
-          </Link>
-        </div>
-      ) : null}
-
       <div className="era-filter">
         <div className="era-filter__label">Browse by era</div>
         <div className="era-chips" role="toolbar" aria-label="Filter timeline by era">

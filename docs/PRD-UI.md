@@ -97,6 +97,7 @@ Composer (or the registry build step) writes the resolved slugs onto artefacts a
 ## 6. Timeline Experience (Home)
 
 - **Hero & palette** — Parchment (#F8F6F3) background with oxblood (#6A1F1B) headline, serif typography, subtle radial gradients.
+- **Utility bar** — Slim beige strip pinned to the top with a contextual primary link (“Latest episode: …” on home, “← Timeline” elsewhere) plus the global search trigger (hidden on the homepage since the hero already features the omnibox). Keep it responsive and avoid double-search affordances on the landing page.
 - **Latest Episode banner** — Beige capsule with clock icon, published date, CTA to the latest `/episode` slug. Fully keyboard-accessible.
 - **Era chips** — Rounded pills in beige/oxblood. Options: All Eras, Prehistory, Ancient World, Late Antiquity & Early Middle Ages, High Middle Ages, Early Modern, Long 19th Century, 20th Century, 21st Century, Undated / Special. Chips update the `?era=` query param without a reload and preserve scroll position.
 - **Timeline spine** — Stays centered on all breakpoints. Series and episode markers share the same axis; series markers use the secondary tint.

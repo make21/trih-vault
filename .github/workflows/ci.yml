@@ -31,5 +31,8 @@ jobs:
           OPENAI_MODEL_FALLBACK: ${{ secrets.OPENAI_MODEL_FALLBACK }}
         run: npm run dev:pipeline -- --plan
 
+      - name: Build search index
+        run: npm run build:search
+
       - name: Unit tests
         run: npm test

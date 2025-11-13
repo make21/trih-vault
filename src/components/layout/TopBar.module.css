@@ -1,0 +1,71 @@
+.topBar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px clamp(16px, 3vw, 32px);
+  background: rgba(248, 246, 243, 0.95);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid rgba(42, 37, 34, 0.08);
+  gap: 16px;
+}
+
+.homeLink {
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.latest {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: rgba(42, 37, 34, 0.75);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.latestLabel {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+  color: var(--color-secondary);
+}
+
+.latestLink {
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.searchButton {
+  border: none;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(42, 37, 34, 0.15);
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .label {
+    display: none;
+  }
+
+  .latest {
+    max-width: 55%;
+    font-size: 0.8rem;
+  }
+}

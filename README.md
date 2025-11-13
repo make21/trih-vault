@@ -54,6 +54,7 @@ npm run dev                # Next.js UI at http://localhost:3000
 npm run dev:pipeline       # full pipeline run (rewrites data/ + public/)
 npm run dev:pipeline -- --plan  # dry run for CI or quick verification
 npm run schema:check       # validate artefacts against JSON Schemas
+npm run build:search       # generate deterministic MiniSearch index in public/search-index*.json
 npm test                   # Vitest suite
 ```
 

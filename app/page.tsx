@@ -1,9 +1,11 @@
-import { Suspense } from 'react';
-import episodesData from '../public/episodes.json';
-import seriesData from '../public/series.json';
-import BackToTop from '@/components/BackToTop';
-import { Timeline } from '@/ui/timeline/Timeline';
-import { buildTimeline, type RawEpisodeInput, type RawSeriesInput } from '@/ui/timeline/buildTimeline';
+import { Suspense } from "react";
+
+import BackToTop from "@/components/BackToTop";
+import { SearchTrigger } from "@/components/search/SearchTrigger";
+import { Timeline } from "@/ui/timeline/Timeline";
+import { buildTimeline, type RawEpisodeInput, type RawSeriesInput } from "@/ui/timeline/buildTimeline";
+import episodesData from "../public/episodes.json";
+import seriesData from "../public/series.json";
 
 export default function HomePage() {
   const episodes = episodesData as RawEpisodeInput[];
@@ -12,9 +14,9 @@ export default function HomePage() {
     series: seriesData as RawSeriesInput[]
   });
 
-  const latestEpisode = episodes.reduce<null | RawEpisodeInput>((latest, candidate) => {
+  const latestEpisode = episodes.reduce<RawEpisodeInput | null>((latest, candidate) => {
     if (!candidate.publishedAt) return latest;
-    if (!latest || (latest.publishedAt ?? '') < (candidate.publishedAt ?? '')) {
+    if (!latest || (latest.publishedAt ?? "") < (candidate.publishedAt ?? "")) {
       return candidate;
     }
     return latest;
@@ -22,9 +24,12 @@ export default function HomePage() {
 
   return (
     <div className="page">
-      <header className="page__hero">
+      <header className="page__hero page__hero--centered">
         <h1>The Rest Is History Explorer</h1>
         <p className="page__tagline">A better way to find your next listen.</p>
+        <div className="hero-search hero-search--inline">
+          <SearchTrigger />
+        </div>
       </header>
 
       <main className="page__content">
@@ -37,10 +42,11 @@ export default function HomePage() {
                 ? {
                     title: latestEpisode.cleanTitle,
                     slug: latestEpisode.slug,
-                    publishedAt: latestEpisode.publishedAt ?? ''
+                    publishedAt: latestEpisode.publishedAt ?? ""
                   }
                 : null
             }
+            showLatestBanner={false}
           />
         </Suspense>
       </main>
