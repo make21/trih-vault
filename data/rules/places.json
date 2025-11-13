@@ -116,6 +116,13 @@
     "notes": "Canonical polity entry; use topic `ancient-greece` for cultural coverage."
   },
   {
+    "id": "carthage",
+    "preferredName": "Carthage",
+    "aliases": ["Carthaginian Republic", "Qart Hadasht"],
+    "type": "extinct-polity",
+    "notes": "Use for the Punic polity/city-state; modern Tunis is tracked separately."
+  },
+  {
     "id": "egypt",
     "preferredName": "Egypt",
     "aliases": ["Arab Republic of Egypt"],

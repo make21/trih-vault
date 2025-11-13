@@ -372,6 +372,25 @@
     "type": "person:historical"
   },
   {
+    "id": "hannibal",
+    "preferredName": "Hannibal",
+    "aliases": [
+      "Hannibal Barca"
+    ],
+    "type": "person:historical",
+    "notes": "Carthaginian general; consolidate all Hannibal Barca references here."
+  },
+  {
+    "id": "hamilcar-barca",
+    "preferredName": "Hamilcar Barca",
+    "aliases": [
+      "Hamilcar",
+      "Hamilcar Barcas"
+    ],
+    "type": "person:historical",
+    "notes": "Carthaginian general; father of Hannibal."
+  },
+  {
     "id": "harald-hardrada",
     "preferredName": "Harald Hardrada",
     "aliases": [
