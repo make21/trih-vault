@@ -129,11 +129,9 @@ Composer (or the registry build step) writes the resolved slugs onto artefacts a
 
 ---
 
-## 8. Search Experience (SERP — backlog)
+## 8. Search Experience (See `docs/PRD-Search.md`)
 
-- Not built yet; the current experience deep-links users from timeline + chips into entity detail pages instead.
-- When prioritized, deliverables remain: single omnibox across episodes/series, lightweight client index (MiniSearch/Fuse), optional People/Places facet chips, and GA events for submit/result clicks.
-- Keep this section as the canonical requirements doc for that future sprint.
+Search now has its own canonical PRD in `docs/PRD-Search.md`, which specifies the MiniSearch index builder, entity inclusion, GA instrumentation, SEO guardrails, and success metrics. This UI document simply references that spec to avoid duplication. Until the feature ships, the timeline and entity detail pages continue to provide the primary browse pathways.
 
 ---
 
