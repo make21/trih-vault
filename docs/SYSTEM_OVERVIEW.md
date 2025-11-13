@@ -1,6 +1,6 @@
-# The Rest Is History Explorer — System Overview
+# The Rest Is History Vault — System Overview
 
-This document orients new maintainers around the data pipeline that powers the “The Rest Is History Explorer” application. It explains how source data moves through the repository, where LLMs participate, and how to extend the system without breaking determinism.
+This document orients new maintainers around the data pipeline that powers the “The Rest Is History Vault” application. It explains how source data moves through the repository, where LLMs participate, and how to extend the system without breaking determinism.
 
 ```
 RSS Feed → fetcher → programmatic enrichment → series grouping → LLM caches → composer → public artefacts

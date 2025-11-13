@@ -1,6 +1,6 @@
-# The Rest Is History Explorer
+# The Rest Is History Vault
 
-Next.js + TypeScript application and deterministic data pipeline that power the public “The Rest Is History” explorer. The repo contains the end-to-end ingestion/enrichment tooling **and** the static UI that renders the published JSON artefacts. New contributors should skim `codex-notes.md`, `docs/SYSTEM_OVERVIEW.md`, and the PRDs in `docs/` before diving into code, and every fresh AI coding session must begin by reading `codex-notes.md` to stay aligned with the latest collaboration guidance.
+Next.js + TypeScript application and deterministic data pipeline that power The Rest Is History Vault at <https://www.trihvault.com/>. The repo contains the end-to-end ingestion/enrichment tooling **and** the static UI that renders the published JSON artefacts. New contributors should skim `codex-notes.md`, `docs/SYSTEM_OVERVIEW.md`, and the PRDs in `docs/` before diving into code, and every fresh AI coding session must begin by reading `codex-notes.md` to stay aligned with the latest collaboration guidance.
 
 LLM enrichment now emits curated `keyTopics` (registry lives in `data/rules/topics.json`) so the UI can surface reusable topic chips for discovery.
 
@@ -18,7 +18,7 @@ The pipeline turns the official RSS feed into stable JSON artefacts that downstr
 
 `src/run-local-pipeline.ts` orchestrates the flow via stage modules in `src/pipeline/` (`fetcher`, `enricher`, `grouper`, `llmEnricher`, `composer`, `validator`). All writes go through `stableStringify` for byte-for-byte determinism.
 
-### Explorer UI
+### Vault UI
 
 - **Timeline home** — Mobile-first vertical timeline (`app/page.tsx`) that blends series and standalone episodes, respects BC ranges, collapses large gaps, and surfaces undated content (including a dedicated chip) separately.
 - **Detail routes** — Deterministic slugs drive `/series/[slug]` and `/episode/[slug]` with narrative summaries, part lists, audio playback, and “connected threads” metadata (people, places, related episodes).

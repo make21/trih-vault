@@ -5,7 +5,7 @@ import { StaticPageLayout } from "@/components/detail";
 import styles from "../static-pages.module.css";
 
 export const metadata: Metadata = {
-  title: "Privacy — The Rest Is History Explorer",
+  title: "Privacy — The Rest Is History Vault",
   description: "Plain-language privacy details for this fan-built site."
 };
 
@@ -17,7 +17,7 @@ export default function PrivacyPage(): JSX.Element {
     >
       <div className={styles.stack}>
         <p>
-          The Rest Is History Explorer is a static site backed by deterministic JSON files. It does not accept user
+          The Rest Is History Vault is a static site backed by deterministic JSON files. It does not accept user
           submissions, run forms, or ask for personal information. Visiting the site is equivalent to loading any other
           static page on the web.
         </p>

@@ -8,8 +8,8 @@ import episodesData from "../public/episodes.json";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "The Rest Is History Explorer",
-  description: "Browse The Rest Is History episodes, series, people, places, and topics in one place."
+  title: "The Rest Is History Vault",
+  description: "Browse The Rest Is History Vault for episodes, series, people, places, and topics in one place."
 };
 
 type EpisodeSummary = { slug: string; cleanTitle: string; publishedAt?: string };

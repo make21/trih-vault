@@ -57,7 +57,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   const description = episode.cleanDescriptionText.slice(0, 160);
 
   return {
-    title: `${episode.cleanTitle} — The Rest Is History`,
+    title: `${episode.cleanTitle} — The Rest Is History Vault`,
     description: series ? `${series.seriesTitle}: ${description}` : description
   };
 }

@@ -1,4 +1,4 @@
-# TRIH Explorer — Detail Views Implementation Notes
+# TRIH Vault — Detail Views Implementation Notes
 
 _Last updated: 2025-11-02_
 

@@ -6,13 +6,14 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState
+  useState,
+  type ChangeEvent
 } from "react";
 import FocusTrap from "focus-trap-react";
 
 import { logFilterChip, logSearchError, logSearchResultClick, logSearchSubmit } from "@/lib/search/events";
 import { useSearchIndex } from "@/lib/search/useSearchIndex";
-import type { SearchEntityRef, SearchFilters, SearchResult } from "@/lib/search/types";
+import type { SearchEntityRef, SearchFilters, SearchResult, FacetSuggestion } from "@/lib/search/types";
 
 import { useSearchOverlay } from "./SearchProvider";
 import styles from "./SearchOverlay.module.css";
@@ -21,6 +22,13 @@ interface FacetOption {
   id: string;
   label: string;
   count: number;
+}
+
+type FilterType = "person" | "place" | "topic";
+interface ActiveFilterState {
+  type: FilterType;
+  slug: string;
+  label: string;
 }
 
 const MAX_FACET_OPTIONS = 6;
@@ -54,12 +62,50 @@ const buildFacetOptions = (results: SearchResult[], field: keyof Pick<SearchResu
     .slice(0, MAX_FACET_OPTIONS);
 };
 
+const clampFacetList = (options: FacetSuggestion[]): FacetOption[] => {
+  const deduped: FacetOption[] = [];
+  const seen = new Set<string>();
+  options.forEach((option) => {
+    if (!option?.id || seen.has(option.id)) {
+      return;
+    }
+    seen.add(option.id);
+    deduped.push({ id: option.id, label: option.label, count: option.count });
+  });
+  return deduped.slice(0, MAX_FACET_OPTIONS);
+};
+
+const buildCuratedDefaults = (facets: { people: FacetSuggestion[]; places: FacetSuggestion[]; topics: FacetSuggestion[] }) => {
+  const curatedPeople = clampFacetList(facets.people);
+
+  const placesWithoutUk = facets.places.filter((option) => option.id !== "united-kingdom");
+  const germany = facets.places.find((option) => option.id === "germany");
+  if (germany && !placesWithoutUk.some((option) => option.id === germany.id)) {
+    placesWithoutUk.push(germany);
+  }
+  const curatedPlaces = clampFacetList(placesWithoutUk);
+
+  const topicsWithoutColdWar = facets.topics.filter((option) => option.id !== "cold-war");
+  const frenchRevolution = facets.topics.find((option) => option.id === "french-revolution");
+  if (frenchRevolution && !topicsWithoutColdWar.some((option) => option.id === frenchRevolution.id)) {
+    topicsWithoutColdWar.push(frenchRevolution);
+  }
+  const curatedTopics = clampFacetList(topicsWithoutColdWar);
+
+  return {
+    people: curatedPeople,
+    places: curatedPlaces,
+    topics: curatedTopics
+  };
+};
+
 export function SearchOverlay(): JSX.Element | null {
   const { isOpen, close } = useSearchOverlay();
   const { status, error, clearError, prime, search, facets } = useSearchIndex();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
   const [filters, setFilters] = useState<SearchFilters>({ person: null, place: null, topic: null });
+  const [activeFilter, setActiveFilter] = useState<ActiveFilterState | null>(null);
   const [isSearching, setSearching] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -71,6 +117,7 @@ export function SearchOverlay(): JSX.Element | null {
       setQuery("");
       setResults([]);
       setFilters({ person: null, place: null, topic: null });
+      setActiveFilter(null);
       lastFocusedElementRef.current?.focus();
       return;
     }
@@ -177,19 +224,56 @@ export function SearchOverlay(): JSX.Element | null {
     [query, results.length, filters]
   );
 
+  const resetFilters = useCallback(() => {
+    setFilters({ person: null, place: null, topic: null });
+  }, []);
+
+  const clearActiveFilter = useCallback(() => {
+    if (activeFilter) {
+      logFilterChip({ chipType: activeFilter.type, chipSlug: activeFilter.slug, state: "off" });
+    }
+    setActiveFilter(null);
+    resetFilters();
+  }, [activeFilter, resetFilters]);
+
   const handleFilterToggle = useCallback(
-    (type: "person" | "place" | "topic", slug: string) => {
-      setFilters((prev) => {
-        const nextValue = prev[type] === slug ? null : slug;
-        logFilterChip({ chipType: type, chipSlug: slug, state: nextValue ? "on" : "off" });
-        return {
-          ...prev,
-          [type]: nextValue
-        };
+    (type: FilterType, option: FacetOption, opts?: { prefillQuery?: boolean }) => {
+      const isSame = activeFilter?.type === type && activeFilter.slug === option.id;
+      if (isSame) {
+        clearActiveFilter();
+        return;
+      }
+
+      if (activeFilter) {
+        clearActiveFilter();
+      } else {
+        resetFilters();
+      }
+
+      const nextFilters: SearchFilters = { person: null, place: null, topic: null };
+      nextFilters[type] = option.id;
+      setFilters(nextFilters);
+      logFilterChip({ chipType: type, chipSlug: option.id, state: "on" });
+      setActiveFilter({
+        type,
+        slug: option.id,
+        label: option.label
       });
+
+      if (opts?.prefillQuery) {
+        setQuery(option.label);
+      }
     },
-    []
+    [activeFilter, clearActiveFilter, resetFilters]
   );
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value);
+  };
+
+  const handleClearQuery = () => {
+    setQuery("");
+  };
 
   const handleResultClick = (result: SearchResult) => {
     const href = getHrefForResult(result);
@@ -198,38 +282,46 @@ export function SearchOverlay(): JSX.Element | null {
     router.push(href);
   };
 
+  const curatedDefaults = useMemo(() => buildCuratedDefaults(facets), [facets]);
+
   if (!isOpen) {
     return null;
   }
 
   const defaultFacetButtons = (
     <div className={styles.chipsRow}>
-      {facets.people.slice(0, 6).map((option) => (
+      {curatedDefaults.people.map((option) => (
         <button
           key={`default-person-${option.id}`}
           type="button"
-          className={`${styles.chip} ${filters.person === option.id ? styles.chipActive : ""}`}
-          onClick={() => handleFilterToggle("person", option.id)}
+          className={`${styles.chip} ${
+            activeFilter?.type === "person" && activeFilter.slug === option.id ? styles.chipActive : ""
+          }`}
+          onClick={() => handleFilterToggle("person", option, { prefillQuery: true })}
         >
           👤 {option.label}
         </button>
       ))}
-      {facets.places.slice(0, 6).map((option) => (
+      {curatedDefaults.places.map((option) => (
         <button
           key={`default-place-${option.id}`}
           type="button"
-          className={`${styles.chip} ${filters.place === option.id ? styles.chipActive : ""}`}
-          onClick={() => handleFilterToggle("place", option.id)}
+          className={`${styles.chip} ${
+            activeFilter?.type === "place" && activeFilter.slug === option.id ? styles.chipActive : ""
+          }`}
+          onClick={() => handleFilterToggle("place", option, { prefillQuery: true })}
         >
           📍 {option.label}
         </button>
       ))}
-      {facets.topics.slice(0, 6).map((option) => (
+      {curatedDefaults.topics.map((option) => (
         <button
           key={`default-topic-${option.id}`}
           type="button"
-          className={`${styles.chip} ${filters.topic === option.id ? styles.chipActive : ""}`}
-          onClick={() => handleFilterToggle("topic", option.id)}
+          className={`${styles.chip} ${
+            activeFilter?.type === "topic" && activeFilter.slug === option.id ? styles.chipActive : ""
+          }`}
+          onClick={() => handleFilterToggle("topic", option, { prefillQuery: true })}
         >
           🗂 {option.label}
         </button>
@@ -252,12 +344,12 @@ export function SearchOverlay(): JSX.Element | null {
               ref={inputRef}
               type="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={handleInputChange}
               placeholder="Search episodes, series, people, places, topics…"
               aria-label="Search episodes, series, people, places, topics"
             />
             {query ? (
-              <button type="button" onClick={() => setQuery("")}>
+              <button type="button" onClick={handleClearQuery}>
                 Clear
               </button>
             ) : null}
@@ -270,8 +362,10 @@ export function SearchOverlay(): JSX.Element | null {
                 <button
                   key={`person-${option.id}`}
                   type="button"
-                  className={`${styles.chip} ${filters.person === option.id ? styles.chipActive : ""}`}
-                  onClick={() => handleFilterToggle("person", option.id)}
+                  className={`${styles.chip} ${
+                    activeFilter?.type === "person" && activeFilter.slug === option.id ? styles.chipActive : ""
+                  }`}
+                  onClick={() => handleFilterToggle("person", option)}
                 >
                   👤 {option.label}
                 </button>
@@ -280,8 +374,10 @@ export function SearchOverlay(): JSX.Element | null {
                 <button
                   key={`place-${option.id}`}
                   type="button"
-                  className={`${styles.chip} ${filters.place === option.id ? styles.chipActive : ""}`}
-                  onClick={() => handleFilterToggle("place", option.id)}
+                  className={`${styles.chip} ${
+                    activeFilter?.type === "place" && activeFilter.slug === option.id ? styles.chipActive : ""
+                  }`}
+                  onClick={() => handleFilterToggle("place", option)}
                 >
                   📍 {option.label}
                 </button>
@@ -290,8 +386,10 @@ export function SearchOverlay(): JSX.Element | null {
                 <button
                   key={`topic-${option.id}`}
                   type="button"
-                  className={`${styles.chip} ${filters.topic === option.id ? styles.chipActive : ""}`}
-                  onClick={() => handleFilterToggle("topic", option.id)}
+                  className={`${styles.chip} ${
+                    activeFilter?.type === "topic" && activeFilter.slug === option.id ? styles.chipActive : ""
+                  }`}
+                  onClick={() => handleFilterToggle("topic", option)}
                 >
                   🗂 {option.label}
                 </button>
@@ -317,11 +415,22 @@ export function SearchOverlay(): JSX.Element | null {
           ) : null}
 
           {!error && query.length < 2 ? (
-            <div className={styles.emptyState}>Type at least two characters to search the archive.</div>
+            <div className={styles.emptyState}>Type at least two characters or tap a chip to search the archive.</div>
+          ) : null}
+
+          {activeFilter ? (
+            <div className={styles.activeFilter}>
+              <span>Filtered by {activeFilter.label}</span>
+              <button type="button" onClick={clearActiveFilter}>
+                Clear filter
+              </button>
+            </div>
           ) : null}
 
           {!error && query.length >= 2 && results.length === 0 && !isSearching ? (
-            <div className={styles.emptyState}>No matches yet. Try another keyword or remove filters.</div>
+            <div className={styles.emptyState}>
+              No matches yet. Try another keyword{activeFilter ? " or clear the filter" : ""}.
+            </div>
           ) : null}
 
           {results.length > 0 ? (

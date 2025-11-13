@@ -50,7 +50,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     `Explore “${series.seriesTitle}” on The Rest Is History with ${series.episodeIds.length} in-depth episodes.`;
 
   return {
-    title: `${series.seriesTitle} — The Rest Is History`,
+    title: `${series.seriesTitle} — The Rest Is History Vault`,
     description
   };
 }

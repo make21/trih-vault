@@ -24,7 +24,7 @@ export function Footer(): JSX.Element {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <p className={styles.disclaimer}>
-          The Rest Is History Explorer is a fan-built side project from a long-time listener who wanted an easier way to
+          The Rest Is History Vault is a fan-built side project from a long-time listener who wanted an easier way to
           revisit the archive without endless scrolling.
           <span className={styles.fanNote}>Not associated with Dominic, Tom, Goalhanger, or the official show.</span>
         </p>
@@ -54,7 +54,7 @@ export function Footer(): JSX.Element {
       </div>
 
       <div className={styles.meta}>
-        <span>© {year} The Rest Is History Explorer</span>
+        <span>© {year} The Rest Is History Vault</span>
         <span>Fan project. Built for fun.</span>
       </div>
     </footer>

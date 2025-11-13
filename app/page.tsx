@@ -25,7 +25,7 @@ export default function HomePage() {
   return (
     <div className="page">
       <header className="page__hero page__hero--centered">
-        <h1>The Rest Is History Explorer</h1>
+        <h1>The Rest Is History Vault</h1>
         <p className="page__tagline">A better way to find your next listen.</p>
         <div className="hero-search hero-search--inline">
           <SearchTrigger />

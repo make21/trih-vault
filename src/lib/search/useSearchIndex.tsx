@@ -3,7 +3,14 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
 
 import { MINI_SEARCH_OPTIONS } from "./options";
-import type { SearchFacets, SearchFilters, SearchResult, SearchStatus, SearchDocument } from "./types";
+import type {
+  SearchFacets,
+  SearchFilters,
+  SearchResult,
+  SearchStatus,
+  SearchDocument,
+  SearchEntityType
+} from "./types";
 
 interface SearchIndexContextValue {
   status: SearchStatus;
@@ -23,6 +30,15 @@ const NUMERIC_QUERY_REGEX = /^\d{4}$/;
 const normalizeFilter = (value?: string | null): string | null =>
   value ? value.trim().toLowerCase() || null : null;
 
+const matchesEntity = (result: SearchResult, type: SearchEntityType, filter: string | null): boolean => {
+  if (!filter || result.type !== "entity" || result.entityType !== type) {
+    return false;
+  }
+  const slug = result.slug?.split("/").pop()?.trim().toLowerCase();
+  const idSuffix = result.id?.split(":").pop()?.trim().toLowerCase();
+  return slug === filter || idSuffix === filter;
+};
+
 const matchesFilter = (result: SearchResult, filters: SearchFilters | undefined): boolean => {
   if (!filters) {
     return true;
@@ -32,33 +48,36 @@ const matchesFilter = (result: SearchResult, filters: SearchFilters | undefined)
   const topicFilter = normalizeFilter(filters.topic);
 
   if (personFilter) {
-    const personMatches = result.people?.some((person) => {
-      const label = person.label.trim().toLowerCase();
-      const id = person.id.trim().toLowerCase();
-      return label === personFilter || id === personFilter;
-    });
+    const personMatches =
+      result.people?.some((person) => {
+        const label = person.label.trim().toLowerCase();
+        const id = person.id.trim().toLowerCase();
+        return label === personFilter || id === personFilter;
+      }) || matchesEntity(result, "person", personFilter);
     if (!personMatches) {
       return false;
     }
   }
 
   if (placeFilter) {
-    const placeMatches = result.places?.some((place) => {
-      const label = place.label.trim().toLowerCase();
-      const id = place.id.trim().toLowerCase();
-      return label === placeFilter || id === placeFilter;
-    });
+    const placeMatches =
+      result.places?.some((place) => {
+        const label = place.label.trim().toLowerCase();
+        const id = place.id.trim().toLowerCase();
+        return label === placeFilter || id === placeFilter;
+      }) || matchesEntity(result, "place", placeFilter);
     if (!placeMatches) {
       return false;
     }
   }
 
   if (topicFilter) {
-    const topicMatches = result.topics?.some((topic) => {
-      const label = topic.label.trim().toLowerCase();
-      const id = topic.id.trim().toLowerCase();
-      return label === topicFilter || id === topicFilter;
-    });
+    const topicMatches =
+      result.topics?.some((topic) => {
+        const label = topic.label.trim().toLowerCase();
+        const id = topic.id.trim().toLowerCase();
+        return label === topicFilter || id === topicFilter;
+      }) || matchesEntity(result, "topic", topicFilter);
     if (!topicMatches) {
       return false;
     }

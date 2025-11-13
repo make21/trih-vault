@@ -7,7 +7,7 @@ Last updated: 2025-11-11
 ## 1. Product Snapshot
 
 **Goal**  
-Deliver a single omnibox (“Global Search”) that lets mobile users quickly jump to episodes, series, and canonical People/Places/Topics entity pages without leaving the deterministic, static-first architecture of the Explorer.
+Deliver a single omnibox (“Global Search”) that lets mobile users quickly jump to episodes, series, and canonical People/Places/Topics entity pages without leaving the deterministic, static-first architecture of the Vault.
 
 **Success Metrics (first 2 weeks post-launch)**
 - ≥25% of sessions perform at least one search (mirrors the UI PRD success target).
@@ -163,7 +163,7 @@ Deliver a single omnibox (“Global Search”) that lets mobile users quickly ju
 ---
 
 ## 9. References
-- `docs/PRD-UI.md` — high-level Explorer UI specification.
+- `docs/PRD-UI.md` — high-level Vault UI specification.
 - `docs/PRD-Pipeline.md` — describes artefact generation that feeds the index.
 - `docs/PRD-UI-DetailViews.md` — describes episode/series detail requirements consumed by search results.
 - `docs/DATA_MODEL.md` — authoritative schema for episode/series payloads.

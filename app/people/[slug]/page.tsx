@@ -20,7 +20,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   }
 
   return {
-    title: `${data.label} — The Rest Is History Explorer`,
+    title: `${data.label} — The Rest Is History Vault`,
     description: data.metaDescription
   };
 }

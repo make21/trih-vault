@@ -35,7 +35,7 @@ export function TopBar({ latestEpisode }: TopBarProps): JSX.Element {
           </Link>
         </div>
       ) : (
-        <span className={styles.homeLink}>The Rest Is History Explorer</span>
+        <span className={styles.homeLink}>The Rest Is History Vault</span>
       )}
       {pathname !== "/" ? (
         <button type="button" className={styles.searchButton} onClick={open} aria-label="Open search">

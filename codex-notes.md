@@ -39,7 +39,7 @@
 - Plan the next enrichment batch (mid/late catalogue) once the current proposals are cleared, using `--force-llm` to target the chosen episode IDs and cap spend with `--max-llm-calls`.
 - Keep auditing registries for cross-entity collisions; reconcile duplicates early so the validator guardrail doesn’t block future pipeline runs.
 - Monitor the scheduled GitHub Actions publish + Vercel revalidation webhook to ensure nightly artefact pushes stay in sync with local work.
-- Once the production domain is finalized, set `NEXT_PUBLIC_SITE_URL` (or `SITE_URL`) so canonical URLs/JSON-LD stop defaulting to `http://localhost:3000`.
+- Canonical URLs/JSON-LD now point to `https://www.trihvault.com` via `NEXT_PUBLIC_SITE_URL`; update in Next config if the domain ever changes again.
 
 ## Canon backfill command
 ```bash
@@ -52,7 +52,7 @@ _After the run_: review `data/errors.jsonl`, curate registries, append a review 
 ## Recent Changes
 - **2025-11-14**: Landed end-to-end search overlay (MiniSearch index builder + lazy client overlay + triggers). Added global utility bar with contextual latest-episode link, centered the homepage hero/search, and standardized the 1990s topic to the new `the-nineties` registry entry. Search GA events are stubbed but paused until site-wide GA lands.
 - **2025-11-13**: Split detail layouts so topics/people/places use a purpose-built `EntityLayout` (title-only heroes now compact, consistent quick-facts spacing), while About/Privacy/Terms moved onto a new `StaticPageLayout`. Updated PRD + notes to reflect the UI polish and removed personal references from the legal pages.
-- **2025-11-12**: Added global footer with fan disclaimer + quick links, launched lightweight About/Privacy/Terms pages, and tightened the home hero copy to “The Rest Is History Explorer”. Entity page styling investigation still pending—people/places/topics with sparse data continue to show oversized heroes (see Rome vs Christmas screenshots).
+- **2025-11-12**: Added global footer with fan disclaimer + quick links, launched lightweight About/Privacy/Terms pages, and tightened the home hero copy to “The Rest Is History Vault”. Entity page styling investigation still pending—people/places/topics with sparse data continue to show oversized heroes (see Rome vs Christmas screenshots).
 
 - **2025-11-11:** Timeline/UI refresh shipped—parchment background, oxblood + beige palette, centered spine, “Latest Episode” banner, rounded era chips (including the Undated/Special filter), tactile cards with gap markers, and matching detail-page styling (series + episode) using the same brand tokens.
 - **2025-11-10:** Ingested the Nov 10 RSS snapshot, force-enriched episodes `615`, `616`, and the Bob Iger RIHC special, enforced cross-entity guardrails in `src/pipeline/validator.ts`, cleaned legacy pending topics that duplicated people/places, renamed the Rome/Greece entries to separate polity vs. topic labels, and added canonical people for Anne Boleyn, Catherine of Aragon, and Bob Iger.

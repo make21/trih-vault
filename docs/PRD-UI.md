@@ -1,4 +1,4 @@
-# The Rest Is History Explorer — UI PRD (v1)
+# The Rest Is History Vault — UI PRD (v1)
 
 Last updated: 2025-11-11  
 
@@ -194,13 +194,19 @@ Accessibility: provide `aria-expanded` for collapsible sections, descriptive but
 
 ## 12. Analytics (GA4)
 
-- `timeline_scroll_depth` (25 / 50 / 75% markers).
-- `search_submit` and `search_result_click`.
-- `filter_chip_click` (People/Places).
-- `open_series`, `open_episode`.
-- `audio_play`.
+Baseline GA4 wiring captures page views plus the following custom events:
 
-Integrate via GA4 gtag events with consistent parameters (`content_type`, `content_id`, etc.).
+- `timeline_scroll` — fires whenever users cross ≥3 decade markers or pause for ≥2 s after scrolling. Payload: `{ first_marker, last_marker, total_pixels, dwell_ms }`.
+- `chip_click` — triggered by timeline/entity/search chips with `{ chip_type: "people" | "places" | "topics" | "undated" | "era", chip_slug }`.
+- `card_open` — emitted when an episode/series tile opens from any module with `{ source: "timeline" | "related" | "entity", target_type: "episode" | "series", slug }`.
+- `search_submit`, `search_result_click`, `filter_chip_click` — log `query` for every search event so GA’s Explorations can surface top keywords over time.
+- `outbound_click` — fires for links that leave trihvault.com with `{ hostname, path, context }`.
+- `utility_click` — e.g., `back_to_top`, hero CTAs, quick nav buttons.
+- `audio_play` — tracks HTML audio player usage with `{ episode_slug }`.
+
+A derived `engaged_session` user property is set once a session records ≥2 interactive events (`card_open`, `chip_click`, `timeline_scroll`, `search_result_click`, `outbound_click`, or `audio_play`). This provides a consistent dimension for reporting “real” engagement.
+
+All events use GA4 gtag with consistent parameters (`content_type`, `content_id`, `query`, etc.) so downstream dashboards stay tidy.
 
 ---
 

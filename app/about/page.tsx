@@ -5,21 +5,22 @@ import { StaticPageLayout } from "@/components/detail";
 import styles from "../static-pages.module.css";
 
 export const metadata: Metadata = {
-  title: "About — The Rest Is History Explorer",
-  description: "Why this fan-made explorer exists and what it is trying to solve."
+  title: "About — The Rest Is History Vault",
+  description: "Why this fan-made vault exists and what it is trying to solve."
 };
 
 export default function AboutPage(): JSX.Element {
   return (
     <StaticPageLayout
-      title="About The Rest Is History Explorer"
-      subtitle="Built by Jeff Talajic — a Rest Is History fan who wanted a faster way to revisit the archive."
+      title="About The Rest Is History Vault"
+      subtitle="Built by Jeff Talajic — the Rest Is History fan behind trihvault.com."
     >
       <div className={styles.stack}>
         <p>
           This site started as a weekend tinkering project after one too many sessions scrolling through podcast apps
           to find a specific episode. I wanted a way to see the show as a living timeline, surface recurring people,
-          places, and topics, and jump straight into deep dives without swiping through hundreds of tiles.
+          places, and topics, and jump straight into deep dives without swiping through hundreds of tiles. That tinkering
+          evolved into the Vault at trihvault.com so everyone can browse the archive without relying on podcast app UX.
         </p>
         <p>
           What began as a personal reference quickly snowballed into a deterministic data pipeline, static JSON
