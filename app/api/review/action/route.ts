@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { readFile, writeFile, appendFile } from "fs/promises";
 import path from "path";
 import { slugify } from "@/lib/slug/slugify";
@@ -10,6 +10,15 @@ const PEOPLE_PATH = path.join(DATA_DIR, "rules", "people.json");
 const PLACES_PATH = path.join(DATA_DIR, "rules", "places.json");
 const TOPICS_PATH = path.join(DATA_DIR, "rules", "topics.json");
 const REVIEWS_PATH = path.join(DATA_DIR, "pending", "reviews.jsonl");
+const REVIEW_TOKEN = process.env.REVIEW_TOKEN;
+
+const unauthorized = () =>
+  NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+
+const isAuthorized = (request: NextRequest) => {
+  if (!REVIEW_TOKEN) return false;
+  return request.headers.get("x-review-token") === REVIEW_TOKEN;
+};
 
 type EntityType = "person" | "place" | "topic";
 type ActionType = "accept" | "reject" | "map";
@@ -32,7 +41,10 @@ const ensureUniqueId = (registry: any[], id: string) => {
   }
 };
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return unauthorized();
+  }
   const body = await req.json();
   const action: ActionType = body.action;
   const entityType: EntityType = body.entityType;
