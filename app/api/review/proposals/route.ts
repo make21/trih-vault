@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { readFile } from "fs/promises";
 import path from "path";
 import { slugify } from "@/lib/slug/slugify";
@@ -15,6 +15,15 @@ const REVIEWS_PATH = path.join(DATA_DIR, "pending", "reviews.jsonl");
 const PEOPLE_PATH = path.join(DATA_DIR, "rules", "people.json");
 const PLACES_PATH = path.join(DATA_DIR, "rules", "places.json");
 const TOPICS_PATH = path.join(DATA_DIR, "rules", "topics.json");
+const REVIEW_TOKEN = process.env.REVIEW_TOKEN;
+
+const unauthorized = () =>
+  NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+const isAuthorized = (request: NextRequest) => {
+  if (!REVIEW_TOKEN) return false;
+  return request.headers.get("x-review-token") === REVIEW_TOKEN;
+};
 
 type RegistrySummary = {
   id: string;
@@ -50,7 +59,10 @@ const safeJsonParse = (line: string) => {
   }
 };
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (!isAuthorized(request)) {
+    return unauthorized();
+  }
   const [
     errorsRaw,
     episodesRaw,
