@@ -6,7 +6,7 @@ import { getAllSeries, getSeriesAggregate, getSeriesBySlug } from "@/lib/data";
 import { getPersonHref, getPlaceHref } from "@/lib/entityLinks";
 import { getTopPeopleForSeries, getTopPlacesForSeries } from "@/lib/indexes";
 import { findRelatedSeries } from "@/lib/similar";
-import { buildSeriesStructuredData } from "@/lib/structuredData";
+import { buildSeriesStructuredData, stringifyJsonLd } from "@/lib/structuredData";
 
 import styles from "./page.module.css";
 
@@ -85,7 +85,7 @@ export default function SeriesPage({ params }: SeriesPageProps): JSX.Element {
     title: entry.seriesTitle
   }));
 
-  const structuredData = JSON.stringify(
+  const structuredData = stringifyJsonLd(
     buildSeriesStructuredData(series, {
       episodes,
       people: topPeople.map((person) => person.name),

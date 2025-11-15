@@ -5,6 +5,19 @@ import { getPersonHref, getPlaceHref, getTopicHref } from "@/lib/entityLinks";
 
 import { buildCanonicalUrl } from "./urls";
 
+export function stringifyJsonLd(data: unknown): string {
+  const json = JSON.stringify(data);
+  if (!json) {
+    return "";
+  }
+  return json
+    .replace(/</g, "\\u003C")
+    .replace(/>/g, "\\u003E")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
+}
+
 type EntitySchemaType = "Person" | "Place" | "DefinedTerm";
 
 const ENTITY_SCHEMA_TYPE: Record<EntityPageData["filterParam"], EntitySchemaType> = {

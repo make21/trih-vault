@@ -14,7 +14,7 @@ import { getAllEpisodes, getEpisodeBySlug, getEpisodesForSeries, getSeriesById }
 import { segmentDescription, stripAdChoices } from "@/lib/description";
 import { getPersonHref, getPlaceHref, getTopicHref } from "@/lib/entityLinks";
 import { findRelatedEpisodes } from "@/lib/similar";
-import { buildEpisodeStructuredData } from "@/lib/structuredData";
+import { buildEpisodeStructuredData, stringifyJsonLd } from "@/lib/structuredData";
 
 import styles from "./page.module.css";
 
@@ -149,7 +149,7 @@ export default function EpisodePage({ params }: EpisodePageProps): JSX.Element {
     });
   }
 
-  const structuredData = JSON.stringify(buildEpisodeStructuredData(episode, { series }));
+  const structuredData = stringifyJsonLd(buildEpisodeStructuredData(episode, { series }));
 
   return (
     <>

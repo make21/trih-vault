@@ -7,7 +7,7 @@ import type { QuickFactsItem } from "@/components/detail/QuickFacts";
 import EntityEpisodes from "@/components/entity/EntityEpisodes";
 import entityStyles from "@/components/entity/EntityPage.module.css";
 import { formatDisplayDate, getPersonEntityData, getPersonStaticSlugs } from "@/lib/entities";
-import { buildEntityStructuredData } from "@/lib/structuredData";
+import { buildEntityStructuredData, stringifyJsonLd } from "@/lib/structuredData";
 
 export function generateStaticParams(): Array<{ slug: string }> {
   return getPersonStaticSlugs().map((slug) => ({ slug }));
@@ -34,7 +34,7 @@ export default function PersonPage({ params }: PersonPageProps): JSX.Element {
   if (!data) {
     notFound();
   }
-  const structuredData = JSON.stringify(buildEntityStructuredData(data));
+  const structuredData = stringifyJsonLd(buildEntityStructuredData(data));
 
   const facts: QuickFactsItem[] = [];
   const renderEpisodeFact = (entry: NonNullable<typeof data.firstEpisode>) => (
